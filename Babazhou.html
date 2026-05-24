@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>八宝舟 - 回合制战棋</title>
+<script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#1a1a2e;display:flex;justify-content:center;align-items:center;min-height:100vh;overflow:hidden}
+#game-container{width:100%;max-width:500px}
+</style>
+</head>
+<body>
+<div id="game-container"></div>
+<script>
+// ===== 八宝舟 - 手机版 =====
+const GRID_W = 7, GRID_H = 5, CELL = 64, OFFSET_X = 26, OFFSET_Y = 80;
+
+class Unit {
+    constructor(name, hp, atk, agi, team, x, y) {
+        this.name = name; this.maxHp = hp; this.hp = hp; this.atk = atk; this.agi = agi;
+        this.team = team; this.x = x; this.y = y;
+        this.charge = 0; this.maxCharge = 5;
+        this.skillCd = 0; this.skillMaxCd = 3;
+        this.ultimateReady = false;
+        this.alive = true;
+        this.stunned = 0;
+        this.sprite = null; this.hpBar = null; this.hpText = null; this.chargeText = null;
+    }
+    takeDamage(dmg) {
+        this.hp -= dmg;
+        if (this.hp <= 0) { this.hp = 0; this.alive = false; }
+        return dmg;
+    }
+    addCharge(n) { this.charge = Math.min(this.charge + n, this.maxCharge); }
+}
+
+class BattleScene extends Phaser.Scene {
+    constructor() { super('Battle'); }
+
+    create() {
+        this.cameras.main.setBackgroundColor('#1a1a2e');
+        this.units = [];
+        this.selected = null;
+        this.currentTeam = 'p1';
+        this.phase = 'action'; // action | move | skill | ultimate
+        this.turnLog = [];
+        this.round = 1;
+        this.gameOver = false;
+
+        // 棋盘
+        this.gridGraphics = this.add.graphics();
+        this.drawGrid();
+
+        // 创建单位
+        this.units.push(new Unit('铁甲卫士', 100, 15, 8, 'p1', 1, 2));
+        this.units.push(new Unit('烈焰法师', 80, 22, 12, 'p1', 2, 2));
+        this.units.push(new Unit('暗影刺客', 65, 28, 15, 'p2', 6, 2));
+        this.units.push(new Unit('圣光骑士', 110, 12, 6, 'p2', 7, 2));
+
+        // 绘制单位
+        this.unitSprites = {};
+        this.units.forEach(u => this.createUnitSprite(u));
+
+        // UI
+        this.infoText = this.add.text(OFFSET_X, 8, '', { fontSize:'13px', color:'#e0e0e0', wordWrap:{width:400} });
+        this.actionBtns = [];
+        this.createActionButtons();
+
+        // 输入
+        this.input.on('pointerdown', (pointer) => {
+            if (this.gameOver) return;
+            let gx = Math.floor((pointer.x - OFFSET_X) / CELL);
+            let gy = Math.floor((pointer.y - OFFSET_Y) / CELL);
+            if (gx >= 0 && gx < GRID_W && gy >= 0 && gy < GRID_H) {
+                this.onCellClick(gx, gy);
+            }
+        });
+
+        this.startTurn();
+    }
+
+    drawGrid() {
+        let g = this.gridGraphics;
+        g.clear();
+        for (let x = 0; x < GRID_W; x++) {
+            for (let y = 0; y < GRID_H; y++) {
+                let px = OFFSET_X + x * CELL, py = OFFSET_Y + y * CELL;
+                let color = (x === 3) ? 0x333355 : 0x2a2a4a;
+                g.fillStyle(color, 1);
+                g.fillRect(px + 1, py + 1, CELL - 2, CELL - 2);
+                g.lineStyle(1, 0x444466, 0.5);
+                g.strokeRect(px, py, CELL, CELL);
+            }
+        }
+    }
+
+    createUnitSprite(u) {
+        let px = OFFSET_X + u.x * CELL + CELL/2;
+        let py = OFFSET_Y + u.y * CELL + CELL/2 - 8;
+        let color = u.team === 'p1' ? 0x4488ff : 0xff4444;
+
+        // 底座
+        let base = this.add.circle(px, py + 10, 18, color, 0.3);
+        // 身体
+        let body = this.add.circle(px, py, 16, color, 0.8);
+        // 名字
+        let nameText = this.add.text(px, py - 22, u.name.substring(0,2), { fontSize:'10px', color:'#fff' }).setOrigin(0.5);
+        // HP条背景
+        let hpBg = this.add.rectangle(px, py + 28, 40, 5, 0x333333);
+        // HP条
+        let hpBar = this.add.rectangle(px - 20, py + 28, 40, 5, 0x44ff44).setOrigin(0, 0.5);
+        // HP文字
+        let hpText = this.add.text(px, py + 34, `${u.hp}`, { fontSize:'9px', color:'#aaa' }).setOrigin(0.5);
+        // 充能
+        let chargeText = this.add.text(px + 18, py - 10, '', { fontSize:'9px', color:'#ffcc00' }).setOrigin(0.5);
+
+        u.sprite = body; u.hpBar = hpBar; u.hpText = hpText; u.chargeText = chargeText;
+        u.baseSprite = base; u.nameSprite = nameText; u.hpBg = hpBg;
+    }
+
+    updateUnitSprite(u) {
+        if (!u.alive) {
+            u.sprite.setAlpha(0.2);
+            u.nameSprite.setAlpha(0.2);
+            u.baseSprite.setAlpha(0.1);
+            u.hpBar.setAlpha(0.2);
+            u.hpBg.setAlpha(0.2);
+            u.hpText.setAlpha(0.2);
+            u.chargeText.setText('');
+            return;
+        }
+        let ratio = u.hp / u.maxHp;
+        u.hpBar.setDisplaySize(40 * ratio, 5);
+        u.hpBar.setFillStyle(ratio > 0.5 ? 0x44ff44 : (ratio > 0.25 ? 0xffaa00 : 0xff4444));
+        u.hpText.setText(`${u.hp}`);
+        u.chargeText.setText(u.charge >= u.maxCharge ? '⚡' : '');
+        u.sprite.setAlpha(u.stunned > 0 ? 0.5 : 1);
+    }
+
+    createActionButtons() {
+        let btns = [
+            { text:'普攻', x:OFFSET_X, cb:()=>this.setPhase('action') },
+            { text:'技能', x:OFFSET_X+70, cb:()=>this.setPhase('skill') },
+            { text:'移动', x:OFFSET_X+140, cb:()=>this.setPhase('move') },
+            { text:'大招', x:OFFSET_X+210, cb:()=>this.setPhase('ultimate') },
+            { text:'结束', x:OFFSET_X+280, cb:()=>this.endTurn() },
+        ];
+        btns.forEach(b => {
+            let btn = this.add.rectangle(b.x + 30, OFFSET_Y + GRID_H * CELL + 20, 60, 30, 0x333366)
+                .setInteractive({useHandCursor:true});
+            let txt = this.add.text(b.x + 30, OFFSET_Y + GRID_H * CELL + 20, b.text, {fontSize:'12px',color:'#fff'}).setOrigin(0.5);
+            btn.on('pointerdown', b.cb);
+            btn.on('pointerover', () => btn.setFillStyle(0x4444aa));
+            btn.on('pointerout', () => btn.setFillStyle(0x333366));
+            this.actionBtns.push({btn, txt});
+        });
+    }
+
+    setPhase(p) {
+        this.phase = p;
+        this.clearHighlights();
+        if (this.selected) {
+            this.highlightTargets(this.selected, p);
+        }
+        this.updateInfo();
+    }
+
+    startTurn() {
+        this.clearHighlights();
+        this.selected = null;
+        this.phase = 'action';
+        // 眩晕处理
+        let myUnits = this.getMyUnits();
+        myUnits.forEach(u => {
+            if (u.stunned > 0) {
+                u.stunned--;
+                this.addLog(`${u.name} 眩晕中，跳过行动`);
+            }
+        });
+        // 回合充能
+        if (this.currentTeam === 'p1') {
+            this.units.forEach(u => u.addCharge(1));
+        }
+        this.updateAllSprites();
+        this.updateInfo();
+    }
+
+    onCellClick(gx, gy) {
+        if (this.gameOver) return;
+        let unit = this.getUnitAt(gx, gy);
+
+        if (this.phase === 'action' || this.phase === 'skill' || this.phase === 'ultimate') {
+            if (unit && unit.team === this.currentTeam && unit.alive && unit.stunned === 0) {
+                // 选择己方单位
+                this.selected = unit;
+                this.clearHighlights();
+                this.highlightCell(gx, gy, 0xffff00);
+                this.highlightTargets(unit, this.phase);
+                this.updateInfo();
+            } else if (this.selected && unit && unit.team !== this.currentTeam && unit.alive) {
+                // 攻击敌方
+                this.executeAttack(this.selected, unit, this.phase);
+            }
+        } else if (this.phase === 'move') {
+            if (unit && unit.team === this.currentTeam && unit.alive && unit.stunned === 0) {
+                this.selected = unit;
+                this.clearHighlights();
+                this.highlightCell(gx, gy, 0xffff00);
+                this.highlightMoveRange(unit);
+                this.updateInfo();
+            } else if (this.selected && !unit && gx !== 3) {
+                // 移动
+                let dist = Math.abs(gx - this.selected.x) + Math.abs(gy - this.selected.y);
+                if (dist <= 2) {
+                    this.selected.x = gx; this.selected.y = gy;
+                    this.moveUnitSprite(this.selected);
+                    this.clearHighlights();
+                    this.selected = null;
+                    this.phase = 'action';
+                    this.updateInfo();
+                }
+            }
+        }
+    }
+
+    executeAttack(attacker, defender, phase) {
+        let dmg = 0;
+        if (phase === 'action') {
+            dmg = attacker.atk;
+            this.addLog(`${attacker.name} 普攻 ${defender.name}，造成 ${dmg} 点伤害`);
+        } else if (phase === 'skill') {
+            if (attacker.skillCd > 0) { this.addLog('技能冷却中！'); return; }
+            dmg = Math.floor(attacker.atk * 1.8);
+            attacker.skillCd = attacker.skillMaxCd;
+            this.addLog(`${attacker.name} 使用【重击】，造成 ${dmg} 点伤害`);
+        } else if (phase === 'ultimate') {
+            if (attacker.charge < attacker.maxCharge) { this.addLog('充能不足！'); return; }
+            dmg = Math.floor(attacker.atk * 3.0);
+            attacker.charge = 0;
+            this.addLog(`⚡${attacker.name} 释放大招【终极一击】，造成 ${dmg} 点伤害`);
+        }
+
+        defender.takeDamage(dmg);
+        attacker.addCharge(1);
+        defender.addCharge(1);
+
+        // 技能CD
+        this.units.forEach(u => { if (u.skillCd > 0) u.skillCd--; });
+
+        this.clearHighlights();
+        this.selected = null;
+        this.phase = 'action';
+        this.updateAllSprites();
+        this.updateInfo();
+        this.checkGameOver();
+    }
+
+    endTurn() {
+        if (this.gameOver) return;
+        this.clearHighlights();
+        this.selected = null;
+        this.phase = 'action';
+
+        if (this.currentTeam === 'p1') {
+            this.currentTeam = 'p2';
+        } else {
+            this.currentTeam = 'p1';
+            this.round++;
+        }
+        this.startTurn();
+    }
+
+    highlightCell(x, y, color) {
+        let g = this.gridGraphics;
+        let px = OFFSET_X + x * CELL, py = OFFSET_Y + y * CELL;
+        g.lineStyle(3, color, 1);
+        g.strokeRect(px + 2, py + 2, CELL - 4, CELL - 4);
+    }
+
+    highlightTargets(unit, phase) {
+        let enemies = this.units.filter(u => u.team !== this.currentTeam && u.alive);
+        enemies.forEach(e => {
+            let dist = Math.abs(e.x - unit.x) + Math.abs(e.y - unit.y);
+            if (phase === 'action' && dist <= 1) this.highlightCell(e.x, e.y, 0xff6666);
+            if (phase === 'skill' && dist <= 2) this.highlightCell(e.x, e.y, 0xff9966);
+            if (phase === 'ultimate' && dist <= 3) this.highlightCell(e.x, e.y, 0xffcc00);
+        });
+    }
+
+    highlightMoveRange(unit) {
+        for (let x = 0; x < GRID_W; x++) {
+            for (let y = 0; y < GRID_H; y++) {
+                if (x === 3) continue; // 中间列不可站
+                let dist = Math.abs(x - unit.x) + Math.abs(y - unit.y);
+                if (dist >= 1 && dist <= 2 && !this.getUnitAt(x, y)) {
+                    this.highlightCell(x, y, 0x44ff44);
+                }
+            }
+        }
+    }
+
+    clearHighlights() {
+        this.drawGrid();
+    }
+
+    moveUnitSprite(u) {
+        let px = OFFSET_X + u.x * CELL + CELL/2;
+        let py = OFFSET_Y + u.y * CELL + CELL/2 - 8;
+        this.tweens.add({ targets:[u.sprite, u.baseSprite, u.nameSprite, u.hpBar, u.hpBg, u.hpText, u.chargeText], x:px - (u.sprite.x - px > 0 ? u.sprite.x : u.sprite.x), duration:200, ease:'Power2' });
+        u.sprite.x = px; u.baseSprite.x = px; u.nameSprite.x = px;
+        u.hpBar.x = px - 20; u.hpBg.x = px; u.hpText.x = px; u.chargeText.x = px + 18;
+        u.sprite.y = py; u.baseSprite.y = py + 10; u.nameSprite.y = py - 22;
+        u.hpBar.y = py + 28; u.hpBg.y = py + 28; u.hpText.y = py + 34; u.chargeText.y = py - 10;
+    }
+
+    getUnitAt(x, y) { return this.units.find(u => u.alive && u.x === x && u.y === y); }
+    getMyUnits() { return this.units.filter(u => u.team === this.currentTeam && u.alive); }
+
+    updateAllSprites() { this.units.forEach(u => this.updateUnitSprite(u)); }
+
+    updateInfo() {
+        let teamName = this.currentTeam === 'p1' ? '蓝方' : '红方';
+        let phaseName = {action:'选择普攻目标', skill:'选择技能目标(CD3回合)', move:'选择移动位置(2格)', ultimate:'选择大招目标(需5充能)'};
+        let info = `第${this.round}回合 | ${teamName}回合 | ${phaseName[this.phase] || ''}`;
+        if (this.selected) {
+            info += `\n已选: ${this.selected.name} HP:${this.selected.hp}/${this.selected.maxHp} ATK:${this.selected.atk} 充能:${this.selected.charge}/${this.selected.maxCharge}`;
+            if (this.selected.skillCd > 0) info += ` 技能CD:${this.selected.skillCd}`;
+        }
+        this.infoText.setText(info);
+
+        // 日志
+        if (this.logText) this.logText.destroy();
+        let log = this.turnLog.slice(-4).join('\n');
+        this.logText = this.add.text(OFFSET_X, OFFSET_Y + GRID_H * CELL + 50, log, { fontSize:'10px', color:'#888', wordWrap:{width:400} });
+    }
+
+    addLog(msg) { this.turnLog.push(msg); }
+
+    checkGameOver() {
+        let p1Alive = this.units.some(u => u.team === 'p1' && u.alive);
+        let p2Alive = this.units.some(u => u.team === 'p2' && u.alive);
+        if (!p1Alive || !p2Alive) {
+            this.gameOver = true;
+            let winner = p1Alive ? '蓝方' : '红方';
+            this.add.text(OFFSET_X + 100, OFFSET_Y + 100, `${winner}获胜！`, { fontSize:'32px', color:'#ffcc00', fontStyle:'bold' });
+            this.add.text(OFFSET_X + 80, OFFSET_Y + 150, '点击任意位置重新开始', { fontSize:'14px', color:'#aaa' });
+            this.input.once('pointerdown', () => this.scene.restart());
+        }
+    }
+}
+
+const config = {
+    type: Phaser.AUTO,
+    width: OFFSET_X * 2 + GRID_W * CELL,
+    height: OFFSET_Y + GRID_H * CELL + 100,
+    parent: 'game-container',
+    scene: BattleScene,
+    scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
+    backgroundColor: '#1a1a2e'
+};
+
+new Phaser.Game(config);
+</script>
+</body>
+</html>
