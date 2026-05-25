@@ -235,7 +235,7 @@ function chg(u,n){u.ch=Math.min(u.ch+n,u.mxc)}
 function sCd(u,k,v){u.cd[k]=v}
 function gCd(u,k){return u.cd[k]||0}
 function cdTk(u){for(let k in u.cd)if(u.cd[k]>0)u.cd[k]--}
-function inRg(u,tx,ty){let dx=tx-u.x,dy=ty-u.y;return u.rg.some(r=>dx===r[0]&&dy===r[1])}
+function inRg(u,tx,ty){let dx=tx-u.x,dy=ty-u.y;let flip=u.tm==='p2'?-1:1;return u.rg.some(r=>dx===r[0]*flip&&dy===r[1])}
 
 // ===== 全局状态 =====
 let pool=[],p1pick=[],p2pick=[],bans=[];
@@ -431,10 +431,24 @@ brd.appendChild(hl);
 }
 }
 }
-// 技能选位模式高亮
+// 技能/普攻选位模式高亮
 if(b.skMode){
+let isBA=b.skMode.isBA;
 for(let x=0;x<7;x++)for(let y=1;y<6;y++){
 let hasUnit=b.us.some(u=>u.al&&u.x===x&&u.y===y);
+if(isBA){
+// 普攻模式：高亮可攻击敌方
+let u=b.us.find(v=>v.al&&v.x===x&&v.y===y);
+if(u&&u.tm!==b.sel.tm){
+let canAtk=isChargeUnit(b.sel)?(b.sel.y===y&&((b.sel.tm==='p1'&&x>b.sel.x)||(b.sel.tm==='p2'&&x<b.sel.x))):b.sel.inRg(x,y);
+if(canAtk){
+let hl=document.createElement('div');
+hl.style.cssText='position:absolute;left:'+(x*56+10)+'px;top:'+((y-1)*56+10)+'px;width:56px;height:56px;background:rgba(255,80,80,0.3);border:2px solid rgba(255,80,80,0.7);border-radius:4px;pointer-events:none;z-index:1';
+brd.appendChild(hl);
+}
+}
+continue;
+}
 if(!hasUnit){
 let hl=document.createElement('div');
 hl.style.cssText='position:absolute;left:'+(x*56+10)+'px;top:'+((y-1)*56+10)+'px;width:56px;height:56px;background:rgba(100,255,100,0.15);border:2px dashed rgba(100,255,100,0.4);border-radius:4px;pointer-events:none;z-index:1';
@@ -454,7 +468,7 @@ brd.appendChild(hl);
 }
 }
 let hint=document.createElement('div');hint.className='skmode-hint';
-hint.textContent='选择'+(b.skMode.tgt==='enemy'?'敌方':'')+'目标';
+hint.textContent=b.skMode.isBA?'点击敌方普攻':'选择'+(b.skMode.tgt==='enemy'?'敌方':'')+'目标';
 brd.appendChild(hint);
 }
 // 单位
@@ -510,7 +524,22 @@ $('logs').innerHTML=b.lg.slice(-8).map(l=>'<div>'+l+'</div>').join('');
 
 function onBClick(u){
 if(b.skMode){
-// 技能选位模式
+// 技能/普攻选位模式
+if(b.skMode.isBA){
+// 普攻选目标：检查是否可攻击
+let canAtk=isChargeUnit(b.sel)?(b.sel.y===u.y&&((b.sel.tm==='p1'&&u.x>b.sel.x)||(b.sel.tm==='p2'&&u.x<b.sel.x))):b.sel.inRg(u.x,u.y);
+if(u.tm!==b.sel.tm&&canAtk){
+let ba=b.skMode.sk;
+let ctx={b,sel:u};
+ba.ex(b.sel,u,ctx);
+if(b.sel.n==='手充'&&b.sel.ultA>0){b.us.filter(v=>v.tm!==b.sel.tm&&v.al&&Math.abs(v.x-u.x)<=1&&Math.abs(v.y-u.y)<=1&&v!==u).forEach(v=>dmg(v,b.sel.atk));b.sel.ultA--}
+b.us.filter(v=>v.al&&v.tm!==b.sel.tm).forEach(v=>v.chg(1));
+b.acted.add(b.sel._uid);b.sel=null;b.skMode=null;
+renderBattle();checkGO();
+if(!b.go&&allActed())switchTeam();
+}
+return;
+}
 let ctx={b,sel:u};
 b.skMode.sk.ex(b.sel,u,ctx);
 b.skMode=null;b.acted.add(b.sel._uid);b.sel=null;
@@ -551,7 +580,9 @@ b.sel=u;renderBattle();upInfo();
 
 function doAction(unit,tp,sk){
 if(tp==='ba'){
-// 普攻通过点击敌方触发，这里不应到达
+// 进入普攻选目标模式
+b.skMode={sk:sk,tgt:'enemy',isBA:1};
+renderBattle();upInfo();
 return;
 }
 // 判断是否需要选目标 (ex有3个参数=需要t)
