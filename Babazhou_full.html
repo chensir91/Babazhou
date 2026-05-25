@@ -412,6 +412,20 @@ if(!p1||!p2){bgo=1;setPhase('gameover');$('winnerText').textContent=(p1?'🔵 �
 function renderBoard(){
 let brd=$('board2');brd.innerHTML='';
 brd.style.width='420px';brd.style.height='300px';brd.style.position='relative';brd.style.background='#1a1a2e';brd.style.margin='0 auto';brd.style.borderRadius='4px';
+// 攻击范围高亮（选中单位时）
+if(bsel){
+for(let x=0;x<7;x++)for(let y=1;y<6;y++){
+if(bsel.inRg(x,y)){
+let hl=document.createElement('div');
+hl.style.cssText='position:absolute;left:'+(x*56+10)+'px;top:'+((y-1)*56+10)+'px;width:56px;height:56px;';
+let isEnemy=bus.some(u=>u.tm!=bsel.tm&&u.al&&u.x==x&&u.y==y);
+hl.style.background=isEnemy?'rgba(255,80,80,0.25)':'rgba(100,180,255,0.15)';
+hl.style.border=isEnemy?'2px solid rgba(255,80,80,0.6)':'1px dashed rgba(100,180,255,0.4)';
+hl.style.borderRadius='4px';hl.style.pointerEvents='none';
+brd.appendChild(hl);
+}
+}
+}
 bus.forEach(u=>{if(!u.al)return;
 let slot=document.createElement('div');slot.className='slot';
 if(u.x<3)slot.classList.add('p1');else if(u.x>3)slot.classList.add('p2');else slot.classList.add('mid');
@@ -430,7 +444,6 @@ let tgt=brd.querySelector('[style*="left:'+(u.x*56+10)+'px"][style*="top:'+((u.y
 if(tgt)tgt.classList.add('tgt');
 });
 }
-// 日志
 $('logs').innerHTML=blogs.slice(-8).map(l=>'<div>'+l+'</div>').join('');
 }
 
@@ -458,9 +471,9 @@ if(a.n=='手充'&&a.ultA>0){bus.filter(v=>v.tm!=a.tm&&v.al&&Math.abs(v.x-d.x)<=1
 bus.filter(u=>u.al&&u.tm!=a.tm&&u==d).forEach(u=>u.chg(1));
 }
 
-function bSkip(){if(bsel){eMT(bsel);renderBoard()}}
-function bUlt(){if(!bsel)return;let u=bsel;let ult=u.sk.find(s=>s.tp=='ult'&&!s.auto&&u.ch>=s.ch);if(ult){ult.ex(u,{us:bus,lg:m=>blogs.push(m),fE,gU,sel:null});bsel=null;renderBoard()}}
-function bSkill(){if(!bsel)return;let u=bsel;let sk=u.sk.find(s=>s.tp=='sk'&&u.gCd(s.n)<=0&&(!s.ch||u.ch>=s.ch));if(sk){sk.ex(u,{us:bus,lg:m=>blogs.push(m),fE,gU,sel:null});bsel=null;renderBoard()}}
+function bSkip(){if(bsel){eMT(bsel);renderBoard();upInfo()}}
+function bUlt(){if(!bsel)return;let u=bsel;let ult=u.sk.find(s=>s.tp=='ult'&&!s.auto&&u.ch>=s.ch);if(ult){ult.ex(u,{us:bus,lg:m=>blogs.push(m),fE,gU,sel:null});bsel=null;renderBoard();upInfo();eMT(u)}}
+function bSkill(){if(!bsel)return;let u=bsel;let sk=u.sk.find(s=>s.tp=='sk'&&u.gCd(s.n)<=0&&(!s.ch||u.ch>=s.ch));if(sk){sk.ex(u,{us:bus,lg:m=>blogs.push(m),fE,gU,sel:null});bsel=null;renderBoard();upInfo();eMT(u)}}
 
 function upInfo(){
 let info='第'+brn+'回合 | '+(bct=='p1'?'🔵蓝':'🔴红')+'方';
