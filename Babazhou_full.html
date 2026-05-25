@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>八宝舟 完整版</title><script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#111;display:flex;justify-content:center;align-items:flex-start;min-height:100vh}#gc{width:100%;max-width:540px}</style></head>
+<body><div id="gc"></div><script>
+const W=7,H=5,SZ=60,OX=40,OY=60;
+
+// ===== 损伤系统 =====
+class Ail{constructor(t){this.t=t;this.s=0}add(n){this.s+=n;if(this.s>=10){this.s=0;return 1}return 0}}
+
+// ===== 单位类 =====
+class U{
+constructor(c){
+this.n=c.n;this.hp=c.h;this.mH=c.h;this.atk=c.a;this.agi=c.g;this.tm=c.t;this.x=c.x;this.y=c.y;
+this.rg=c.r||[[0,0]];this.ch=0;this.mxC=c.m||5;this.sh=0;this.al=1;
+this.st=0;this.bd=0;this.bl=0;this.sth=0;this.tt=0;this.inv=0;this.invT=0;
+this.ail={neuro:new Ail('neuro'),fear:new Ail('fear'),burn:new Ail('burn')};
+this.cd={};this.sto={};this.pv=c.p||[];this.sk=c.sk||[];this.cs=0;
+this.cls=c.cls||'';this.isS=0;this.mst=null;
+// 角色特有
+this.qi=0;this.ult=0;this.fd=0;this.intel=0;this.gru=0;this.gTur=0;this.turCt=0;
+this.rage=0;this.form=0;this.trees=[];this.mk=[];this.kC=0;this.dT=0;this.dd=0;
+this.cc=[];this.elec='';this.xiaoy=0;this.bonus=0;this.autoSk=0;
+}
+dmg(v,p=0){
+if(!this.al)return 0;let a=v;
+if(!p&&this.sh>0){let b=this.sh;this.sh=Math.max(0,this.sh-a);a=Math.max(0,a-b)}
+this.hp-=a;this.dT+=a;
+if(this.hp<=0){this.hp=0;if(this.dd){this.delay=1;return a}this.al=0}
+return a
+}
+heal(v){if(this.al)this.hp=Math.min(this.mH,this.hp+v)}
+chrg(n){this.ch=Math.min(this.ch+n,this.mxC)}
+cdTk(){for(let k in this.cd)if(this.cd[k]>0)this.cd[k]--}
+gCd(k){return this.cd[k]||0}
+sCd(k,v){this.cd[k]=v}
+inRg(tx,ty){let dx=tx-this.x,dy=ty-this.y;return this.rg.some(r=>dx===r[0]&&dy===r[1])}
+alive(){return this.al||this.delay>0}
+}
+
+// ===== 24角色数据 =====
+// 格式: [名字, 生命, 攻击, 敏捷, 充能上限, 攻击范围, 职业, 被动列表, 技能列表]
+function mkRoster(){
+return [
+{n:'陈色',h:16,a:0,g:7,m:3,r:[],cls:'召唤师',sk:[
+{n:'毛虫',tp:'sk',cd:8,st:4,ex:function(u,b){let p=b.fE(u.tm=='p1'?1:5,0,4);if(!p)return;let w=new U({n:'毛毛虫',h:1+(b.us.some(v=>v.n=='第五陈色'&&v.al&&v.tm==u.tm)?1:0),a:0,g:0,t:u.tm,x:p.x,y:p.y,m:0,r:[]});w.isS=1;w.mst=u;b.us.push(w);b.mkSp(w);b.lg(u.n+' 召唤毛毛虫('+p.x+','+p.y+') HP:'+w.hp);u.sCd('毛虫',8)}},
+{n:'虫群',tp:'ult',ch:3,ex:function(u,b){let ws=b.us.filter(v=>v.isS&&v.mst===u);let th=ws.reduce((s,w)=>s+w.hp,0);let es=b.us.filter(v=>v.tm!=u.tm&&v.al);if(es.length>0){let d=Math.floor(th/es.length*2);es.forEach(e=>e.dmg(d));b.lg('虫群 每人'+d+'伤害')}b.us.filter(v=>v.tm==u.tm).forEach(v=>v.atk+=1);ws.forEach(w=>{w.al=0;if(w.sp)w.sp.setVisible(false)});b.us=b.us.filter(v=>v.al);u.ch=0;b.cleanSp()}},
+]},
+{n:'周水',h:3,a:2,g:8,m:2,r:[[0,0],[1,0]],cls:'处决者',sk:[
+{n:'恐惧震慑',tp:'ba',ex:function(u,t,b,isChain){let d=t.dmg(u.atk);b.lg(u.n+' 冲锋'+t.n+' '+d+'伤 +5恐惧');if(t.ail.fear.add(5))b.tAil(t,'fear');u.chrg(1);t.chrg(1);if(!t.al&&!isChain){b.lg('冷场触发！');let all=b.us.filter(v=>v.al);all.forEach(v=>{let ds=v.tm==u.tm?0:v.dmg(u.atk);b.lg('冷场→'+v.n+' '+ds+'伤')})}}},
+{n:'瞬杀时刻',tp:'ult',ch:2,auto:1,ex:function(u,b){let es=b.us.filter(v=>v.tm!=u.tm&&v.al);if(!es.length)return;es.sort((a,b)=>a.hp-b.hp);let t=es[0];let d=Math.floor((u.atk+(u.mH-u.hp))*1);t.dmg(d,1);b.lg('瞬杀 '+t.n+' '+d+'穿透 +8恐惧');t.ail.fear.add(8);u.ch=0}},
+]},
+{n:'优南',h:14,a:2,g:10,m:1,r:[[0,0],[1,0]],cls:'斗士',sk:[
+{n:'冲拳',tp:'ba',ex:function(u,t,b){let hasAil=t.ail.neuro.s>0||t.ail.fear.s>0||t.ail.burn.s>0;let mul=u.qi>=2?3:1;let d=t.dmg(u.atk*mul+(hasAil?1:0));b.lg(u.n+' 冲拳'+(hasAil?'重拳+1':'')+(mul>1?'×3':'')+' '+d+'伤');if(u.qi>=2){t.ail.fear.add(2);u.qi=0;b.lg('消耗2层气，+2恐惧')}u.chrg(1);t.chrg(1)}},
+{n:'怒发冲冠',tp:'sk',ch:1,ex:function(u,b){if(u.qi>=2)return;u.qi++;u.ch=0;b.lg(u.n+' 积气('+u.qi+'/2)')}},
+{n:'格挡',tp:'sk',cd:18,ex:function(u,b){u.sh+=5;u.sCd('格挡',18);b.lg(u.n+' +5盾')}},
+]},
+{n:'王土',h:18,a:0,g:1,m:5,r:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]],cls:'守护者',sk:[
+{n:'化合反应',tp:'sk',cd:13,st:3,ex:function(u,b){let nb=b.us.filter(v=>v.tm==u.tm&&v.al&&Math.abs(v.x-u.x)<=1&&Math.abs(v.y-u.y)<=1&&v.hp<v.mH/2);if(!nb.length)return;nb.forEach(v=>{let am=Math.ceil(v.mH/2);v.heal(am);b.lg(v.n+' +'+am)})}},
+{n:'森罗万象',tp:'ult',ch:5,ex:function(u,b){b.us.filter(v=>v.tm==u.tm).forEach(v=>{v.mH+=2;v.heal(2)});b.lg('森罗万象:全体+2生命上限');u.ult=1;u.ch=0}},
+]},
+{n:'达不溜',h:10,a:2,g:8,m:2,r:[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]],cls:'情报官',sk:[
+{n:'绯斩',tp:'ba',ex:function(u,t,b){let d=t.dmg(u.atk,1);u.intel+=Math.floor(d/2);if(u.intel>10)u.intel=10;b.lg(u.n+' 绯斩 '+d+'穿透 情报'+u.intel);if(u.intel>=5)b.lg('减伤生效');u.chrg(1);t.chrg(1);if(!u.lastT||u.lastT!==t)u.lastT=t}},
+{n:'破晓',tp:'ult',ch:2,ex:function(u,b){let il=u.intel;u.intel=0;b.us.filter(v=>v.tm!=u.tm).forEach(v=>{v.pv.forEach(p=>{if(p.nm)v[p.nm]=0});b.lg(v.n+' 被动失效2回合')});u.ch=0;b.lg('破晓:消耗'+il+'情报值')}},
+]},
+{n:'蓝主任',h:8,a:0,g:3,m:1,r:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1]],cls:'战术家',sk:[
+{n:'绝对权威',tp:'ba',ex:function(u,t,b){if(u.gru<=0)return b.lg('无怨气');let ex=b.fE(t.x-1,t.x+1,t.y-1,t.y+1);if(ex){t.x=ex.x;t.y=ex.y;b.reSp(t)}u.gru--;b.lg(u.n+' 拖拽'+t.n+' 怨气:'+u.gru)}},
+{n:'左膀右臂',tp:'ba',ex:function(u,t,b){if(u.gru<=0)return b.lg('无怨气');let f1=b.us.filter(v=>v.tm==u.tm&&v.al&&Math.abs(v.x-u.x)<=1&&Math.abs(v.y-u.y)<=1);if(f1.length<2)return;let a=f1[0],b2=f1[1];[a.x,a.y,b2.x,b2.y]=[b2.x,b2.y,a.x,a.y];b.reSp(a);b.reSp(b2);u.gru--;b.lg(u.n+' 交换'+a.n+'↔'+b2.n)}},
+{n:'信XX得永胜',tp:'ult',ch:1,ex:function(u,b){if(u.gru<=0)return b.lg('无怨气');u.gru--;b.extraTurn=b.extraTurn||[];let t=b.sel||b.us.find(v=>v.tm==u.tm&&v.al&&v!=u);if(t)b.extraTurn.push(t);u.ch=0;b.lg(t?t.n+' 下次额外行动':'无人可指定')}},
+]},
+{n:'剑柄',h:5,a:2,g:6,m:2,r:[[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]],cls:'处决者',sk:[
+{n:'剑雨滂沱',tp:'sk',cd:2,st:2,ex:function(u,b){let grp=[Math.floor(Math.random()*5),Math.floor(Math.random()*3)];let ar=b.us.filter(v=>v.tm!=u.tm&&v.al&&v.x>=grp[0]&&v.x<grp[0]+3&&v.y>=grp[1]&&v.y<grp[1]+3);if(!ar.length)return;ar.forEach(v=>v.dmg(u.atk*2));b.lg(u.n+' 剑雨('+ar.length+'人) 2倍伤害');let k=ar.some(v=>!v.al);if(k){u.sCd('剑雨滂沱',0);b.lg('击杀→可再次释放')}}},
+{n:'照耀的荣光',tp:'ult',ch:2,auto:1,ex:function(u,b){u.atk+=1;u.ch=0;b.lg(u.n+' 攻击力永久+1='+u.atk)}},
+]},
+{n:'手充',h:12,a:2,g:1,m:1,r:[[0,1],[0,2],[0,3],[0,4],[0,5],[0,6]],cls:'神射手',sk:[
+{n:'开冲',tp:'ba',ex:function(u,t,b){let bon=u.lt===t?(u.cs||0):0;u.cs=(u.lt===t)?(u.cs||0)+1:1;u.lt=t;let d=t.dmg(u.atk+bon);b.lg(u.n+' 开冲(连击+'+bon+') '+d+'伤');u.chrg(1);t.chrg(1)}},
+{n:'到处都是',tp:'ult',ch:1,ex:function(u,b){u.ult=4;u.ch=0;b.lg('大招:普攻溅射周围8格 持续4回合')}},
+]},
+{n:'P铅',h:14,a:1,g:5,m:3,r:[[0,0],[3,0],[3,-1],[3,1],[4,0],[4,-1],[4,1]],cls:'投手',sk:[
+{n:'实心球',tp:'ba',ex:function(u,t,b){let mul=t.y==u.y&&t.x>u.x?2:1;let d=t.dmg(u.atk*mul);b.lg(u.n+' 实心球'+(mul>1?'(正面×2)':'')+' '+d+'伤');u.chrg(1);t.chrg(1)}},
+{n:'控场能力',tp:'sk',cd:8,ex:function(u,b){b.us.filter(v=>v.tm!=u.tm&&v.al&&Math.abs(v.x-u.x)>=3&&Math.abs(v.x-u.x)<=4&&Math.abs(v.y-u.y)<=1).forEach(v=>{v.bd=2;b.lg(v.n+' 被束缚')});u.sCd('控场能力',8)}},
+{n:'手感火热',tp:'sk',ch:3,ex:function(u,b){let es=b.us.filter(v=>v.tm!=u.tm&&v.al);let tg=[];for(let i=0;i<3&&es.length;i++){let idx=Math.floor(Math.random()*es.length);tg.push(es.splice(idx,1)[0])}tg.forEach(t=>t.dmg(u.atk));b.lg(u.n+' 三连弹 '+tg.map(t=>t.n).join()+'各'+u.atk+'伤');let lo=tg.find(t=>t.hp<t.mH/2);if(lo){lo.dmg(u.atk+1);b.lg('追加弹>'+lo.n+' '+(u.atk+1)+'伤')}u.ch=0}},
+]},
+{n:'小二',h:8,a:0,g:4,m:3,r:[[-2,-2],[-2,-1],[-2,0],[-2,1],[-2,2],[-1,-2],[-1,-1],[-1,0],[-1,1],[-1,2],[0,-2],[0,-1],[0,1],[0,2],[1,-2],[1,-1],[1,0],[1,1],[1,2],[2,-2],[2,-1],[2,0],[2,1],[2,2]],cls:'吟游者',sk:[
+{n:'潮汐',tp:'ult',ch:3,auto:1,ex:function(u,b){let r13=b.us.filter(v=>v.al&&Math.abs(v.x-u.x)<=2&&Math.abs(v.y-u.y)<=2);r13.forEach(v=>{v.immuneDmg=(v.immuneDmg||0)+1;b.lg(v.n+' +1免疫')});u.ch=0}},
+]},
+{n:'肖牢大',h:10,a:2,g:7,m:4,r:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1]],cls:'扩散术师',sk:[
+{n:'落叶飘零',tp:'ba',ex:function(u,t,b){let nb=[t];b.us.forEach(v=>{if(v.tm!=u.tm&&v.al&&Math.abs(v.x-t.x)<=1&&Math.abs(v.y-t.y)<=1&&v!=t)nb.push(v)});nb.forEach(v=>v.dmg(u.atk));b.lg(u.n+' 落叶飘零 '+nb.length+'人 '+u.atk+'伤害');u.chrg(1);nb.forEach(v=>{if(v.al)v.chrg(1)})}},
+{n:'逍遥游',tp:'sk',ch:4,ex:function(u,b){u.xiaoy++;u.inv=1;u.heal(4);b.lg(u.n+' 逍遥游 无敌+回复4HP('+u.xiaoy+'/2)');if(u.xiaoy>=2){u.al=0;b.lg(u.n+' 强制阵亡！')}u.ch=0}},
+]},
+{n:'主播',h:12,a:1,g:2,m:0,r:[[0,0],[1,0],[2,0],[2,-1],[2,1],[2,-2],[2,2]],cls:'医师',sk:[
+{n:'点赞',tp:'ba',ex:function(u,t,b){if(t.tm==u.tm){t.heal(u.atk*2);b.lg(u.n+' 治疗'+t.n+' +'+u.atk*2)}else{let d=t.dmg(u.atk);b.lg(u.n+' 攻击'+t.n+' '+d+'伤')}u.chrg(1);if(t.tm==u.tm&&!t.isS)t.chrg(1)}},
+{n:'收藏',tp:'sk',cd:30,st:2,ex:function(u,b){b.lg(u.n+' 收藏:记录状态(暂未实现完整回溯)');u.sCd('收藏',30)}},
+{n:'投币',tp:'sk',cd:5,ex:function(u,b){let t=b.sel;if(!t||t.tm==u.tm){b.us.filter(v=>v.tm!=u.tm&&v.al).slice(0,1).forEach(v=>{v.st=1;b.lg(v.n+' 被眩晕1回合')})}else{t.st=1;b.lg(t.n+' 被眩晕1回合')}u.sCd('投币',5)}},
+]},
+{n:'丁衍征一',h:10,a:0,g:8,m:0,r:[],cls:'召唤师',sk:[
+{n:'知识风暴',tp:'ba',ex:function(u,t,b){u.form=u.form?0:1;b.lg(u.n+' 切换→'+(u.form?'巡猎':'智识'))}},
+{n:'雪豹我们上 智识',tp:'ba',ex:function(u,t,b){if(u.form!=0)return b.lg('非智识形态');let p=b.fE(4,6,0,4);if(!p)return;let xb=new U({n:'雪豹',h:4,a:0,g:0,t:u.tm,x:p.x,y:p.y,m:0,r:[]});xb.isS=1;xb.mst=u;xb.type='xb';b.us.push(xb);b.mkSp(xb);b.lg(u.n+' 召唤雪豹智识')}},
+{n:'雪豹我们上 巡猎',tp:'ba',ex:function(u,t,b){if(u.form!=1)return b.lg('非巡猎形态');let r=b.us.filter(v=>v.tm==u.tm&&v.al&&!v.isS);if(!r.length)return;r[0].mounted=1;r[0].xbHp=4;b.lg(r[0].n+' 骑乘雪豹 HP+4');b.us.forEach(v=>{if(v.isS&&v.type=='xb'&&v.mst==u)v.al=0})}},
+{n:'扬雾 智识',tp:'sk',cd:17,st:2,ex:function(u,b){if(u.form!=0)return;b.us.filter(v=>v.tm==u.tm).forEach(v=>{v.sth=2;b.lg(v.n+' 隐匿2回合')});u.sCd('扬雾 智识',17)}},
+{n:'扬雾 巡猎',tp:'sk',cd:17,st:2,ex:function(u,b){if(u.form!=1)return;b.lg(u.n+' 布置铌钴钉路径(暂简化)');u.sCd('扬雾 巡猎',17)}},
+]},
+{n:'澄心',h:12,a:2,g:3,m:0,r:[[-1,0],[0,-1],[0,0],[0,1],[1,-1],[1,0]],cls:'医师',sk:[
+{n:'分解反应',tp:'ba',ex:function(u,t,b){u.heal(u.atk);if(t.tm==u.tm){t.heal(u.atk);b.lg(u.n+' 治疗自身和'+t.n+' +'+u.atk)}else{b.lg(u.n+' 治疗自身 +'+u.atk)}}},
+{n:'硝酸',tp:'sk',ch:3,st:2,ex:function(u,b){u.bl+=3;u.atk+=1;b.lg(u.n+' 硝酸:自身流血+3 攻击力+1='+u.atk);u.ch=0}},
+{n:'复分解反应',tp:'sk',cd:18,st:2,ex:function(u,b){b.us.filter(v=>v.tm==u.tm&&v.al&&Math.abs(v.x-u.x)<=1&&Math.abs(v.y-u.y)<=1).forEach(v=>{v.heal(u.atk);b.lg(v.n+' +'+u.atk)});u.sCd('复分解反应',18)}},
+]},
+{n:'第五陈色',h:12,a:2,g:7,m:0,r:[[0,0],[0,1]],cls:'冲锋手',sk:[
+{n:'奋力一击',tp:'ba',ex:function(u,t,b){let d=t.dmg(u.atk);t.ail.fear.add(5);u.st=1;b.lg(u.n+' 奋力一击 '+d+'伤 +5恐惧 自身眩晕');u.chrg(1);t.chrg(1)}},
+{n:'千鸟锐枪',tp:'sk',cd:22,ex:function(u,b){u.chging=1;u.chgSk='千鸟锐枪';b.lg(u.n+' 蓄力！下回合冲锋')}},
+]},
+{n:'加州老鼠',h:14,a:0,g:9,m:4,r:[[0,0],[0,1],[0,2],[0,3],[0,4]],cls:'强攻手',p:[{nm:'怒气',val:4}],sk:[
+{n:'怒斥',tp:'ba',ex:function(u,t,b){let d=t.dmg(u.atk+Math.floor(u.rage/4));b.lg(u.n+' 怒斥('+Math.floor(u.rage/4)+'额外) '+d+'伤');u.chrg(1);t.chrg(1)}},
+{n:'降压药',tp:'sk',cd:1,ex:function(u,b){let am=Math.floor(u.rage/4);u.heal(am);u.rage=0;b.lg(u.n+' 降压药 +'+am+'HP 怒气清零')}},
+{n:'烂香蕉',tp:'sk',cd:1,ex:function(u,b){u.dmg(5);u.rage=12;b.lg(u.n+' 烂香蕉 -5HP 怒气满')}},
+{n:'鼠群',tp:'sk',ch:4,ex:function(u,b){let ms=[];for(let dx=-1;dx<=1;dx++)for(let dy=-1;dy<=1;dy++){let nx=u.x+dx,ny=u.y+dy;if(nx>=0&&nx<W&&ny>=0&&ny<H&&!b.gU(nx,ny)&&ms.length<6){let mo=new U({n:'老鼠',h:1,a:1,g:0,t:u.tm,x:nx,y:ny,m:0,r:[]});mo.isS=1;mo.mst=u;mo.rush=1;b.us.push(mo);b.mkSp(mo);ms.push(mo)}}u.ch=0;b.lg(u.n+' 召唤'+ms.length+'只老鼠')}},
+]},
+{n:'路易十六',h:16,a:2,g:4,m:3,r:[[0,0],[2,-1],[2,0],[2,1],[3,-1],[3,0],[3,1],[4,-1],[4,0],[4,1]],cls:'战术家',sk:[
+{n:'逸散',tp:'ba',ex:function(u,t,b){let es=b.us.filter(v=>v.tm!=u.tm&&v.al).slice(0,2);es.forEach(v=>{let d=v.dmg(Math.floor(u.atk/2));b.lg(v.n+' 逸散 '+d+'伤')});u.chrg(1)}},
+{n:'电解',tp:'sk',cd:10,ex:function(u,b){b.us.filter(v=>v.al&&Math.abs(v.x-u.x)<=4&&Math.abs(v.y-u.y)<=1).forEach((v,i)=>{v.elec=i%2?'-':'+';b.lg(v.n+' ['+v.elec+']')});u.sCd('电解',10);b.lg('电解:分配电荷')}},
+{n:'万象天引',tp:'sk',cd:15,st:2,ex:function(u,b){let ps=b.us.filter(v=>v.elec=='+');let ns=b.us.filter(v=>v.elec=='-');ps.forEach(p=>{let op=ns[0];if(op){let ex=b.fE(op.x-1,op.x+1,op.y-1,op.y+1);if(ex){p.x=ex.x;p.y=ex.y;b.reSp(p);p.dmg(u.atk);b.lg(p.n+' 拖拽→('+p.x+','+p.y+') '+u.atk+'伤')}}});b.us.forEach(v=>v.elec='');u.sCd('万象天引',15)}},
+{n:'量子力学',tp:'sk',ch:3,ex:function(u,b){b.us.filter(v=>v.al&&Math.abs(v.x-u.x)<=4&&Math.abs(v.y-u.y)<=1).forEach(v=>{v.elec=v.elec?(v.elec=='+'?'-':'+'):'+';v.dmg(u.atk);b.lg(v.n+' 量子 '+u.atk+'伤 电荷:'+v.elec)});u.ch=0}},
+]},
+{n:'QC',h:14,a:1,g:6,m:4,r:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1]],cls:'医师',sk:[
+{n:'葡萄糖',tp:'ba',ex:function(u,t,b){if(t.tm==u.tm){t.heal(u.atk);b.lg(u.n+' 治疗'+t.n+' +'+u.atk)}else{let d=t.dmg(u.atk);b.lg(u.n+' 攻击'+t.n+' '+d+'伤')}u.chrg(1)}},
+{n:'提纯',tp:'sk',cd:8,st:3,ex:function(u,b){b.us.filter(v=>v.al&&Math.abs(v.x-u.x)<=1&&Math.abs(v.y-u.y)<=1).forEach(v=>{v.st=0;v.bd=0;v.bl=0});u.sCd('提纯',8);b.lg('提纯:清除周围负面')}},
+{n:'长夜临光',tp:'ult',ch:4,ex:function(u,b){u.atk+=1;u.rg=[];for(let x=0;x<W;x++)for(let y=0;y<H;y++)u.rg.push([x-u.x,y-u.y]);u.ult=1;u.ch=0;b.lg('长夜临光:攻击+1,全图射程')}},
+]},
+{n:'松龄',h:8,a:0,g:1,m:0,r:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1]],cls:'召唤师',sk:[
+{n:'植树',tp:'sk',cd:18,st:2,ex:function(u,b){let p=b.fE(0,6,0,4);if(!p)return;let tr=new U({n:'大树',h:99,a:0,g:0,t:u.tm,x:p.x,y:p.y,m:0,r:[]});tr.isS=1;tr.mst=u;tr.isTree=1;b.us.push(tr);b.mkSp(tr);b.lg(u.n+' 植树('+tr.x+','+tr.y+')');u.trees.push(tr);b.us.filter(v=>v.tm!=u.tm&&v.al&&Math.abs(v.x-tr.x)<=1&&Math.abs(v.y-tr.y)<=1).forEach(v=>{v.bd=2;b.lg(v.n+' 被大树束缚')});u.sCd('植树',18)}},
+]},
+{n:'门师傅',h:12,a:4,g:10,m:3,r:[[-2,-1],[-2,0],[-2,1],[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1],[2,-1],[2,0],[2,1]],cls:'处决者',sk:[
+{n:'苦无',tp:'ba',ex:function(u,t,b){let d=t.dmg(u.atk*3);t.mk.push(u);b.lg(u.n+' 苦无 '+d+'伤 标记'+t.n);u.chrg(1);t.chrg(1)}},
+{n:'飞雷神',tp:'sk',cd:13,ex:function(u,b){b.us.filter(v=>v.tm!=u.tm&&v.al&&Math.abs(v.x-u.x)<=2&&Math.abs(v.y-u.y)<=1).forEach(v=>{v.mk.push(u);v.dmg(u.atk);b.lg(v.n+' 飞雷神标记 '+u.atk+'伤')});u.sCd('飞雷神',2);b.lg('下回合可释放爆旋连丸')}},
+{n:'超大玉',tp:'ult',ch:3,auto:1,ex:function(u,b){b.us.filter(v=>v.tm!=u.tm&&v.al&&v.x==u.x+1&&Math.abs(v.y-u.y)<=2).forEach(v=>{v.dmg(u.atk);b.lg(v.n+' 超大玉 '+u.atk+'伤')});u.ch=0}},
+]},
+{n:'风笛',h:5,a:1,g:6,m:0,r:[[0,0],[0,1]],cls:'冲锋手',sk:[
+{n:'扶摇而上',tp:'ba',ex:function(u,t,b){let mul=u.fd<2?6:1;let d=t.dmg(u.atk*mul);b.lg(u.n+' 扶摇而上×'+mul+' '+d+'伤');u.fd++;u.chrg(1);t.chrg(1)}},
+]},
+{n:'纯烬艾雅法拉',h:10,a:1,g:4,m:0,r:[[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1],[2,-1],[2,0],[2,1],[2,-2],[2,2]],cls:'医师',sk:[
+{n:'飘絮',tp:'ba',ex:function(u,t,b){if(t.tm==u.tm){t.heal(u.atk);b.lg(u.n+' 治疗'+t.n+' +'+u.atk);t.ail.neuro.s=Math.max(0,t.ail.neuro.s-2);t.ail.fear.s=Math.max(0,t.ail.fear.s-2);t.ail.burn.s=Math.max(0,t.ail.burn.s-2)}else{let d=t.dmg(u.atk);b.lg(u.n+' 攻击'+t.n+' '+d+'伤')}}},
+{n:'弄清影',tp:'sk',cd:20,st:2,ex:function(u,b){let t=b.sel||b.us.find(v=>v.tm==u.tm&&v.al);if(t){t.st=0;t.bd=0;t.bl=0;t.ail.neuro.s=0;t.ail.fear.s=0;t.ail.burn.s=0;b.lg(t.n+' 弄清影:清除全部负面')}u.sCd('弄清影',20)}},
+]},
+{n:'宇智波佐助',h:8,a:1,g:8,m:0,r:[[0,0],[0,1],[0,2],[0,3]],cls:'冲锋手',sk:[
+{n:'千鸟刀',tp:'sk',cd:1,ex:function(u,t,b){let d=t.dmg(u.atk);b.lg(u.n+' 千鸟刀 '+d+'伤')}},
+{n:'天照',tp:'sk',cd:1,ex:function(u,t,b){if(u.tkUse)return b.lg('天照已用');u.chging=1;u.chgSk='天照';u.chgT=t;t.st=2;u.tkUse=1;b.lg(u.n+' 天照蓄力 眩晕'+t.n+'2回合')}},
+{n:'因陀罗之矢',tp:'sk',cd:1,ex:function(u,t,b){if(u.idUse)return b.lg('已用');let all=b.us.filter(v=>v.al&&Math.abs(v.x-u.x)<=3&&Math.abs(v.y-u.y)<=1);all.forEach(v=>v.dmg(2,1));let last=all[all.length-1];if(last){b.us.filter(v=>v.al&&Math.abs(v.x-last.x)<=1&&Math.abs(v.y-last.y)<=1).forEach(v=>v.dmg(3,1))}u.idUse=1;b.lg(u.n+' 因陀罗之矢 贯穿伤害')}},
+]},
+{n:'科比牢大',h:16,a:0,g:1,m:6,r:[[0,0],[2,-1],[2,0],[2,1],[3,-1],[3,0],[3,1],[4,-1],[4,0],[4,1]],cls:'解放者',sk:[
+{n:'肘击',tp:'ba',ex:function(u,t,b){let d=t.dmg(u.atk+u.bonus);b.lg(u.n+' 肘击(攻击+'+u.bonus+') '+d+'伤');u.chrg(1);t.chrg(1);u.bonus=0;if(u.atk+u.bonus>=2)u.tt=1}},
+{n:'What can I say',tp:'ult',ch:6,ex:function(u,b){let ts=b.us.filter(v=>v.tm!=u.tm&&v.al&&Math.abs(v.x-u.x)>=2&&Math.abs(v.x-u.x)<=4&&Math.abs(v.y-u.y)<=1);ts.forEach(t=>t.dmg((u.atk+u.bonus)*2));b.lg('What can I say! '+ts.length+'人受伤');u.ch=0;u.bonus=0}},
+]},
+];
+}
+
+// ===== 主场景 =====
+class BS extends Phaser.Scene{
+constructor(){super('BS')}
+create(){
+this.cameras.main.setBackgroundColor('#111');
+this.us=[];this.sel=null;this.cT='p1';this.rn=1;this.go=0;this.lgs=[];
+this.gG=this.add.graphics();this.dG();
+this.infoT=this.add.text(OX,4,'',{fontSize:'10px',color:'#ccc',wordWrap:{width:440}});
+this.logT=this.add.text(OX,OY+H*SZ+4,'',{fontSize:'8px',color:'#777',wordWrap:{width:440}});
+this.cB();this.input.on('pointerdown',p=>this.oC(p));
+this.roster=mkRoster();
+this.pickPhase();
+}
+
+dG(){
+let g=this.gG;g.clear();
+for(let x=0;x<W;x++)for(let y=0;y<H;y++){
+let px=OX+x*SZ,py=OY+y*SZ;
+g.fillStyle(x==3?0x222244:0x1a1a33,1);g.fillRect(px+1,py+1,SZ-2,SZ-2);
+g.lineStyle(1,0x333355,0.5);g.strokeRect(px,py,SZ,SZ);
+}
+}
+
+pickPhase(){
+// 随机分配8个角色 4v4
+let pool=[...this.roster].sort(()=>Math.random()-0.5);
+let sel=pool.slice(0,8);
+sel.slice(0,4).forEach((r,i)=>{
+let c={...r,t:'p1',x:1+i,y:2,m:r.m||5};
+c.sk=r.sk.map(s=>({...s}));c.pv=r.pv||[];
+this.us.push(new U(c));
+});
+sel.slice(4,8).forEach((r,i)=>{
+let c={...r,t:'p2',x:6-i,y:2,m:r.m||5};
+c.sk=r.sk.map(s=>({...s}));c.pv=r.pv||[];
+this.us.push(new U(c));
+});
+// 羁绊效果
+let chs=this.us.find(u=>u.n=='陈色'&&u.tm=='p1');
+let dwc=this.us.find(u=>u.n=='第五陈色'&&u.tm=='p1');
+if(chs&&dwc){dwc.atk+=1;this.lg('羁绊:第五陈色攻击力+1');}
+let zs=this.us.find(u=>u.n=='周水');
+let jzls=this.us.find(u=>u.n=='加州老鼠');
+if(zs&&jzls&&zs.tm==jzls.tm){jzls.rage+=4;zs.mH+=1;zs.hp+=1;this.lg('羁绊:加州老鼠怒气上限+4 周水+1HP');}
+let ly=this.us.find(u=>u.n=='路易十六');
+let xl=this.us.find(u=>u.n=='小六');
+if(ly&&xl&&ly.tm==xl.tm){xl.agi+=3;this.lg('羁绊:小六敏捷+3');}
+
+// 初始化被动
+this.us.forEach(u=>{
+if(u.n=='周水')u.sth=1;
+if(u.n=='手充')u.sth=999;
+if(u.n=='蓝主任'){u.gru=1;}
+if(u.n=='加州老鼠'){u.rage=u.rage||4;}
+if(u.n=='丁衍征一'){u.form=0;}
+if(u.cls=='冲锋手'){u.fd=0;}
+if(u.n=='优南'){u.qi=0;}
+if(u.n=='科比牢大'){u.bonus=0;}
+(u.sk||[]).forEach(s=>{if(s.cd)u.cd[s.n]=0;});
+});
+
+this.us.forEach(u=>this.mkSp(u));
+this.upAll();
+// 先手判定
+let p1a=this.us.filter(u=>u.tm=='p1').reduce((s,u)=>s+u.agi,0);
+let p2a=this.us.filter(u=>u.tm=='p2').reduce((s,u)=>s+u.agi,0);
+if(p1a!=p2a)this.cT=p1a>p2a?'p1':'p2';
+else{let p1h=this.us.filter(u=>u.tm=='p1').reduce((s,u)=>s+u.mH,0);let p2h=this.us.filter(u=>u.tm=='p2').reduce((s,u)=>s+u.mH,0);this.cT=p1h<p2h?'p1':'p2'}
+this.lg('先手:'+(this.cT=='p1'?'蓝方':'红方'));
+this.sR();
+}
+
+sR(){
+this.us.forEach(u=>{if(u.al)u.chrg(1)});
+// 流血
+this.us.forEach(u=>{if(u.al&&u.bl>0){u.dmg(2,1);this.lg(u.n+' 流血-2');u.bl--}});
+// 王土大招回复
+if(this.us.some(v=>v.n=='王土'&&v.ult))this.us.filter(v=>v.tm=='p1'&&v.al).forEach(v=>v.heal(1));
+// 大树回复
+this.us.filter(v=>v.al&&v.isS&&v.isTree).forEach(v=>{this.us.filter(w=>w.al&&w.tm==v.tm&&Math.abs(w.x-v.x)<=1&&Math.abs(w.y-v.y)<=1).forEach(w=>w.heal(2))});
+// 雪豹伤害
+this.us.filter(v=>v.al&&v.isS&&v.type=='xb').forEach(v=>{this.us.filter(w=>w.al&&w.tm!=v.tm&&Math.abs(w.x-v.x)<=1&&Math.abs(w.y-v.y)<=1).forEach(w=>{w.dmg(4);this.lg('雪豹→'+w.n+' 4伤')})});
+// 老鼠冲锋
+this.us.filter(v=>v.al&&v.isS&&v.rush).forEach(v=>{let t=this.us.find(w=>w.tm!=v.tm&&w.al&&w.x==v.x);if(t){t.dmg(1);this.lg('老鼠冲锋→'+t.n+' 1伤')}v.al=0});
+this.us=this.us.filter(v=>v.al);
+// 清理召唤物精灵
+this.clSp();
+// 手充HP上限-1
+this.us.filter(v=>v.n=='手充'&&v.al).forEach(v=>{v.mH-=1;if(v.mH<1)v.mH=1;if(v.hp>v.mH)v.hp=v.mH});
+// 科比攻击力累加
+this.us.filter(v=>v.n=='科比牢大'&&v.al&&v.bonus<8).forEach(v=>v.bonus++);
+// 蓝主任积怨
+this.us.filter(v=>v.n=='蓝主任'&&v.al).forEach(v=>{v.gTur++;if(v.gTur>=5){v.gTur=0;v.gru++;}});
+// 减状态
+this.us.forEach(u=>{u.sth=Math.max(0,u.sth-0);u.tt=0;u.bd=Math.max(0,u.bd-0);u.inv=0;});
+// CD
+this.us.forEach(u=>{u.cdTk()});
+// 肖牢大隐匿
+this.us.filter(v=>v.n=='肖牢大'&&v.al&&v.dT>0).forEach(v=>v.sth=1);
+this.us.forEach(v=>v.dT=0);
+
+this.us.forEach(u=>u.ac=0);
+this.ao=this.us.filter(u=>u.al&&u.tm==this.cT).sort((a,b)=>b.agi-a.agi);
+this.tI=0;this.upI();this.sMT();
+}
+
+sMT(){
+if(this.tI>=this.ao.length){this.sT();return}
+let u=this.ao[this.tI];
+if(!u.al||u.st>0){if(u.st>0){this.lg(u.n+' 眩晕跳过');u.st--}this.eMT(u);return}
+// 延迟死亡
+if(u.delay){u.delay=0;u.al=0;this.lg(u.n+' 延迟死亡触发!');this.eMT(u);return}
+// 自动大招
+let au=u.sk&&u.sk.find(s=>s.tp=='ult'&&s.auto&&u.ch>=s.ch);
+if(au){au.ex(u,this);this.upAll();this.eMT(u);return}
+this.sel=u;this.cH();this.hC(u.x,u.y,0xff0);this.hT(u);this.upI()
+}
+
+eMT(u){
+this.sel=null;this.cH();
+let ex=this.extraTurn||[];if(ex.length>0){let eu=ex.shift();this.ao.unshift(eu);this.lg(eu.n+' 额外行动!')}
+this.upAll();
+if(!this.go)this.cGO();
+if(!this.go){this.tI++;if(this.tI>=this.ao.length)this.sT();else this.sMT()}
+}
+
+sT(){
+if(!this.us.some(u=>u.tm=='p1'&&u.al&&!u.isS)||!this.us.some(u=>u.tm=='p2'&&u.al&&!u.isS)){this.cGO();return}
+this.cT=this.cT=='p1'?'p2':'p1';
+if(this.cT=='p1'){this.rn++;this.lg('── 第'+this.rn+'回合 ──')}
+this.sR()
+}
+
+oC(p){
+if(this.go){this.scene.restart();return}
+let gx=Math.floor((p.x-OX)/SZ),gy=Math.floor((p.y-OY)/SZ);
+if(gx<0||gx>=W||gy<0||gy>=H)return;
+let u=this.gU(gx,gy);
+
+if(this.sel&&u&&u.tm!=this.sel.tm&&u.al){
+this.exA(this.sel,u)
+}else if(u&&u.tm==this.cT&&u.al&&u.st==0&&!u.isS){
+this.sel=u;this.cH();this.hC(gx,gy,0xff0);this.hT(u);this.upI()
+}
+}
+
+exA(a,d){
+// 选择技能: 大招>技能>普攻
+let hasU=a.sk&&a.sk.some(s=>s.tp=='ult'&&!s.auto&&a.ch>=s.ch);
+let hasS=a.sk&&a.sk.some(s=>s.tp=='sk'&&a.gCd(s.n)<=0&&(!s.ch||a.ch>=s.ch));
+let hasB=a.sk&&a.sk.some(s=>s.tp=='ba');
+
+if(hasU){
+let ult=a.sk.find(s=>s.tp=='ult'&&!s.auto&&a.ch>=s.ch);
+if(ult)ult.ex(a,this);
+}else if(hasS&&!a.selFirst){
+let sk=a.sk.find(s=>s.tp=='sk'&&a.gCd(s.n)<=0&&(!s.ch||a.ch>=s.ch));
+if(sk)sk.ex(a,this);
+}else if(hasB){
+let ba=a.sk.find(s=>s.tp=='ba');
+let al=a.sk.filter(s=>s.tp=='ba');
+if(al.length>1){
+// 多普攻角色选第一个
+ba=al[0];
+}
+if(ba)ba.ex(a,d,this);
+if(a.ult&&a.n=='手充'){
+this.us.filter(v=>v.tm!=a.tm&&v.al&&Math.abs(v.x-d.x)<=1&&Math.abs(v.y-d.y)<=1&&v!=d).forEach(v=>{v.dmg(a.atk);this.lg('溅射→'+v.n)});
+if(a.ult>0)a.ult--;if(a.ult<=0)this.lg('大招溅射结束')
+}
+}else{
+this.lg(a.n+' 无法攻击')
+}
+
+// 充能
+this.us.forEach(u=>{if(u.al&&u.tm!=a.tm&&u==d)u.chrg(1)});
+
+this.cH();this.sel=null;this.upAll();this.upI();
+if(!this.go)this.cGO();
+if(!this.go)this.eMT(a)
+}
+
+tAil(u,type){
+this.lg('【'+{neuro:'神经',fear:'恐惧',burn:'燃烧'}[type]+'损伤触发】'+u.n);
+if(type=='neuro'){u.dmg(2,1);u.st+=1}
+else if(type=='fear'){u.dmg(4,1)}
+else if(type=='burn'){u.dmg(2,1);u.bl+=3}
+}
+
+mkSp(u){
+let px=OX+u.x*SZ+SZ/2,py=OY+u.y*SZ+SZ/2-8;
+let c=u.tm=='p1'?0x4488ff:0xff4444;
+u.bS=this.add.circle(px,py+10,15,c,0.3);
+u.sp=this.add.circle(px,py,13,c,0.85);
+u.nS=this.add.text(px,py-18,u.n.substring(0,3),{fontSize:'8px',color:'#fff'}).setOrigin(0.5);
+u.hB=this.add.rectangle(px,py+25,34,4,0x333);
+u.hF=this.add.rectangle(px-17,py+25,34,4,0x4f4).setOrigin(0,0.5);
+u.hT=this.add.text(px,py+31,`${u.hp}`,{fontSize:'7px',color:'#aaa'}).setOrigin(0.5);
+u.cT=this.add.text(px+14,py-8,'',{fontSize:'7px',color:'#fc0'}).setOrigin(0.5);
+u.sT=this.add.text(px-14,py-8,'',{fontSize:'7px',color:'#8cf'}).setOrigin(0.5);
+if(u.isS){u.sp.setFillStyle(u.isTree?0x44aa44:(u.type=='xb'?0xcccccc:0x88aa88));u.sp.setRadius(8)}
+}
+
+reSp(u){
+if(!u.sp)return;
+let px=OX+u.x*SZ+SZ/2,py=OY+u.y*SZ+SZ/2-8;
+u.sp.setPosition(px,py);u.bS.setPosition(px,py+10);u.nS.setPosition(px,py-18);
+u.hB.setPosition(px,py+25);u.hF.setPosition(px-17,py+25);u.hT.setPosition(px,py+31);
+u.cT.setPosition(px+14,py-8);u.sT.setPosition(px-14,py-8);
+}
+
+upSp(u){
+if(!u.al||u.delay){if(u.sp){u.sp.setAlpha(0.1);u.nS.setAlpha(0.1);u.bS.setAlpha(0.05);u.hT.setText('');u.cT.setText('');u.sT.setText('')}return}
+let r=u.hp/u.mH;
+u.hF.setDisplaySize(34*r,4);
+u.hF.setFillStyle(r>0.5?0x44ff44:(r>0.25?0xffaa00:0xff4444));
+u.hT.setText(`${u.hp}/${u.mH}`);
+u.cT.setText(u.ch>=u.mxC?'⚡':(u.ch>0?`${u.ch}`:''));
+u.sT.setText(u.sh>0?`🛡${u.sh}`:'');
+let a=u.st>0?0.5:(u.sth>0?0.4:(u.inv?0.6:0.85));
+if(u.sp)u.sp.setAlpha(a);
+}
+
+upAll(){this.us.forEach(u=>this.upSp(u))}
+clSp(){this.us.filter(v=>!v.al).forEach(v=>{if(v.sp)v.sp.setVisible(false)})}
+
+cB(){
+[{t:'跳过',x:OX,fn:()=>{if(this.sel)this.eMT(this.sel)}},
+{t:'大招',x:OX+80,fn:()=>{if(!this.sel)return;let u=this.sel;let ult=u.sk&&u.sk.find(s=>s.tp=='ult'&&!s.auto&&u.ch>=s.ch);if(ult){ult.ex(u,this);this.eMT(u)}}},
+{t:'技能',x:OX+160,fn:()=>{
+if(!this.sel)return;let u=this.sel;
+let sks=u.sk&&u.sk.filter(s=>s.tp=='sk'&&u.gCd(s.n)<=0&&(!s.ch||u.ch>=s.ch));
+if(sks.length>0){sks[0].ex(u,this);this.eMT(u)}
+}},
+].forEach(b=>{
+let btn=this.add.rectangle(b.x+30,OY+H*SZ+26,54,26,0x333366).setInteractive({useHandCursor:1});
+this.add.text(b.x+30,OY+H*SZ+26,b.t,{fontSize:'10px',color:'#fff'}).setOrigin(0.5);
+btn.on('pointerdown',b.fn);
+btn.on('pointerover',()=>btn.setFillStyle(0x5555cc));
+btn.on('pointerout',()=>btn.setFillStyle(0x333366));
+})
+}
+
+hC(x,y,c){let g=this.gG,px=OX+x*SZ,py=OY+y*SZ;g.lineStyle(3,c,1);g.strokeRect(px+2,py+2,SZ-4,SZ-4)}
+hT(u){this.us.filter(v=>v.tm!=u.tm&&v.al).forEach(e=>{if(u.inRg(e.x,e.y))this.hC(e.x,e.y,0xf66)})}
+cH(){this.dG()}
+gU(x,y){return this.us.find(u=>u.al&&u.x==x&&u.y==y)}
+fE(x1,x2,y1,y2){for(let x=Math.max(0,x1);x<=Math.min(W-1,x2);x++)for(let y=Math.max(0,y1);y<=Math.min(H-1,y2);y++){if(!this.gU(x,y)&&x!=3)return{x:x,y:y}}return null}
+
+upI(){
+let t=this.cT=='p1'?'蓝方':'红方';
+let i='第'+this.rn+'回合 | '+t+'行动';
+if(this.sel)i+='\n'+this.sel.n+' HP:'+this.sel.hp+'/'+this.sel.mH+' ATK:'+this.sel.atk+' 充:'+this.sel.ch+'/'+this.sel.mxC+(this.sel.qi?' 气:'+this.sel.qi:(this.sel.gru?' 怨:'+this.sel.gru:(this.sel.rage?' 怒:'+this.sel.rage:'')));
+this.infoT.setText(i);this.logT.setText(this.lgs.slice(-4).join('\n'))
+}
+lg(m){this.lgs.push(m)}
+cGO(){
+let p1=this.us.some(u=>u.tm=='p1'&&u.al&&!u.isS);
+let p2=this.us.some(u=>u.tm=='p2'&&u.al&&!u.isS);
+if(!p1||!p2){this.go=1;
+this.add.text(OX+60,OY+60,(p1?'蓝方':'红方')+'获胜!',{fontSize:'26px',color:'#fc0',fontStyle:'bold'});
+this.add.text(OX+50,OY+110,'点击重新开始',{fontSize:'11px',color:'#999'});
+}
+}
+cleanSp(){this.us.filter(v=>!v.al&&v.sp).forEach(v=>v.sp.setVisible(false))}
+}
+
+new Phaser.Game({
+type:Phaser.AUTO,width:OX*2+W*SZ,height:OY+H*SZ+64,
+parent:'gc',scene:BS,
+scale:{mode:Phaser.Scale.FIT,autoCenter:Phaser.Scale.CENTER_BOTH},
+backgroundColor:'#111111'
+});
+</script></body></html>
