@@ -402,8 +402,6 @@ if(au){au.ex(u,{us:bus,lg:m=>blogs.push(m),fE,gU,sel:null});eMT(u);return}
 bsel=u;renderBoard();upInfo();
 }
 
-function sMT(){if(bti>=bao.length){switchTeam();return}let u=bao[bti];if(!u.al||u.st>0){if(u.st>0){blogs.push(u.n+' 眩晕跳过');u.st--}eMT(u);return}let au=u.sk.find(s=>s.tp=='ult'&&s.auto&&u.ch>=s.ch);if(au){let ctx={us:bus,lg:m=>blogs.push(m),fE,gU,sel:null};au.ex(u,ctx);bsel=null;eMT(u);return}bsel=u;renderBoard();upInfo();}
-
 function switchTeam(){
 if(!bus.some(u=>u.tm=='p1'&&u.al)||!bus.some(u=>u.tm=='p2'&&u.al)){checkGO();return}
 bct=bct=='p1'?'p2':'p1';
