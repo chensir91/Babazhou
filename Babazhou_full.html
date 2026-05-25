@@ -268,25 +268,17 @@ if(bans.includes(i))return;
 let picked=p1pick.includes(i)||p2pick.includes(i);
 let ch=document.createElement('div');ch.className='chip'+(picked?' picked':'');
 ch.textContent=r.n+' ['+r.cls+'] HP:'+r.h+' ATK:'+r.a+' AGI:'+r.g;
-if(!picked){ch.onclick=()=>{
-ch.classList.toggle('selected');
-if(pt=='蓝'){
-let idx=p1pick.indexOf(i);if(idx>=0)p1pick.splice(idx,1);else p1pick.push(i);
-}else{
-let idx=p2pick.indexOf(i);if(idx>=0)p2pick.splice(idx,1);else p2pick.push(i);
-}
-}}
+if(!picked){ch.onclick=()=>doPick(i,pt);}
 d.appendChild(ch);
 });
-$('pickInfo').textContent='点击选择1个角色';
+$('pickInfo').textContent='点击选择角色';
 }
-function confirmPick(){
-let pt=pickOrder[pickTurn];
-let picks=pt=='蓝'?p1pick:p2pick;
-if(picks.length!==pickTurn/2+1){alert('请选1个角色');return}
+function doPick(i,pt){
+if(pt=='蓝'){p1pick.push(i)}else{p2pick.push(i)}
 pickTurn++;
 if(pickTurn<10){renderPick()}else{startDeploy()}
 }
+function confirmPick(){}
 
 // ===== 布阵阶段 =====
 function startDeploy(){
