@@ -383,7 +383,7 @@ if(u.n==='丁衍征一')u.form=0;
 if(u.n==='科比牢大')u.bns=0;
 b.us.push(u);
 });
-b.ct='p1';b.rn=1;b.lg=[];b.go=0;b.sel=null;b.acted=new Set();b.extra=null;b.skMode=null;
+b.ct='p1';b.rn=1;let _lg=[];b.lg=function(m){_lg.push(m)};b.lg.push=function(m){return _lg.push(m)};b.lg.slice=function(n){return _lg.slice(n)};b.lg.filter=function(f){return _lg.filter(f)};b.lg.some=function(f){return _lg.some(f)};b.go=0;b.sel=null;b.acted=new Set();b.extra=null;b.skMode=null;
 b.gU=function(x,y){return this.us.find(u=>u.al&&u.x===x&&u.y===y)};
 b.fE=function(x1,x2,y1,y2){for(let x=Math.max(0,x1);x<=Math.min(6,x2);x++)for(let y=Math.max(1,y1);y<=Math.min(5,y2);y++){if(!this.gU(x,y)&&x!==3)return{x,y}}return null};
 setPhase('battle');
@@ -532,7 +532,7 @@ if(b.skMode){
 // 技能/普攻选位模式
 if(b.skMode.isBA){
 // 普攻选目标：检查是否可攻击
-let canAtk=isChargeUnit(b.sel)?(b.sel.y===u.y&&((b.sel.tm==='p1'&&u.x>b.sel.x)||(b.sel.tm==='p2'&&u.x<b.sel.x))):b.sel.inRg(u.x,u.y);
+let chgR=b.sel.chging?2:1;let canAtk=isChargeUnit(b.sel)?(Math.abs(b.sel.y-u.y)<chgR&&((b.sel.tm==='p1'&&u.x>b.sel.x)||(b.sel.tm==='p2'&&u.x<b.sel.x))):b.sel.inRg(u.x,u.y);
 if(u.tm!==b.sel.tm&&canAtk&&!u.sth){
 let ba=b.skMode.sk;
 let ctx={b,sel:u};
@@ -588,7 +588,7 @@ b.sel=u;renderBattle();upInfo();
 function doAction(unit,tp,sk){
 if(tp==='ba'){
 // 检查是否有可攻击的目标（排除隐匿单位）
-let hasTarget=b.us.some(v=>v.tm!==unit.tm&&v.al&&!v.sth&&(isChargeUnit(unit)?(unit.y===v.y&&((unit.tm==='p1'&&v.x>unit.x)||(unit.tm==='p2'&&v.x<unit.x))):unit.inRg(v.x,v.y)));
+let cR=unit.chging?2:1;let hasTarget=b.us.some(v=>v.tm!==unit.tm&&v.al&&!v.sth&&(isChargeUnit(unit)?(Math.abs(unit.y-v.y)<cR&&((unit.tm==='p1'&&v.x>unit.x)||(unit.tm==='p2'&&v.x<unit.x))):unit.inRg(v.x,v.y)));
 if(!hasTarget){
 // 无有效目标，直接执行（如丁衍征一的自身技能）
 let ctx={b,sel:null};
