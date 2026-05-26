@@ -203,8 +203,8 @@ const ROSTER=[
 {tp:'sk',n:'弄清影',cd:20,st:2,ex:(u,ctx)=>{let t=ctx.b.sel||ctx.b.us.find(v=>v.tm===u.tm&&v.al);if(t){t.st=0;t.bd=0;t.bl=0;t.ail.neuro.s=0;t.ail.fear.s=0;t.ail.burn.s=0;ctx.b.lg(t.n+' 弄清影:全清')}}}
 ]},
 {n:'宇智波佐助',h:8,a:1,g:8,m:0,cls:'冲锋手',rg:[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]],sk:[
-{tp:'sk',n:'千鸟刀',cd:1,ex:(u,t,ctx)=>{let d=t.dmg(u.atk);ctx.b.lg(u.n+' 千鸟刀 '+d+'伤')}},
-{tp:'sk',n:'天照',cd:1,ex:(u,t,ctx)=>{if(u.tkS)return ctx.b.lg('天照已用');u.chging=1;u.chgSk='天照';t.st=2;u.tkS=1;ctx.b.lg('天照蓄力:眩晕'+t.n+'2回合')}},
+{tp:'sk',n:'千鸟刀',cd:1,ex:(u,t,ctx)=>{t=getChargeTarget(u,ctx.b.us)||t;let d=t.dmg(u.atk);ctx.b.lg(u.n+' 千鸟刀 '+d+'伤')}},
+{tp:'sk',n:'天照',cd:1,ex:(u,t,ctx)=>{if(u.tkS)return ctx.b.lg('天照已用');t=getChargeTarget(u,ctx.b.us)||t;u.chging=1;u.chgSk='天照';t.st=2;u.tkS=1;ctx.b.lg('天照蓄力:眩晕'+t.n+'2回合')}},
 {tp:'sk',n:'因陀罗之矢',cd:1,ex:(u,t,ctx)=>{if(u.idS)return ctx.b.lg('已用');let all=ctx.b.us.filter(v=>v.al&&Math.abs(v.x-u.x)<=3&&Math.abs(v.y-u.y)<=1);all.forEach(v=>v.dmg(2,1));let last=all[all.length-1];if(last){ctx.b.us.filter(v=>v.al&&Math.abs(v.x-last.x)<=1&&Math.abs(v.y-last.y)<=1).forEach(v=>v.dmg(3,1))}u.idS=1;ctx.b.lg('因陀罗之矢!')}}
 ]},
 {n:'科比牢大',h:16,a:0,g:1,m:6,cls:'解放者',rg:[[0,0],[2,-1],[2,0],[2,1],[3,-1],[3,0],[3,1],[4,-1],[4,0],[4,1]],sk:[
@@ -418,9 +418,10 @@ brd.style.width='420px';brd.style.height='300px';brd.style.position='relative';b
 if(b.sel&&!b.skMode){
 let isChg=isChargeUnit(b.sel);
 let chgDir=isChg?(b.sel.tm==='p1'?1:-1):0;
+let chgRows=b.sel.chging?2:1;
 for(let x=0;x<7;x++)for(let y=1;y<6;y++){
 let inR=isChg?(
-b.sel.y===y&&((chgDir===1&&x>b.sel.x)||(chgDir===-1&&x<b.sel.x))
+Math.abs(b.sel.y-y)<chgRows&&((chgDir===1&&x>b.sel.x)||(chgDir===-1&&x<b.sel.x))
 ):b.sel.inRg(x,y);
 if(inR){
 let hl=document.createElement('div');
@@ -442,7 +443,7 @@ if(isBA){
 // 普攻模式：高亮可攻击敌方
 let u=b.us.find(v=>v.al&&v.x===x&&v.y===y);
 if(u&&u.tm!==b.sel.tm){
-let canAtk=isChargeUnit(b.sel)?(b.sel.y===y&&((b.sel.tm==='p1'&&x>b.sel.x)||(b.sel.tm==='p2'&&x<b.sel.x))):b.sel.inRg(x,y);
+let chgR=b.sel.chging?2:1;let canAtk=isChargeUnit(b.sel)?(Math.abs(b.sel.y-y)<chgR&&((b.sel.tm==='p1'&&x>b.sel.x)||(b.sel.tm==='p2'&&x<b.sel.x))):b.sel.inRg(x,y);
 if(canAtk){
 let hl=document.createElement('div');
 hl.style.cssText='position:absolute;left:'+(x*56+10)+'px;top:'+((y-1)*56+10)+'px;width:56px;height:56px;background:rgba(255,80,80,0.3);border:2px solid rgba(255,80,80,0.7);border-radius:4px;pointer-events:none;z-index:3';
@@ -536,6 +537,7 @@ let ctx={b,sel:u};
 ba.ex(b.sel,u,ctx);
 if(b.sel.n==='手充'&&b.sel.ultA>0){b.us.filter(v=>v.tm!==b.sel.tm&&v.al&&Math.abs(v.x-u.x)<=1&&Math.abs(v.y-u.y)<=1&&v!==u).forEach(v=>dmg(v,b.sel.atk));b.sel.ultA--}
 b.us.filter(v=>v.al&&v.tm!==b.sel.tm).forEach(v=>v.chg(1));
+if(b.sel.chging){b.sel.chging=0;b.lg.push(b.sel.n+' 蓄力释放!')}
 b.acted.add(b.sel._uid);b.sel=null;b.skMode=null;
 renderBattle();checkGO();
 if(!b.go&&allActed())switchTeam();
@@ -559,8 +561,8 @@ if(u===b.sel){
 b.sel=null;renderBattle();upInfo();return;
 }
 // 选中单位后点击敌方→普攻
-let canAtk=isChargeUnit(b.sel)?(
-b.sel.y===u.y&&((b.sel.tm==='p1'&&u.x>b.sel.x)||(b.sel.tm==='p2'&&u.x<b.sel.x))
+let cr=b.sel.chging?2:1;let canAtk=isChargeUnit(b.sel)?(
+Math.abs(b.sel.y-u.y)<cr&&((b.sel.tm==='p1'&&u.x>b.sel.x)||(b.sel.tm==='p2'&&u.x<b.sel.x))
 ):b.sel.inRg(u.x,u.y);
 if(u.tm!==b.sel.tm&&canAtk){
 let ba=b.sel.sk.find(s=>s.tp==='ba');
@@ -569,6 +571,7 @@ let ctx={b,sel:u};
 ba.ex(b.sel,u,ctx);
 if(b.sel.n==='手充'&&b.sel.ultA>0){b.us.filter(v=>v.tm!==b.sel.tm&&v.al&&Math.abs(v.x-u.x)<=1&&Math.abs(v.y-u.y)<=1&&v!==u).forEach(v=>dmg(v,b.sel.atk));b.sel.ultA--}
 b.us.filter(v=>v.al&&v.tm!==b.sel.tm).forEach(v=>v.chg(1));
+if(b.sel.chging){b.sel.chging=0;b.lg.push(b.sel.n+' 蓄力释放!')}
 b.acted.add(b.sel._uid);b.sel=null;
 renderBattle();checkGO();
 if(!b.go&&allActed())switchTeam();
@@ -625,7 +628,14 @@ return null;
 }
 function isChargeUnit(u){
 let e=ROSTER.find(r=>r.n===u.n);
-return e&&e.cls==='冲锋手';
+if(e&&e.cls==='冲锋手')return true;
+// 检查是否有冲锋相关技能
+let skNames=u.sk?u.sk.map(s=>s.n):[];
+let hasChargeSkill=skNames.some(n=>n.includes('冲锋')||n.includes('千鸟')||n.includes('扶摇'));
+if(hasChargeSkill)return true;
+// 检查 chging 状态
+if(u.chging)return true;
+return false;
 }
 
 function switchTeam(){
