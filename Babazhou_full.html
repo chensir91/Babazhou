@@ -536,7 +536,7 @@ let chgR=b.sel.chging?2:1;let canAtk=isChargeUnit(b.sel)?(Math.abs(b.sel.y-u.y)<
 if(u.tm!==b.sel.tm&&canAtk&&!u.sth){
 let ba=b.skMode.sk;
 let ctx={b,sel:u};
-ba.ex(b.sel,u,ctx);
+try{ba.ex(b.sel,u,ctx)}catch(e){b.lg.push('ERR:'+e.message);renderBattle();return}
 if(b.sel.n==='手充'&&b.sel.ultA>0){b.us.filter(v=>v.tm!==b.sel.tm&&v.al&&Math.abs(v.x-u.x)<=1&&Math.abs(v.y-u.y)<=1&&v!==u).forEach(v=>dmg(v,b.sel.atk));b.sel.ultA--}
 b.us.filter(v=>v.al&&v.tm!==b.sel.tm).forEach(v=>v.chg(1));
 if(b.sel.chging){b.sel.chging=0;b.lg.push(b.sel.n+' 蓄力释放!')}
