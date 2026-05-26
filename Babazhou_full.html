@@ -138,7 +138,7 @@ const ROSTER=[
 {tp:'ult',n:'到处都是',ch:1,ex:(u,ctx)=>{u.ultA=4;u.ch=0;ctx.b.lg('大招:溅射4回合')}}
 ]},
 {n:'P铅',h:14,a:1,g:5,m:3,cls:'投手',rg:[[0,0],[3,0],[3,-1],[3,1],[4,0],[4,-1],[4,1]],sk:[
-{tp:'ba',n:'实心球',ex:(u,t,ctx)=>{let m=t.y===u.y&&t.x>u.x?2:1;let d=t.dmg(u.atk*m);ctx.b.lg(u.n+' 实心球'+(m>1?'正面×2':'')+' '+d+'伤');u.chg(1);t.chg(1)}},
+{tp:'ba',n:'实心球',ex:(u,t,ctx)=>{let m=t.y===u.y&&((u.tm==='p1'&&t.x>u.x)||(u.tm==='p2'&&t.x<u.x))?2:1;let d=t.dmg(u.atk*m);ctx.b.lg(u.n+' 实心球'+(m>1?'正面×2':'')+' '+d+'伤');u.chg(1);t.chg(1)}},
 {tp:'sk',n:'控场能力',cd:8,ex:(u,ctx)=>{let tg=ctx.b.us.filter(v=>v.tm!==u.tm&&v.al&&Math.abs(v.x-u.x)>=3&&Math.abs(v.x-u.x)<=4&&Math.abs(v.y-u.y)<=1);tg.forEach(v=>v.bd=2);ctx.b.lg('束缚'+tg.length+'人2回合')}},
 {tp:'sk',n:'手感火热',ch:3,ex:(u,ctx)=>{let es=ctx.b.us.filter(v=>v.tm!==u.tm&&v.al).slice(0,3);es.forEach(e=>e.dmg(u.atk));u.ch=0;ctx.b.lg('三连弹!')}}
 ]},
@@ -229,7 +229,7 @@ o.inRg=function(tx,ty){return inRg(this,tx,ty)};
 o.sk=ROSTER.find(r=>r.n===n)?.sk||[];
 return o;
 }
-function dmg(u,v,p){if(!u.al)return 0;let a=v;if(!p&&u.sh>0){let b=Math.min(u.sh,a);u.sh-=b;a-=b}u.hp-=a;if(u.hp<=0){u.hp=0;u.al=0}return v}
+function dmg(u,v,p){if(!u.al)return 0;if(u.inv)return 0;let a=v;if(!p&&u.sh>0){let b=Math.min(u.sh,a);u.sh-=b;a-=b}u.hp-=a;if(u.hp<=0){u.hp=0;u.al=0}return v}
 function heal(u,v){if(u.al)u.hp=Math.min(u.mH,u.hp+v)}
 function chg(u,n){u.ch=Math.min(u.ch+n,u.mxc)}
 function sCd(u,k,v){u.cd[k]=v}
@@ -372,6 +372,8 @@ b.us=[];let allD=[...p1deploy.map(d=>({...d,tm:'p1'})),...p2deploy.map(d=>({...d
 allD.forEach(d=>{
 let u=mu(d.n,d.h,d.a,d.g,d.tm,d.x,d.y,d.m||5,d.rg||[[0,0]]);
 u.sk=d.sk||[];
+u.ch=0;
+u.sk.filter(s=>s.st&&s.tp==='sk').forEach(s=>u.sC(s.n,s.st));
 if(u.n==='第五陈色'&&allD.some(v=>v.n==='陈色'&&v.tm===u.tm))u.atk+=1;
 if(u.n==='加州老鼠')u.rage=4;
 if(u.n==='周水'){u.sth=1;if(allD.some(v=>v.n==='加州老鼠'&&v.tm===u.tm)){u.mH+=1;u.hp+=1}}
@@ -426,7 +428,7 @@ Math.abs(b.sel.y-y)<chgRows&&((chgDir===1&&x>b.sel.x)||(chgDir===-1&&x<b.sel.x))
 if(inR){
 let hl=document.createElement('div');
 hl.style.cssText='position:absolute;left:'+(x*56+10)+'px;top:'+((y-1)*56+10)+'px;width:56px;height:56px;';
-let isEnemy=b.us.some(u=>u.tm!==b.sel.tm&&u.al&&u.x===x&&u.y===y);
+let isEnemy=b.us.some(u=>u.tm!==b.sel.tm&&u.al&&u.x===x&&u.y===y&&!u.sth);
 hl.style.background=isEnemy?'rgba(255,80,80,0.2)':'rgba(100,180,255,0.1)';
 hl.style.border=isEnemy?'2px solid rgba(255,80,80,0.5)':'1px dashed rgba(100,180,255,0.3)';
 hl.style.borderRadius='4px';hl.style.pointerEvents='none';hl.style.zIndex='1';
@@ -442,7 +444,7 @@ let hasUnit=b.us.some(u=>u.al&&u.x===x&&u.y===y);
 if(isBA){
 // 普攻模式：高亮可攻击敌方
 let u=b.us.find(v=>v.al&&v.x===x&&v.y===y);
-if(u&&u.tm!==b.sel.tm){
+if(u&&u.tm!==b.sel.tm&&!u.sth){
 let chgR=b.sel.chging?2:1;let canAtk=isChargeUnit(b.sel)?(Math.abs(b.sel.y-y)<chgR&&((b.sel.tm==='p1'&&x>b.sel.x)||(b.sel.tm==='p2'&&x<b.sel.x))):b.sel.inRg(x,y);
 if(canAtk){
 let hl=document.createElement('div');
@@ -531,7 +533,7 @@ if(b.skMode){
 if(b.skMode.isBA){
 // 普攻选目标：检查是否可攻击
 let canAtk=isChargeUnit(b.sel)?(b.sel.y===u.y&&((b.sel.tm==='p1'&&u.x>b.sel.x)||(b.sel.tm==='p2'&&u.x<b.sel.x))):b.sel.inRg(u.x,u.y);
-if(u.tm!==b.sel.tm&&canAtk){
+if(u.tm!==b.sel.tm&&canAtk&&!u.sth){
 let ba=b.skMode.sk;
 let ctx={b,sel:u};
 ba.ex(b.sel,u,ctx);
@@ -564,7 +566,7 @@ b.sel=null;renderBattle();upInfo();return;
 let cr=b.sel.chging?2:1;let canAtk=isChargeUnit(b.sel)?(
 Math.abs(b.sel.y-u.y)<cr&&((b.sel.tm==='p1'&&u.x>b.sel.x)||(b.sel.tm==='p2'&&u.x<b.sel.x))
 ):b.sel.inRg(u.x,u.y);
-if(u.tm!==b.sel.tm&&canAtk){
+if(u.tm!==b.sel.tm&&canAtk&&!u.sth){
 let ba=b.sel.sk.find(s=>s.tp==='ba');
 if(ba){
 let ctx={b,sel:u};
@@ -585,6 +587,17 @@ b.sel=u;renderBattle();upInfo();
 
 function doAction(unit,tp,sk){
 if(tp==='ba'){
+// 检查是否有可攻击的目标（排除隐匿单位）
+let hasTarget=b.us.some(v=>v.tm!==unit.tm&&v.al&&!v.sth&&(isChargeUnit(unit)?(unit.y===v.y&&((unit.tm==='p1'&&v.x>unit.x)||(unit.tm==='p2'&&v.x<unit.x))):unit.inRg(v.x,v.y)));
+if(!hasTarget){
+// 无有效目标，直接执行（如丁衍征一的自身技能）
+let ctx={b,sel:null};
+sk.ex(unit,null,ctx);
+b.acted.add(unit._uid);b.sel=null;
+renderBattle();checkGO();
+if(!b.go&&allActed())switchTeam();
+return;
+}
 // 进入普攻选目标模式
 b.skMode={sk:sk,tgt:'enemy',isBA:1};
 renderBattle();upInfo();
@@ -640,9 +653,12 @@ return false;
 
 function switchTeam(){
 if(!b.us.some(u=>u.tm==='p1'&&u.al)||!b.us.some(u=>u.tm==='p2'&&u.al)){checkGO();return}
+if(b.extra){
+let eu=b.extra;b.extra=null;
+if(eu.al&&eu.tm===b.ct){b.acted.delete(eu._uid);b.lg.push(eu.n+' 额外行动!');b.sel=null;b.skMode=null;renderBattle();upInfo();return}
+}
 b.ct=b.ct==='p1'?'p2':'p1';
 if(b.ct==='p1'){b.rn++;b.lg.push('── 第'+b.rn+'回合 ──')}
-if(b.extra){let eu=b.extra;b.extra=null;b.lg.push(eu.n+' 额外行动!')}
 b.sel=null;b.skMode=null;
 beginRound();
 if(!b.go){renderBattle();upInfo()}
