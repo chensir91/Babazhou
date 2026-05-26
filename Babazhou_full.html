@@ -133,7 +133,7 @@ const ROSTER=[
 {tp:'sk',n:'剑雨滂沱',cd:2,st:2,ex:(u,ctx)=>{let ox=Math.floor(Math.random()*5),oy=Math.floor(Math.random()*3);let tg=ctx.b.us.filter(v=>v.tm!==u.tm&&v.al&&v.x>=ox&&v.x<ox+3&&v.y>=oy&&v.y<oy+3);tg.forEach(v=>v.dmg(u.atk*2));ctx.b.lg('剑雨 '+tg.length+'人×2伤');if(tg.some(v=>!v.al)){u.sC('剑雨滂沱',0);ctx.b.lg('击杀→可再释放')}}},
 {tp:'ult',n:'照耀的荣光',ch:2,auto:1,ex:(u,ctx)=>{u.atk+=1;u.ch=0;ctx.b.lg('攻击力永久+1')}}
 ]},
-{n:'手充',h:12,a:2,g:1,m:1,cls:'神射手',rg:[[0,1],[0,2],[0,3],[0,4],[0,5],[0,6]],sk:[
+{n:'手充',h:12,a:2,g:1,m:1,cls:'神射手',rg:[[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]],sk:[
 {tp:'ba',n:'开冲',ex:(u,t,ctx)=>{let bns=u.lt===t?(u.cs||0):0;u.cs=(u.lt===t)?(u.cs||0)+1:1;u.lt=t;let d=t.dmg(u.atk+bns);ctx.b.lg(u.n+' 开冲(连+'+bns+') '+d+'伤');u.chg(1);t.chg(1)}},
 {tp:'ult',n:'到处都是',ch:1,ex:(u,ctx)=>{u.ultA=4;u.ch=0;ctx.b.lg('大招:溅射4回合')}}
 ]},
@@ -166,11 +166,11 @@ const ROSTER=[
 {tp:'sk',n:'硝酸',ch:3,st:2,ex:(u,ctx)=>{u.bl+=3;u.atk+=1;u.ch=0;ctx.b.lg('硝酸:流血+3 攻击力+1')}},
 {tp:'sk',n:'复分解反应',cd:18,st:2,ex:(u,ctx)=>{ctx.b.us.filter(v=>v.tm===u.tm&&v.al&&Math.abs(v.x-u.x)<=1&&Math.abs(v.y-u.y)<=1).forEach(v=>{v.heal(u.atk);ctx.b.lg(v.n+' +'+u.atk)});u.sC('复分解反应',18)}}
 ]},
-{n:'第五陈色',h:12,a:2,g:7,m:0,cls:'冲锋手',rg:[[0,0],[0,1],[0,2],[0,3],[0,4],[0,5],[0,6]],sk:[
+{n:'第五陈色',h:12,a:2,g:7,m:0,cls:'冲锋手',rg:[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]],sk:[
 {tp:'ba',n:'奋力一击',ex:(u,t,ctx)=>{t=getChargeTarget(u,ctx.b)||t;let d=t.dmg(u.atk);t.ail.fear.add(5);u.st=1;ctx.b.lg(u.n+' 冲锋 '+d+'伤 +5恐惧 自晕')}},
 {tp:'sk',n:'千鸟锐枪',cd:22,ex:(u,ctx)=>{u.chging=1;u.chgSk='千鸟锐枪';u.sC('千鸟锐枪',22);ctx.b.lg('蓄力!下回合冲锋×2范围')}}
 ]},
-{n:'加州老鼠',h:14,a:0,g:9,m:4,cls:'强攻手',rg:[[0,0],[0,1],[0,2],[0,3],[0,4]],sk:[
+{n:'加州老鼠',h:14,a:0,g:9,m:4,cls:'强攻手',rg:[[0,0],[1,0],[2,0],[3,0],[4,0]],sk:[
 {tp:'ba',n:'怒斥',ex:(u,t,ctx)=>{let bns=Math.floor(u.rage/4);let d=t.dmg((u.atk||0)+bns);ctx.b.lg(u.n+' 怒斥 +'+bns+' '+d+'伤');u.chg(1);t.chg(1)}},
 {tp:'sk',n:'降压药',cd:1,ex:(u,ctx)=>{let h=Math.floor(u.rage/4);u.heal(h);u.rage=0;ctx.b.lg('降压药 +'+h+'HP')}},
 {tp:'sk',n:'烂香蕉',cd:1,ex:(u,ctx)=>{u.dmg(5,1);u.rage=12;ctx.b.lg('烂香蕉 -5HP 怒气满')}},
@@ -195,14 +195,14 @@ const ROSTER=[
 {tp:'sk',n:'飞雷神',cd:13,ex:(u,ctx)=>{ctx.b.us.filter(v=>v.tm!==u.tm&&v.al&&Math.abs(v.x-u.x)<=2).forEach(v=>{v.dmg(u.atk);ctx.b.lg(v.n+' 飞雷神标记')});u.sC('飞雷神',2)}},
 {tp:'ult',n:'超大玉',ch:3,auto:1,ex:(u,ctx)=>{ctx.b.us.filter(v=>v.tm!==u.tm&&v.al&&v.x===u.x+1&&Math.abs(v.y-u.y)<=2).forEach(v=>v.dmg(u.atk));u.ch=0;ctx.b.lg('超大玉!')}}
 ]},
-{n:'风笛',h:5,a:1,g:6,m:0,cls:'冲锋手',rg:[[0,0],[0,1],[0,2],[0,3],[0,4],[0,5],[0,6]],sk:[
+{n:'风笛',h:5,a:1,g:6,m:0,cls:'冲锋手',rg:[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]],sk:[
 {tp:'ba',n:'扶摇而上',ex:(u,t,ctx)=>{t=getChargeTarget(u,ctx.b)||t;let mul=u.fd<2?6:1;let d=t.dmg(u.atk*mul);ctx.b.lg(u.n+' 扶摇×'+mul+'='+d+'伤');u.fd++;u.chg(1);t.chg(1)}}
 ]},
 {n:'纯烬艾雅法拉',h:10,a:1,g:4,m:0,cls:'医师',rg:[[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1],[2,-1],[2,0],[2,1],[2,-2],[2,2]],sk:[
 {tp:'ba',n:'飘絮',ex:(u,t,ctx)=>{if(t.tm===u.tm){t.heal(1);t.ail.neuro.s=Math.max(0,t.ail.neuro.s-2);t.ail.fear.s=Math.max(0,t.ail.fear.s-2);t.ail.burn.s=Math.max(0,t.ail.burn.s-2);ctx.b.lg('飘絮:治疗+清损伤')}else{let d=t.dmg(u.atk);ctx.b.lg('飘絮攻击 '+d+'伤')}}},
 {tp:'sk',n:'弄清影',cd:20,st:2,ex:(u,ctx)=>{let t=ctx.b.sel||ctx.b.us.find(v=>v.tm===u.tm&&v.al);if(t){t.st=0;t.bd=0;t.bl=0;t.ail.neuro.s=0;t.ail.fear.s=0;t.ail.burn.s=0;ctx.b.lg(t.n+' 弄清影:全清')}}}
 ]},
-{n:'宇智波佐助',h:8,a:1,g:8,m:0,cls:'冲锋手',rg:[[0,0],[0,1],[0,2],[0,3]],sk:[
+{n:'宇智波佐助',h:8,a:1,g:8,m:0,cls:'冲锋手',rg:[[0,0],[1,0],[2,0],[3,0]],sk:[
 {tp:'sk',n:'千鸟刀',cd:1,ex:(u,t,ctx)=>{let d=t.dmg(u.atk);ctx.b.lg(u.n+' 千鸟刀 '+d+'伤')}},
 {tp:'sk',n:'天照',cd:1,ex:(u,t,ctx)=>{if(u.tkS)return ctx.b.lg('天照已用');u.chging=1;u.chgSk='天照';t.st=2;u.tkS=1;ctx.b.lg('天照蓄力:眩晕'+t.n+'2回合')}},
 {tp:'sk',n:'因陀罗之矢',cd:1,ex:(u,t,ctx)=>{if(u.idS)return ctx.b.lg('已用');let all=ctx.b.us.filter(v=>v.al&&Math.abs(v.x-u.x)<=3&&Math.abs(v.y-u.y)<=1);all.forEach(v=>v.dmg(2,1));let last=all[all.length-1];if(last){ctx.b.us.filter(v=>v.al&&Math.abs(v.x-last.x)<=1&&Math.abs(v.y-last.y)<=1).forEach(v=>v.dmg(3,1))}u.idS=1;ctx.b.lg('因陀罗之矢!')}}
