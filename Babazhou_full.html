@@ -378,7 +378,7 @@ du.sk=[];du.ch=0;du.isDummy=1;
 b.us.push(du);
 }
 b.ct='p1';b.rn=1;
-let _lg=[];b.lg=function(m){_lg.push(m)};b.lg.push=function(m){return _lg.push(m)};
+let _lg=[];b.logCtx=null;b.lg=function(m){if(b.logCtx){let tmL=b.logCtx.u.tm==='p1'?'蓝方':'红方';let tpL=b.logCtx.tp==='ba'?'普攻':b.logCtx.tp==='sk'?'技能':b.logCtx.tp==='ult'?'大招':'';_lg.push(tmL+b.logCtx.u.n+'使用'+tpL+'·'+b.logCtx.sn+'：'+m)}else{_lg.push(m)}};b.lg.push=function(m){return _lg.push(m)};
 b.lg.slice=function(n){return _lg.slice(n)};b.lg.filter=function(f){return _lg.filter(f)};
 b.lg.some=function(f){return _lg.some(f)};
 setPhase('battle');
@@ -706,6 +706,7 @@ if(!b.go&&allActed())switchTeam();
 return;
 }
 let ctx={b,sel:u};
+b.logCtx={u:b.sel,tp:'sk',sn:b.skMode.sk.n};
 b.skMode.sk.ex(b.sel,u,ctx);b.logCtx=null;
 b.skMode=null;b.acted.add(b.sel._uid);b.sel=null;
 renderBattle();checkGO();
