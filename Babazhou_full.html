@@ -111,8 +111,8 @@ const ROSTER=[
 {tp:'ba',n:'恐惧震慑',ex:(u,t,ctx)=>{let d=t.dmg(u.atk);ctx.b.lg(u.n+'→'+t.n+' '+d+'伤 +5恐惧');t.ail.fear.add(5);u.chg(1);t.chg(1);if(!t.al){ctx.b.lg('冷场:全体普攻!');ctx.b.us.filter(v=>v.al&&v.tm!==u.tm).forEach(v=>v.dmg(u.atk))}}},
 {tp:'ult',n:'瞬杀时刻',ch:2,auto:1,ex:(u,ctx)=>{let es=ctx.b.us.filter(v=>v.tm!==u.tm&&v.al);if(!es.length)return;es.sort((a,b)=>a.hp-b.hp);let t=es[0];t.dmg(Math.floor((u.atk+(u.mH-u.hp))),1);ctx.b.lg('瞬杀 '+t.n+' 穿透伤');t.ail.fear.add(8);u.ch=0}}
 ]},
-{n:'优南',h:14,a:2,g:10,m:1,cls:'斗士',rg:[[0,0],[1,0]],sk:[
-{tp:'ba',n:'冲拳',ex:(u,t,ctx)=>{let has=t.ail.neuro.s>0||t.ail.fear.s>0||t.ail.burn.s>0;let mul=u.qi>=2?3:1;let d=t.dmg(u.atk*mul+(has?1:0));ctx.b.lg(u.n+' 冲拳'+(has?'重拳':'')+(mul>1?'×3':'')+' '+d+'伤');if(u.qi>=2){t.ail.fear.add(2);u.qi=0}u.chg(1);t.chg(1)}},
+{n:'优南',h:14,a:2,cls:'斗士',rg:[[0,0],[1,0]],sk:[
+{tp:'ba',n:'冲拳',ex:(u,t,ctx)=>{let ct=getChargeTarget(u,ctx.b.us);if(!ct)return ctx.b.lg('无冲锋目标');t=ct;let has=t.ail.neuro.s>0||t.ail.fear.s>0||t.ail.burn.s>0;let mul=u.qi>=2?3:1;let d=t.dmg(u.atk*mul+(has?1:0));ctx.b.lg(u.n+' 冲拳'+(has?'重拳':'')+(mul>1?'×3':'')+' '+d+'伤');if(u.qi>=2){t.ail.fear.add(2);u.qi=0}u.chg(1);t.chg(1)}},
 {tp:'sk',n:'怒发冲冠',ch:1,ex:(u,ctx)=>{u.qi++;u.ch=0;ctx.b.lg('积气('+u.qi+'/2)')}},
 {tp:'sk',n:'格挡',cd:18,ex:(u,ctx)=>{u.sh+=5;u.sC('格挡',18);ctx.b.lg('+5盾')}}
 ]},
