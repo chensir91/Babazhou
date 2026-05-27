@@ -591,8 +591,13 @@ if(tp==='ba'){
 let cR=unit.chging?2:1;let hasTarget=b.us.some(v=>v.tm!==unit.tm&&v.al&&!v.sth&&(isChargeUnit(unit)?(Math.abs(unit.y-v.y)<cR&&((unit.tm==='p1'&&v.x>unit.x)||(unit.tm==='p2'&&v.x<unit.x))):unit.inRg(v.x,v.y)));
 if(!hasTarget){
 // 无有效目标，直接执行（如丁衍征一的自身技能）
+try{
 let ctx={b,sel:null};
 sk.ex(unit,null,ctx);
+}catch(e){
+b.lg.push(unit.n+' 范围内无目标');
+b.sel=null;renderBattle();return;
+}
 b.acted.add(unit._uid);b.sel=null;
 renderBattle();checkGO();
 if(!b.go&&allActed())switchTeam();
