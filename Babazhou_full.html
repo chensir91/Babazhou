@@ -67,10 +67,8 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 <h2>🔵 蓝方 BAN（1/4）</h2>
 <div class="info">点击角色禁用（共4个）</div>
 <div id="banPool" class="grid6"></div>
-<div class="row" style="margin-top:8px">
-<label style="font-size:11px;color:#aaa;display:flex;align-items:center;gap:6px">
-<input type="checkbox" id="devModeToggle" onchange="toggleDevMode()"> 🛠 开发者模式（蓝方1角色 vs 红方10人机）
-</label>
+<div class="row" style="margin-top:12px">
+<button class="btn" id="btnDevMode" style="background:#333;font-size:14px;padding:10px 20px" onclick="toggleDevMode()">🛠 开发者模式（蓝方1角色 vs 红方10人机）</button>
 </div>
 </div>
 
@@ -279,12 +277,12 @@ else g.onclick=()=>{bans.push(i);banTurn++;if(banTurn<4)renderBan();else startPi
 d.appendChild(g);
 });
 for(let i=pool.length;i<36;i++){let g=document.createElement('div');g.className='gcell';g.style.background='#111';g.style.border='none';d.appendChild(g);}
-$('devModeToggle').parentElement.style.display=devMode?'':'none';
 }
 
 function toggleDevMode(){
 devMode=!devMode;
-$('devModeToggle').checked=devMode;
+$('btnDevMode').style.background=devMode?'#395':'#333';
+$('btnDevMode').textContent=devMode?'🛠 开发者模式 已开启 ✅':'🛠 开发者模式';
 if(devMode){startDevMode()}else{startBan()}
 }
 function startDevMode(){
