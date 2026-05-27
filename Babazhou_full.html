@@ -626,7 +626,7 @@ return b.us.filter(u=>u.al&&u.tm===b.ct).every(u=>b.acted.has(u._uid));
 // ===== 冲锋目标选择 =====
 function getChargeTarget(u, bus){
 let dir=u.tm==='p1'?1:-1;
-let sameRow=bus.filter(v=>v.al&&v.tm!==u.tm&&v.y===u.y);
+let sameRow=bus.filter(v=>v.al&&v.y===u.y);
 let fronts=[];
 for(let v of sameRow){
 if(dir===1&&v.x>u.x)fronts.push(v);
