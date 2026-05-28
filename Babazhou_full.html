@@ -644,6 +644,7 @@ b.skMode.placed++;
 let allWorms=b.us.filter(v=>v.isS&&v.mst===b.sel&&v.al);
 let wcnt=allWorms.length;
 allWorms.forEach(v=>{v.mH=1+wcnt;if(v.hp>v.mH)v.hp=v.mH;});
+w.hp=w.mH;
 b.lg.push('召唤毛毛虫('+x+','+y+') '+b.skMode.placed+'/'+b.skMode.max);
 if(b.skMode.placed>=b.skMode.max){
 b.sel.mc=Math.max(0,b.sel.mc-b.skMode.placed);
