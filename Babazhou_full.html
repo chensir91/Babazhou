@@ -113,7 +113,7 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 <div id="battleInfo" style="text-align:center;font-size:10px;margin:2px 0"></div>
 <div id="board2" style="position:relative"></div>
 <div id="skillBar"></div>
-<div class="row"><button class="btn" onclick="bSkip()">跳过回合</button><button class="btn" id="btnDummyMove" style="display:none;background:#552" onclick="toggleDummyMove()">📦 调整人机</button><button class="btn" id="btnCdMinus" style="display:none;background:#a33" onclick="devCdMinus()">⏱ 全体冷却-1</button><button class="btn" id="btnChgPlus" style="display:none;background:#3a3" onclick="devChgPlus()">⚡ 全体充能+1</button></div>
+<div class="row"><button class="btn" onclick="bSkip()">跳过回合</button><button class="btn" id="btnDummyMove" style="display:none;background:#552" onclick="toggleDummyMove()">📦 调整人机</button><button class="btn" id="btnAddDummy" style="display:none;background:#252" onclick="toggleAddDummy()">+人机</button><button class="btn" id="btnCdMinus" style="display:none;background:#a33" onclick="devCdMinus()">⏱ 全体冷却-1</button><button class="btn" id="btnChgPlus" style="display:none;background:#3a3" onclick="devChgPlus()">⚡ 全体充能+1</button></div>
 <button class="log-icon" id="logBtn" onclick="showLog()" title="战斗日志">📋</button>
 <div class="log-modal" id="logModal"><button class="log-close" onclick="hideLog()">✕</button><div class="log-content" id="logContent"></div></div>
 </div>
@@ -410,7 +410,7 @@ if(u.n==='科比牢大')u.bns=0;
 b.us.push(u);
 // 红方人机
 let dummies=['人机A','人机B','人机C','人机D','人机E','人机F','人机G','人机H','人机I','人机J'];
-for(let i=0;i<10;i++){
+for(let i=0;i<5;i++){
 let dx=4+(i%3),dy=1+Math.floor(i/3);
 let du=mu(dummies[i],10,1,0,'p2',dx,dy,0,[[0,0],[1,0]]);
 du.sk=[];du.ch=0;du.isDummy=1;
@@ -617,9 +617,11 @@ else $('btnDummyMove').style.display='none';
 if(devMode){
 $('btnCdMinus').style.display='inline-block';
 $('btnChgPlus').style.display='inline-block';
+$('btnAddDummy').style.display='inline-block';
 }else{
 $('btnCdMinus').style.display='none';
 $('btnChgPlus').style.display='none';
+$('btnAddDummy').style.display='none';
 }
 // 攻击范围
 if(b.sel&&!b.skMode){
@@ -659,7 +661,7 @@ brd.appendChild(hl);
 }
 continue;
 }
-if(!hasUnit){
+if(!hasUnit&&x!==3){
 let hl=document.createElement('div');
 hl.style.cssText='position:absolute;left:'+(x*56+10)+'px;top:'+((y-1)*56+10)+'px;width:56px;height:56px;background:rgba(100,255,100,0.15);border:2px dashed rgba(100,255,100,0.4);border-radius:4px;pointer-events:none;z-index:3';
 if(b.skMode.tgt==='empty'&&b.skMode.placed<b.skMode.max){
@@ -739,6 +741,31 @@ brd.appendChild(ds);
 }
 }
 }
+// 添加人机模式: 空格点击放人机
+if(addDummyMode){
+for(let x=0;x<7;x++)for(let y=1;y<6;y++){
+let hasUnit=b.us.some(v=>v.al&&v.x===x&&v.y===y);
+if(!hasUnit&&x!==3){
+let ds=document.createElement('div');
+ds.style.cssText='position:absolute;left:'+(x*56+10)+'px;top:'+((y-1)*56+10)+'px;width:56px;height:56px;background:rgba(100,255,200,0.2);border:2px dashed rgba(100,255,200,0.5);border-radius:4px;z-index:5';
+ds.onclick=(()=>{
+let ox=x,oy=y;
+return()=>{
+let dc=b.us.filter(v=>v.isDummy).length;
+let du=mu('人机'+(dc+1),10,1,0,'p2',ox,oy,0,[[0,0],[1,0]]);
+du.sk=[];du.ch=0;du.isDummy=1;
+b.us.push(du);
+b.lg.push('新增人机 → ('+ox+','+oy+')');
+addDummyMode=false;
+$('btnAddDummy').style.background='#252';
+$('btnAddDummy').textContent='+人机';
+renderBattle();
+};
+})();
+brd.appendChild(ds);
+}
+}
+}
 // 技能栏（地图下方）
 let sb=$('skillBar');
 if(b.sel&&!b.skMode){
@@ -773,13 +800,22 @@ sb.appendChild(it);
 }
 
 // 开发者模式: 人机拖动
-let dummyMoveMode=false,dummySelected=null;
+let dummyMoveMode=false,dummySelected=null,addDummyMode=false;
 function toggleDummyMove(){
 dummyMoveMode=!dummyMoveMode;
 $('btnDummyMove').style.background=dummyMoveMode?'#a55':'#552';
 $('btnDummyMove').textContent=dummyMoveMode?'📦 调整中':'📦 调整人机';
 if(dummyMoveMode) b.lg.push('人机调整模式:点击人机→点击空格移动');
 else b.lg.push('人机调整模式关闭');
+renderBattle();
+}
+
+function toggleAddDummy(){
+addDummyMode=!addDummyMode;
+$('btnAddDummy').style.background=addDummyMode?'#2a2':'#252';
+$('btnAddDummy').textContent=addDummyMode?'点空格放置':'+人机';
+if(addDummyMode) b.lg.push('添加人机模式:点击一个空格放置人机(中列不可放)');
+else b.lg.push('添加人机模式取消');
 renderBattle();
 }
 
@@ -792,6 +828,8 @@ dummySelected=u;b.lg.push('选中 '+u.n);renderBattle();return;
 }
 return;
 }
+// 添加人机模式
+if(addDummyMode) return;
 if(b.skMode){
 // 技能/普攻选位模式
 if(b.skMode.isBA){
@@ -898,7 +936,7 @@ if(!b.go&&allActed())switchTeam();
 }
 
 function allActed(){
-return b.us.filter(u=>u.al&&u.tm===b.ct&&!u.isS).every(u=>b.acted.has(u._uid));
+return b.us.filter(u=>u.al&&u.tm===b.ct&&!u.isS&&!u.isDummy).every(u=>b.acted.has(u._uid));
 }
 
 
@@ -969,7 +1007,7 @@ let label=repoFirst==='p1'?'🔵蓝方':'🔴红方';
 b.lg.push(label+' 先选位 (敏捷:'+(repoFirst==='p1'?p1a:p2a)+')');
 let sc=repoFirst==='p1'?'p2':'p1';
 repoOrder=[repoFirst,sc,sc,repoFirst,repoFirst,sc,sc,repoFirst,repoFirst,sc];
-repoPool=b.us.filter(u=>u.al&&!u.isS);
+repoPool=b.us.filter(u=>u.al&&!u.isS&&!u.isDummy);
 repoPool.forEach(u=>{u.x=-1;u.y=-1});
 repoStep=0;repoCur=null;
 setPhase('deploy');
