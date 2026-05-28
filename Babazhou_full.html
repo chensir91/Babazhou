@@ -1021,6 +1021,14 @@ if(!devMode)return;
 b.us.filter(u=>u.al).forEach(u=>{
 for(let k in u.cd)if(u.cd[k]>0)u.cd[k]--;
 });
+// 陈色毛毛虫储存检查
+b.us.filter(u=>u.al&&u.n==='陈色'&&!u.ultDur).forEach(cs=>{
+if(cs.gCd('毛毛虫')<=0){
+cs.mc=Math.min((cs.mc||0)+1,4);
+cs.sC('毛毛虫',8);
+b.lg.push('陈色 毛毛虫储存+1 ('+cs.mc+'/4)');
+}
+});
 b.lg.push('全体冷却-1');
 renderBattle();
 }
