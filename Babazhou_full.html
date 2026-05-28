@@ -525,7 +525,7 @@ b.acted=new Set();b.sel=null;b.skMode=null;
 // 自动大招
 let autoUnits=b.us.filter(u=>u.al&&u.tm===b.ct);
 for(let u of autoUnits){
-let au=u.sk.find(s=>s.tp==='ult'&&s.auto&&u.ch>=s.ch);
+let au=u.sk.find(s=>s.tp==='ult'&&s.auto&&u.ch>=u.mxc);
 if(au){b.logCtx={u:u,tp:'ult',sn:au.n};au.ex(u,{b,sel:null});b.logCtx=null;b.acted.add(u._uid);}
 }
 if(!b.go)checkGO();
@@ -654,7 +654,7 @@ sb.appendChild(it);
 });
 let ults=b.sel.sk.filter(s=>s.tp==='ult'&&!s.auto);
 ults.forEach(s=>{
-let avail=b.sel.ch>=s.ch;
+let avail=b.sel.ch>=b.sel.mxc;
 let it=document.createElement('div');it.className='sk-item ult'+(avail?'':' dim');
 it.textContent='★ '+s.n+' 充:'+s.ch+'/'+b.sel.ch;
 if(avail)it.onclick=(e)=>{e.stopPropagation();doAction(b.sel,'ult',s);};
@@ -845,30 +845,41 @@ if(!b.go){renderBattle();upInfo()}
 }
 
 // ===== 选位阶段 =====
-let repoParty=null,repoUnit=null;
+let repoStep=0,repoCur=null,repoOrder=[],repoFirst='',repoPool=[];
+
 function startReposition(){
-repoParty=null;repoUnit=null;
 b.sel=null;b.skMode=null;b.acted=new Set();
 let p1a=b.us.filter(u=>u.al&&u.tm==='p1').reduce((s,u)=>s+u.agi,0);
 let p2a=b.us.filter(u=>u.al&&u.tm==='p2').reduce((s,u)=>s+u.agi,0);
-repoParty=p1a>=p2a?'p1':'p2';
-let label=repoParty==='p1'?'🔵蓝方':'🔴红方';
-b.lg.push(label+' 先选位 (敏捷:'+(repoParty==='p1'?p1a:p2a)+')');
-// 开发者模式: 红方是人机，跳过红方选位
-if(b.us.some(u=>u.isDummy)){
-if(repoParty==='p2'){repoParty='p1';b.lg.push('🔴红方(人机)跳过选位');}
-setPhase('deploy');
-renderReposition();
-return;
-}
+repoFirst=p1a>=p2a?'p1':'p2';
+let label=repoFirst==='p1'?'🔵蓝方':'🔴红方';
+b.lg.push(label+' 先选位 (敏捷:'+(repoFirst==='p1'?p1a:p2a)+')');
+let sc=repoFirst==='p1'?'p2':'p1';
+repoOrder=[repoFirst,sc,sc,repoFirst,repoFirst,sc,sc,repoFirst,repoFirst,sc];
+repoPool=b.us.filter(u=>u.al);
+repoPool.forEach(u=>{u.x=-1;u.y=-1});
+repoStep=0;repoCur=null;
 setPhase('deploy');
 renderReposition();
 }
+
 function renderReposition(){
-let label=repoParty==='p1'?'🔵蓝方':'🔴红方';
-$('deployTitle').textContent=label+' 选位 - 点击己方单位→点击空格移动';
-$('deployInfo').textContent='第'+b.rn+'回合选位 (可跳过)';
+// 跳过无可用单位的步骤
+while(repoStep<10){
+let cur=repoOrder[repoStep];
+let avail=repoPool.filter(u=>u.al&&u.tm===cur&&u.x<0);
+if(avail.length>0)break;
+repoStep++;
+}
+if(repoStep>=10){confirmReposition();return}
+
+let cur=repoOrder[repoStep];
+let label=cur==='p1'?'🔵蓝方':'🔴红方';
+let isDummy=b.us.some(u=>u.isDummy);
+$('deployTitle').textContent=label+' 布阵 ('+(repoStep+1)+'/10)';
+$('deployInfo').textContent='第'+b.rn+'回合选位 - 点击角色→点击空格放置';
 let brd=$('board');brd.innerHTML='';
+let placed=repoPool.filter(u=>u.x>=0);
 for(let x=0;x<7;x++)for(let y=1;y<6;y++){
 let slot=document.createElement('div');slot.className='slot';
 if(x===3)slot.classList.add('mid');
@@ -876,48 +887,44 @@ else if(x<3)slot.classList.add('p1');
 else slot.classList.add('p2');
 slot.style.left=(x*56+10)+'px';slot.style.top=((y-1)*56+10)+'px';
 slot.dataset.x=x;slot.dataset.y=y;
-let u=b.us.find(v=>v.al&&v.x===x&&v.y===y);
-if(u){
-slot.innerHTML='<span class="n">'+u.n.substring(0,3)+'</span>';
-slot.classList.add('unit');
-if(repoUnit===u)slot.classList.add('sel');
-if(u.tm===repoParty)slot.onclick=()=>{
-if(repoUnit===u){repoUnit=null;renderReposition();return}
-repoUnit=u;renderReposition();
-};
-}
-if(!u&&repoUnit&&(x<3?repoParty==='p1':x>3?repoParty==='p2':false)){
-slot.onclick=()=>{
-repoUnit.x=x;repoUnit.y=y;repoUnit=null;
-// 换方
-repoParty=repoParty==='p1'?'p2':'p1';
-let label=repoParty==='p1'?'🔵蓝方':'🔴红方';
-b.lg.push(label+' 选位');
+let u=placed.find(v=>v.x===x&&v.y===y);
+if(u){slot.innerHTML='<span class="n">'+u.n.substring(0,3)+'</span>';slot.classList.add('unit')}
+let valid=x<3?cur==='p1':(x>3?cur==='p2':false);
+if(!u&&valid)slot.onclick=()=>{
+if(!repoCur)return;
+if(placed.find(v=>v.x==x&&v.y===y))return;
+repoCur.x=x;repoCur.y=y;
+repoCur=null;repoStep++;
 renderReposition();
 };
-}
 brd.appendChild(slot);
 }
+// 可选角色
 let dr=$('deployRoster');dr.innerHTML='';
-let doneBtn=document.createElement('button');
-doneBtn.className='btn';
-doneBtn.textContent=repoParty==='p1'?'🔵蓝方 确认→'+(b.us.some(u=>u.isDummy)?'开始':'🔴红方选位'):'🔴红方 确认→开始';
-doneBtn.onclick=()=>{
-repoParty=repoParty==='p1'?'p2':'p1';
-if(repoParty==='p2'){
-// 开发者模式: 红方是人机，直接跳过
-if(b.us.some(u=>u.isDummy)){
-confirmReposition();
-return;
+let avail=repoPool.filter(u=>u.al&&u.tm===cur&&u.x<0);
+let humanU=avail.filter(u=>!u.isDummy);
+let dummyU=avail.filter(u=>u.isDummy);
+// 开发者模式自动放置人机
+if(isDummy&&humanU.length===0&&dummyU.length>0){
+let d=dummyU[0];
+let sx=cur==='p1'?0:4,ex=cur==='p1'?2:6;
+for(let x=sx;x<=ex;x++)for(let y=1;y<=5;y++){
+if(!placed.some(v=>v.x===x&&v.y===y)){d.x=x;d.y=y;break}
 }
-b.lg.push('🔴红方 选位');
-renderReposition();
-}else{
-confirmReposition();
+repoStep++;renderReposition();return;
 }
+humanU.forEach(u=>{
+let ch=document.createElement('div');
+ch.className='chip'+(repoCur===u?' selected':'');
+ch.textContent=u.n+' HP:'+u.hp+'/'+u.mH+' 敏:'+u.agi;
+ch.onclick=()=>{
+if(repoCur===u){repoCur=null;renderReposition();return}
+repoCur=u;renderReposition();
 };
-dr.appendChild(doneBtn);
+dr.appendChild(ch);
+});
 }
+
 function confirmReposition(){
 setPhase('battle');
 beginRound();
