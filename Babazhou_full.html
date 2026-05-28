@@ -380,7 +380,7 @@ b.fE=function(x1,x2,y1,y2){for(let x=Math.max(0,x1);x<=Math.min(6,x2);x++)for(le
 let rd=pool[p1pick[0]];
 let u=mu(rd.n,rd.h,rd.a,rd.agi||0,'p1',p1deploy[0].x,p1deploy[0].y,rd.m||5,rd.rg||[[0,0]]);
 u.sk=rd.sk||[];u.ch=0;
-if(u.n==='陈色')u.mc=0;
+if(u.n==='陈色'){u.mc=0;u.sC('毛毛虫',8);}
 if(u.n==='手充')u.sth=999;
 if(u.n==='丁衍征一')u.form=0;
 if(u.n==='科比牢大')u.bns=0;
@@ -508,7 +508,7 @@ if(u.n==='第五陈色'&&allD.some(v=>v.n==='陈色'&&v.tm===u.tm))u.atk+=1;
 if(u.n==='加州老鼠')u.rage=4;
 if(u.n==='周水'){u.sth=1;if(allD.some(v=>v.n==='加州老鼠'&&v.tm===u.tm)){u.mH+=1;u.hp+=1}}
 if(u.n==='蓝主任'){u.gru=1;u.gTur=0}
-if(u.n==='陈色')u.mc=0;
+if(u.n==='陈色'){u.mc=0;u.sC('毛毛虫',8);}
 if(u.n==='手充')u.sth=999;
 if(u.n==='丁衍征一')u.form=0;
 if(u.n==='科比牢大')u.bns=0;
@@ -846,7 +846,12 @@ return;
 // 判断是否需要选目标 (ex有3个参数=需要t，或技能名是毛毛虫)
 let needsTarget=sk.ex.length===3||sk.n==='毛毛虫';
 if(needsTarget){
-b.skMode={sk:sk,tgt:sk.n==='毛毛虫'?'empty':(sk.tp==='ba'||(sk.n==='点赞'||sk.n==='葡萄糖'||sk.n==='飘絮')?'any':'enemy')};
+if(sk.n==='毛毛虫'){
+let n=unit.mc||0;
+b.skMode={sk:sk,tgt:'empty',max:n,placed:0};
+}else{
+b.skMode={sk:sk,tgt:sk.tp==='ba'||(sk.n==='点赞'||sk.n==='葡萄糖'||sk.n==='飘絮')?'any':'enemy'};
+}
 renderBattle();upInfo();
 return;
 }
