@@ -721,7 +721,7 @@ let sks=b.sel.sk.filter(s=>s.tp==='sk');
 sks.forEach(s=>{
 let cd=b.sel.gCd(s.n),avail=cd<=0&&(!s.ch||b.sel.ch>=s.ch)&&!b.sel.skDisabled;
 let it=document.createElement('div');it.className='sk-item sk'+(avail?'':' dim');
-it.textContent='✦ '+s.n+(cd>0?' CD:'+cd:'')+(s.ch?' 充:'+s.ch+'/'+b.sel.ch:'')+(b.sel.skDisabled?' 禁用':'');
+it.textContent='✦ '+s.n+(s.n==='毛毛虫'?' 储:'+b.sel.mc:'')+(cd>0?' CD:'+cd:'')+(s.ch?' 充:'+s.ch+'/'+b.sel.ch:'')+(b.sel.skDisabled?' 禁用':'');
 if(avail)it.onclick=(e)=>{e.stopPropagation();doAction(b.sel,'sk',s);};
 sb.appendChild(it);
 });
@@ -843,10 +843,10 @@ b.skMode={sk:sk,tgt:'enemy',isBA:1};
 renderBattle();upInfo();
 return;
 }
-// 判断是否需要选目标 (ex有3个参数=需要t)
-let needsTarget=sk.ex.length===3;
+// 判断是否需要选目标 (ex有3个参数=需要t，或技能名是毛毛虫)
+let needsTarget=sk.ex.length===3||sk.n==='毛毛虫';
 if(needsTarget){
-b.skMode={sk:sk,tgt:sk.tp==='ba'||(sk.n==='点赞'||sk.n==='葡萄糖'||sk.n==='飘絮')?'any':'enemy'};
+b.skMode={sk:sk,tgt:sk.n==='毛毛虫'?'empty':(sk.tp==='ba'||(sk.n==='点赞'||sk.n==='葡萄糖'||sk.n==='飘絮')?'any':'enemy')};
 renderBattle();upInfo();
 return;
 }
