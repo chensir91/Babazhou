@@ -95,7 +95,7 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 <div id="battleInfo" style="text-align:center;font-size:10px;margin:2px 0"></div>
 <div id="board2" style="position:relative"></div>
 <div id="skillBar"></div>
-<div class="row"><button class="btn" onclick="bSkip()">跳过回合</button><button class="btn" id="btnDummyMove" style="display:none;background:#552" onclick="toggleDummyMove()">📦 调整人机</button></div>
+<div class="row"><button class="btn" onclick="bSkip()">跳过回合</button><button class="btn" id="btnDummyMove" style="display:none;background:#552" onclick="toggleDummyMove()">📦 调整人机</button><button class="btn" id="btnCdMinus" style="display:none;background:#a33" onclick="devCdMinus()">⏱ 全体冷却-1</button><button class="btn" id="btnChgPlus" style="display:none;background:#3a3" onclick="devChgPlus()">⚡ 全体充能+1</button></div>
 <div class="logs" id="logs"></div>
 </div>
 
@@ -112,13 +112,9 @@ const ROSTER=[
 {n:'陈色',h:16,a:0,agi:7,cls:'召唤师',rg:[[0,0]],sk:[
 {tp:'sk',n:'毛毛虫',cd:8,ex:(u,ctx)=>{
 let n=u.mc||0;if(n<=0)return ctx.b.lg('无可召唤的毛毛虫');
-let side=u.tm==='p1'?0:4;let placed=0;
-for(let x=side;x<side+3&&placed<n;x++)for(let y=1;y<=5&&placed<n;y++){
-if(!ctx.b.gU(x,y)){
-let w=mu('毛毛虫',1,0,0,u.tm,x,y,0,[[0,0]]);w.isS=1;w.mst=u;ctx.b.us.push(w);placed++;
-}}
-u.mc=0;u.sC('毛毛虫',8);
-ctx.b.lg('召唤'+placed+'只毛毛虫(共'+ctx.b.us.filter(v=>v.isS&&v.mst===u).length+'只)');
+// 进入选位模式
+ctx.b.skMode={sk:{tp:'sk',n:'毛毛虫'},tgt:'empty',max:n,placed:0};
+ctx.b.lg('选择1~'+n+'个空格召唤毛毛虫');
 }},
 {tp:'ult',n:'虫群',ch:3,ex:(u,ctx)=>{
 let ws=ctx.b.us.filter(v=>v.isS&&v.mst===u);
@@ -127,8 +123,8 @@ let es=ctx.b.us.filter(v=>v.tm!==u.tm&&v.al);
 if(es.length){let d=Math.floor(th*2/es.length);es.forEach(e=>e.dmg(d));ctx.b.lg('虫群:每人'+d+'伤害')}
 ctx.b.us.filter(v=>v.tm===u.tm).forEach(v=>v.atk+=1);
 ws.forEach(w=>w.al=0);
-u.ch=0;u.ultDur=2;u.skDisabled=1;
-ctx.b.lg('虫群发动!持续至下回合结束');
+u.ch=0;u.ultDur=1;u.skDisabled=1;
+ctx.b.lg('虫群发动!下回合开始时触发效果');
 }}
 ]},
 {n:'周水',h:3,a:2,agi:8,cls:'处决者',rg:[[0,0],[1,0]],sk:[
@@ -246,7 +242,7 @@ ail:{neuro:new Ail('neuro'),fear:new Ail('fear'),burn:new Ail('burn')},
 cd:{},sk:[],cs:0,isS:isS||0,mst:mst||null,isTree:isTree||0,
 qi:0,ultA:0,fd:0,intel:0,gru:0,rage:0,form:0,xiaoy:0,chging:0,chgSk:null,
 lt:null,tkS:0,idS:0,bns:0,elec:'',imd:0,
-mc:0,ultDur:0,skDisabled:0};
+mc:0,ultDur:0,skDisabled:0,_uid:Math.random()};
 o.dmg=function(v,p){return dmg(this,v,p)};o.heal=function(v){return heal(this,v)};
 o.chg=function(n){return chg(this,n)};o.sC=function(k,v){return sCd(this,k,v)};
 o.gCd=function(k){return gCd(this,k)};o.cdTk=function(){return cdTk(this)};
@@ -551,6 +547,15 @@ b.lg.push('陈色 毛毛虫储存+1 ('+cs.mc+'/4)');
 });
 // 陈色大招持续
 b.us.filter(u=>u.al&&u.ultDur>0).forEach(u=>{
+if(u.ultDur===1){
+let ws=b.us.filter(v=>v.isS&&v.mst===u);
+let th=ws.reduce((s,w)=>s+w.hp,0);
+let es=b.us.filter(v=>v.tm!==u.tm&&v.al);
+if(es.length){let d=Math.floor(th*2/es.length);es.forEach(e=>e.dmg(d));b.lg.push('虫群:每人'+d+'伤害')}
+b.us.filter(v=>v.tm===u.tm).forEach(v=>v.atk+=1);
+ws.forEach(w=>w.al=0);
+b.lg.push(u.n+' 虫群触发');
+}
 u.ultDur--;
 if(u.ultDur===0){
 u.skDisabled=0;
@@ -581,6 +586,14 @@ brd.style.width='420px';brd.style.height='300px';brd.style.position='relative';b
 // 开发者模式: 显示调整人机按钮
 if(b.us.some(u=>u.isDummy))$('btnDummyMove').style.display='inline-block';
 else $('btnDummyMove').style.display='none';
+// 开发者模式: 显示减冷却/加充能按钮
+if(devMode){
+$('btnCdMinus').style.display='inline-block';
+$('btnChgPlus').style.display='inline-block';
+}else{
+$('btnCdMinus').style.display='none';
+$('btnChgPlus').style.display='none';
+}
 // 攻击范围
 if(b.sel&&!b.skMode){
 let isChg=isChargeUnit(b.sel);
@@ -622,6 +635,23 @@ continue;
 if(!hasUnit){
 let hl=document.createElement('div');
 hl.style.cssText='position:absolute;left:'+(x*56+10)+'px;top:'+((y-1)*56+10)+'px;width:56px;height:56px;background:rgba(100,255,100,0.15);border:2px dashed rgba(100,255,100,0.4);border-radius:4px;pointer-events:none;z-index:3';
+if(b.skMode.tgt==='empty'&&b.skMode.placed<b.skMode.max){
+hl.style.pointerEvents='auto';
+hl.onclick=()=>{
+let w=mu('毛毛虫',1,0,0,b.sel.tm,x,y,0,[[0,0]]);w.isS=1;w.mst=b.sel;b.us.push(w);
+b.skMode.placed++;
+b.lg.push('召唤毛毛虫('+x+','+y+') '+b.skMode.placed+'/'+b.skMode.max);
+if(b.skMode.placed>=b.skMode.max){
+b.sel.mc=Math.max(0,b.sel.mc-b.skMode.placed);
+b.sel.sC('毛毛虫',8);
+b.acted.add(b.sel._uid);b.sel=null;b.skMode=null;
+renderBattle();checkGO();
+if(!b.go&&allActed())switchTeam();
+}else{
+renderBattle();
+}
+};
+}
 brd.appendChild(hl);
 }else{
 let u=b.us.find(v=>v.al&&v.x===x&&v.y===y);
@@ -638,7 +668,7 @@ brd.appendChild(hl);
 }
 }
 let hint=document.createElement('div');hint.className='skmode-hint';
-hint.textContent=b.skMode.isBA?'点击敌方普攻':'选择'+(b.skMode.tgt==='enemy'?'敌方':'')+'目标';
+hint.textContent=b.skMode.isBA?'点击敌方普攻':(b.skMode.tgt==='empty'?'点击空格召唤('+b.skMode.placed+'/'+b.skMode.max+')':'选择'+(b.skMode.tgt==='enemy'?'敌方':'')+'目标');
 brd.appendChild(hint);
 }
 // 单位
@@ -981,6 +1011,22 @@ if(!p1||!p2){b.go=1;setPhase('gameover');$('winnerText').textContent=(p1?'🔵 �
 }
 
 function bSkip(){if(!b.sel)return;b.acted.add(b.sel._uid);b.sel=null;renderBattle();if(allActed())switchTeam()}
+function devCdMinus(){
+if(!devMode)return;
+b.us.filter(u=>u.al).forEach(u=>{
+for(let k in u.cd)if(u.cd[k]>0)u.cd[k]--;
+});
+b.lg.push('全体冷却-1');
+renderBattle();
+}
+function devChgPlus(){
+if(!devMode)return;
+b.us.filter(u=>u.al).forEach(u=>{
+if(!u.ultDur)u.ch=Math.min(u.mxc,u.ch+1);
+});
+b.lg.push('全体充能+1');
+renderBattle();
+}
 
 function upInfo(){
 let info='第'+b.rn+'回合 | '+(b.ct==='p1'?'🔵蓝':'🔴红')+'方';
