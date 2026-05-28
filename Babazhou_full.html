@@ -81,7 +81,7 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 </style></head>
 <body>
 <div id="app">
-<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.03</div>
+<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.04</div>
 
 <div id="ban" class="phase active">
 <h2>🔵 蓝方 BAN（1/4）</h2>
@@ -405,7 +405,7 @@ b.fE=function(x1,x2,y1,y2){for(let x=Math.max(0,x1);x<=Math.min(6,x2);x++)for(le
 let rd=pool[p1pick[0]];
 let u=mu(rd.n,rd.h,rd.a,rd.agi||0,'p1',p1deploy[0].x,p1deploy[0].y,rd.m||5,rd.rg||[[0,0]]);
 u.sk=rd.sk||[];u.ch=0;
-if(u.n==='陈色'){u.mc=0;u.sC('毛毛虫',8);}
+if(u.n==='陈色'){u.mc=0;u.sC('毛毛虫',8);u.mxc=3;}
 if(u.n==='手充')u.sth=999;
 if(u.n==='丁衍征一')u.form=0;
 if(u.n==='科比牢大')u.bns=0;
@@ -536,7 +536,7 @@ if(u.n==='第五陈色'&&allD.some(v=>v.n==='陈色'&&v.tm===u.tm))u.atk+=1;
 if(u.n==='加州老鼠')u.rage=4;
 if(u.n==='周水'){u.sth=1;if(allD.some(v=>v.n==='加州老鼠'&&v.tm===u.tm)){u.mH+=1;u.hp+=1}}
 if(u.n==='蓝主任'){u.gru=1;u.gTur=0}
-if(u.n==='陈色'){u.mc=0;u.sC('毛毛虫',8);}
+if(u.n==='陈色'){u.mc=0;u.sC('毛毛虫',8);u.mxc=3;}
 if(u.n==='手充')u.sth=999;
 if(u.n==='丁衍征一')u.form=0;
 if(u.n==='科比牢大')u.bns=0;
@@ -679,7 +679,7 @@ allWorms.forEach(v=>{v.mH=1+wcnt;if(v.hp>v.mH)v.hp=v.mH;});
 b.skMode.newWorms.forEach(v=>{v.hp=v.mH;});
 b.lg.push('召唤毛毛虫 ×'+b.skMode.placed);
 b.sel.mc=Math.max(0,b.sel.mc-b.skMode.placed);
-b.acted.add(b.sel._uid);b.sel=null;b.skMode=null;
+b.acted.add(b.sel._uid);b.sel=null;b.skMode=null;b.logCtx=null;
 renderBattle();checkGO();
 if(!b.go&&allActed())switchTeam();
 }else{
@@ -1148,7 +1148,7 @@ html+='<div class="'+cls+'">'+l.msg+'</div>';
 $('logContent').innerHTML=html||'暂无日志';
 }
 function hideLog(){$('logModal').classList.remove('show');}
-function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志</div>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}
+function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志</div>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}
 function hideCL(){$('clModal').classList.remove('show');}
 </script>
 
