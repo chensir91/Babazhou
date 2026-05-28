@@ -81,7 +81,7 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 </style></head>
 <body>
 <div id="app">
-<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.02</div>
+<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.03</div>
 
 <div id="ban" class="phase active">
 <h2>🔵 蓝方 BAN（1/4）</h2>
@@ -138,12 +138,14 @@ ctx.b.lg('选择1~'+n+'个空格召唤毛毛虫');
 {tp:'ult',n:'虫群',ch:3,ex:(u,ctx)=>{
 let ws=ctx.b.us.filter(v=>v.isS&&v.mst===u);
 let th=ws.reduce((s,w)=>s+w.hp,0);
+let x=th*2;
+u._ultX=x;
 let es=ctx.b.us.filter(v=>v.tm!==u.tm&&v.al);
-if(es.length){let d=Math.floor(th*2/es.length);es.forEach(e=>e.dmg(d));ctx.b.lg('虫群:每人'+d+'伤害')}
+if(es.length){let d=Math.floor(x/es.length);es.forEach(e=>e.dmg(d));ctx.b.lg('虫群:每人'+d+'伤害')}
 ctx.b.us.filter(v=>v.tm===u.tm).forEach(v=>v.atk+=1);
 ws.forEach(w=>w.al=0);
 u.ch=0;u.ultDur=1;u.skDisabled=1;
-ctx.b.lg('虫群发动!下回合开始时触发效果');
+ctx.b.lg('虫群发动!下个自身回合开始时触发二次伤害');
 }}
 ]},
 {n:'周水',h:3,a:2,agi:8,cls:'处决者',rg:[[0,0],[1,0]],sk:[
@@ -574,19 +576,18 @@ b.lg.push('陈色 毛毛虫储存+1 ('+cs.mc+'/4)');
 });
 // 陈色大招持续
 b.us.filter(u=>u.al&&u.ultDur>0).forEach(u=>{
+if(b.ct===u.tm){
 if(u.ultDur===1){
-let ws=b.us.filter(v=>v.isS&&v.mst===u);
-let th=ws.reduce((s,w)=>s+w.hp,0);
 let es=b.us.filter(v=>v.tm!==u.tm&&v.al);
-if(es.length){let d=Math.floor(th*2/es.length);es.forEach(e=>e.dmg(d));b.lg.push('虫群:每人'+d+'伤害')}
-b.us.filter(v=>v.tm===u.tm).forEach(v=>v.atk+=1);
-ws.forEach(w=>w.al=0);
+let x=u._ultX||0;
+if(es.length){let d=Math.floor(x/es.length);es.forEach(e=>e.dmg(d));b.lg.push('虫群次级伤害:每人'+d+'伤害')}
 b.lg.push(u.n+' 虫群触发');
 }
 u.ultDur--;
 if(u.ultDur===0){
-u.skDisabled=0;
+u.skDisabled=0;u.ch=0;
 b.lg.push(u.n+' 虫群结束');
+}
 }
 });
 b.us.filter(u=>u.al&&u.bl>0).forEach(u=>{dmg(u,2,1);b.lg.push(u.n+' 流血-2');u.bl--});
@@ -1147,7 +1148,7 @@ html+='<div class="'+cls+'">'+l.msg+'</div>';
 $('logContent').innerHTML=html||'暂无日志';
 }
 function hideLog(){$('logModal').classList.remove('show');}
-function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志</div>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}
+function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志</div>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}
 function hideCL(){$('clModal').classList.remove('show');}
 </script>
 
