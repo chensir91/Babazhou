@@ -21,17 +21,17 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 .btn{padding:8px 14px;border-radius:6px;border:none;background:#336;color:#fff;font-size:12px;cursor:pointer;margin:3px}
 .btn:active{background:#558}
 .btn.dis{opacity:0.4;pointer-events:none}
-#board,#board2{position:relative;width:420px;height:300px;margin:0 auto;background:#1a1a2e;border-radius:4px}
-#board2::before{content:'';position:absolute;top:10px;left:10px;width:392px;height:280px;background-image:linear-gradient(rgba(51,51,85,0.4) 1px,transparent 1px),linear-gradient(90deg,rgba(51,51,85,0.4) 1px,transparent 1px);background-size:56px 56px;pointer-events:none;z-index:0}
-.slot{position:absolute;width:56px;height:56px;border:1px solid #333355;background:#222244;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:9px}
-.slot.mid{background:#1a1a33;border-color:#2a2a55}
-.slot.p1{background:#223355}
-.slot.p2{background:#332222}
-.slot.unit{background:#224;border-color:#4488ff88}
-.slot.sel{border-color:#fc0!important;box-shadow:0 0 8px #fc0}
-.slot.tgt{border-color:#f66!important;box-shadow:0 0 6px #f66}
-.slot.ready{border-color:#fc0!important;box-shadow:0 0 6px #fc0;animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 4px #fc0}50%{box-shadow:0 0 10px #fa0}}
+#board,#board2{position:relative;width:420px;height:300px;margin:0 auto;background:linear-gradient(90deg,rgba(30,40,80,0.4) 0%,rgba(30,40,80,0.4) 40%,transparent 40%,transparent 60%,rgba(80,25,25,0.4) 60%,rgba(80,25,25,0.4) 100%),#151525;border-radius:4px;box-shadow:0 3px 16px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.02);border:1px solid #2a2a44}
+#board2::before{content:'';position:absolute;top:10px;left:10px;width:392px;height:280px;background-image:linear-gradient(rgba(40,60,100,0.3) 1px,transparent 1px),linear-gradient(90deg,rgba(40,60,100,0.3) 1px,transparent 1px);background-size:56px 56px;pointer-events:none;z-index:0}
+.slot{position:absolute;width:56px;height:56px;border:1px solid #333355;background:#1e1e3a;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:9px;box-shadow:inset 0 1px 4px rgba(0,0,0,0.35)}
+.slot.mid{background:linear-gradient(180deg,#0c0c1a,#121225);border-color:#1a1a33;border-left-width:2px;border-right-width:2px}
+.slot.p1{background:linear-gradient(180deg,#1a2e50,#162540);border-color:#2a4477;box-shadow:inset 0 0 8px rgba(50,100,200,0.08),inset 0 1px 4px rgba(0,0,0,0.3)}
+.slot.p2{background:linear-gradient(180deg,#3a1a1a,#2a1515);border-color:#552a2a;box-shadow:inset 0 0 8px rgba(200,50,50,0.06),inset 0 1px 4px rgba(0,0,0,0.3)}
+.slot.unit{background:linear-gradient(180deg,#1e1e40,#181835);border-color:#4488ff88;box-shadow:0 2px 8px rgba(0,0,0,0.5)}
+.slot.sel{border-color:#fc0!important;box-shadow:0 0 14px #fc0,0 2px 8px rgba(0,0,0,0.5)}
+.slot.tgt{border-color:#f66!important;box-shadow:0 0 10px #f66,0 2px 6px rgba(0,0,0,0.4)}
+.slot.ready{border-color:#fc0!important;box-shadow:0 0 10px #fc0,0 2px 6px rgba(0,0,0,0.4);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 6px #fc0,0 2px 6px rgba(0,0,0,0.4)}50%{box-shadow:0 0 14px #fa0,0 2px 6px rgba(0,0,0,0.4)}}
 .slot .n{font-size:8px;font-weight:bold}
 .slot .hp{font-size:7px;color:#4f4}
 .slot .cd{font-size:7px;color:#fc0}
@@ -82,7 +82,7 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 </style></head>
 <body>
 <div id="app">
-<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.05</div>
+<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.06</div>
 
 <div id="ban" class="phase active">
 <h2>🔵 蓝方 BAN（1/4）</h2>
@@ -1148,7 +1148,7 @@ html+='<div class="'+cls+'">'+l.msg+'</div>';
 $('logContent').innerHTML=html||'暂无日志';
 }
 function hideLog(){$('logModal').classList.remove('show');}
-function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志</div>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}
+function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志</div>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}
 function hideCL(){$('clModal').classList.remove('show');}
 </script>
 
