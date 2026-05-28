@@ -110,8 +110,26 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 // ===== 24角色数据 =====
 const ROSTER=[
 {n:'陈色',h:16,a:0,agi:7,cls:'召唤师',rg:[[0,0]],sk:[
-{tp:'sk',n:'毛虫',cd:8,st:4,ex:(u,ctx)=>{let p=ctx.b.fE(u.tm==='p1'?1:5,1,5);if(!p)return;let w=mu('毛毛虫',1,0,0,u.tm,p.x,p.y,0,[]);w.isS=1;w.mst=u;ctx.b.us.push(w);u.sC('毛虫',8);ctx.b.lg('召唤毛毛虫('+p.x+','+p.y+')')}},
-{tp:'ult',n:'虫群',ch:3,ex:(u,ctx)=>{let ws=ctx.b.us.filter(v=>v.isS&&v.mst===u);let th=ws.reduce((s,w)=>s+w.hp,0);let es=ctx.b.us.filter(v=>v.tm!==u.tm&&v.al);if(es.length){let d=Math.floor(th/es.length*2);es.forEach(e=>e.dmg(d));ctx.b.lg('虫群:每人'+d+'伤害')}ctx.b.us.filter(v=>v.tm===u.tm).forEach(v=>v.atk+=1);ws.forEach(w=>w.al=0);u.ch=0}}
+{tp:'sk',n:'毛毛虫',cd:8,ex:(u,ctx)=>{
+let n=u.mc||0;if(n<=0)return ctx.b.lg('无可召唤的毛毛虫');
+let side=u.tm==='p1'?0:4;let placed=0;
+for(let x=side;x<side+3&&placed<n;x++)for(let y=1;y<=5&&placed<n;y++){
+if(!ctx.b.gU(x,y)){
+let w=mu('毛毛虫',1,0,0,u.tm,x,y,0,[[0,0]]);w.isS=1;w.mst=u;ctx.b.us.push(w);placed++;
+}}
+u.mc=0;u.sC('毛毛虫',8);
+ctx.b.lg('召唤'+placed+'只毛毛虫(共'+ctx.b.us.filter(v=>v.isS&&v.mst===u).length+'只)');
+}},
+{tp:'ult',n:'虫群',ch:3,ex:(u,ctx)=>{
+let ws=ctx.b.us.filter(v=>v.isS&&v.mst===u);
+let th=ws.reduce((s,w)=>s+w.hp,0);
+let es=ctx.b.us.filter(v=>v.tm!==u.tm&&v.al);
+if(es.length){let d=Math.floor(th*2/es.length);es.forEach(e=>e.dmg(d));ctx.b.lg('虫群:每人'+d+'伤害')}
+ctx.b.us.filter(v=>v.tm===u.tm).forEach(v=>v.atk+=1);
+ws.forEach(w=>w.al=0);
+u.ch=0;u.ultDur=2;u.skDisabled=1;
+ctx.b.lg('虫群发动!持续至下回合结束');
+}}
 ]},
 {n:'周水',h:3,a:2,agi:8,cls:'处决者',rg:[[0,0],[1,0]],sk:[
 {tp:'ba',n:'恐惧震慑',ex:(u,t,ctx)=>{let d=t.dmg(u.atk);ctx.b.lg('→'+t.n+' '+d+'伤 +5恐惧');t.ail.fear.add(5);u.chg(1);t.chg(1);if(!t.al){ctx.b.lg('冷场:全体普攻!');ctx.b.us.filter(v=>v.al&&v.tm!==u.tm).forEach(v=>v.dmg(u.atk))}}},
@@ -227,7 +245,8 @@ st:0,bd:0,bl:0,sth:0,tt:0,inv:0,
 ail:{neuro:new Ail('neuro'),fear:new Ail('fear'),burn:new Ail('burn')},
 cd:{},sk:[],cs:0,isS:isS||0,mst:mst||null,isTree:isTree||0,
 qi:0,ultA:0,fd:0,intel:0,gru:0,rage:0,form:0,xiaoy:0,chging:0,chgSk:null,
-lt:null,tkS:0,idS:0,bns:0,elec:'',imd:0};
+lt:null,tkS:0,idS:0,bns:0,elec:'',imd:0,
+mc:0,ultDur:0,skDisabled:0};
 o.dmg=function(v,p){return dmg(this,v,p)};o.heal=function(v){return heal(this,v)};
 o.chg=function(n){return chg(this,n)};o.sC=function(k,v){return sCd(this,k,v)};
 o.gCd=function(k){return gCd(this,k)};o.cdTk=function(){return cdTk(this)};
@@ -237,7 +256,7 @@ return o;
 }
 function dmg(u,v,p){if(!u.al)return 0;if(u.inv)return 0;let a=v;if(!p&&u.sh>0){let b=Math.min(u.sh,a);u.sh-=b;a-=b}u.hp-=a;if(u.hp<=0){u.hp=0;u.al=0}return v}
 function heal(u,v){if(u.al)u.hp=Math.min(u.mH,u.hp+v)}
-function chg(u,n){u.ch=Math.min(u.ch+n,u.mxc)}
+function chg(u,n){if(u.ultDur>0)return;u.ch=Math.min(u.ch+n,u.mxc)}
 function sCd(u,k,v){u.cd[k]=v}
 function gCd(u,k){return u.cd[k]||0}
 function cdTk(u){for(let k in u.cd)if(u.cd[k]>0)u.cd[k]--}
@@ -365,6 +384,7 @@ b.fE=function(x1,x2,y1,y2){for(let x=Math.max(0,x1);x<=Math.min(6,x2);x++)for(le
 let rd=pool[p1pick[0]];
 let u=mu(rd.n,rd.h,rd.a,rd.agi||0,'p1',p1deploy[0].x,p1deploy[0].y,rd.m||5,rd.rg||[[0,0]]);
 u.sk=rd.sk||[];u.ch=0;
+if(u.n==='陈色')u.mc=0;
 if(u.n==='手充')u.sth=999;
 if(u.n==='丁衍征一')u.form=0;
 if(u.n==='科比牢大')u.bns=0;
@@ -492,6 +512,7 @@ if(u.n==='第五陈色'&&allD.some(v=>v.n==='陈色'&&v.tm===u.tm))u.atk+=1;
 if(u.n==='加州老鼠')u.rage=4;
 if(u.n==='周水'){u.sth=1;if(allD.some(v=>v.n==='加州老鼠'&&v.tm===u.tm)){u.mH+=1;u.hp+=1}}
 if(u.n==='蓝主任'){u.gru=1;u.gTur=0}
+if(u.n==='陈色')u.mc=0;
 if(u.n==='手充')u.sth=999;
 if(u.n==='丁衍征一')u.form=0;
 if(u.n==='科比牢大')u.bns=0;
@@ -514,6 +535,28 @@ beginRound();
 
 function beginRound(){
 b.us.filter(u=>u.al).forEach(u=>{u.chg(1);u.cdTk()});
+// 陈色被动：毛毛虫血量上限=当前存活毛毛虫数+1
+b.us.filter(u=>u.al&&u.n==='陈色').forEach(cs=>{
+let ws=b.us.filter(v=>v.isS&&v.mst===cs&&v.al);
+let cnt=ws.length;
+ws.forEach(w=>{w.mH=1+cnt;if(w.hp>w.mH)w.hp=w.mH;});
+});
+// 陈色毛毛虫充能
+b.us.filter(u=>u.al&&u.n==='陈色'&&!u.ultDur).forEach(cs=>{
+if(cs.gCd('毛毛虫')<=0){
+cs.mc=Math.min((cs.mc||0)+1,4);
+cs.sC('毛毛虫',8);
+b.lg.push('陈色 毛毛虫储存+1 ('+cs.mc+'/4)');
+}
+});
+// 陈色大招持续
+b.us.filter(u=>u.al&&u.ultDur>0).forEach(u=>{
+u.ultDur--;
+if(u.ultDur===0){
+u.skDisabled=0;
+b.lg.push(u.n+' 虫群结束');
+}
+});
 b.us.filter(u=>u.al&&u.bl>0).forEach(u=>{dmg(u,2,1);b.lg.push(u.n+' 流血-2');u.bl--});
 if(b.us.some(v=>v.n==='王土'&&v.ultA))b.us.filter(v=>v.tm==='p1'&&v.al).forEach(v=>heal(v,1));
 b.us.filter(v=>v.al&&v.isTree).forEach(v=>b.us.filter(w=>w.al&&w.tm===v.tm&&Math.abs(w.x-v.x)<=1&&Math.abs(w.y-v.y)<=1).forEach(w=>heal(w,2)));
@@ -646,15 +689,15 @@ sb.appendChild(it);
 });
 let sks=b.sel.sk.filter(s=>s.tp==='sk');
 sks.forEach(s=>{
-let cd=b.sel.gCd(s.n),avail=cd<=0&&(!s.ch||b.sel.ch>=s.ch);
+let cd=b.sel.gCd(s.n),avail=cd<=0&&(!s.ch||b.sel.ch>=s.ch)&&!b.sel.skDisabled;
 let it=document.createElement('div');it.className='sk-item sk'+(avail?'':' dim');
-it.textContent='✦ '+s.n+(cd>0?' CD:'+cd:'')+(s.ch?' 充:'+s.ch+'/'+b.sel.ch:'');
+it.textContent='✦ '+s.n+(cd>0?' CD:'+cd:'')+(s.ch?' 充:'+s.ch+'/'+b.sel.ch:'')+(b.sel.skDisabled?' 禁用':'');
 if(avail)it.onclick=(e)=>{e.stopPropagation();doAction(b.sel,'sk',s);};
 sb.appendChild(it);
 });
 let ults=b.sel.sk.filter(s=>s.tp==='ult'&&!s.auto);
 ults.forEach(s=>{
-let avail=b.sel.ch>=b.sel.mxc;
+let avail=b.sel.ch>=b.sel.mxc&&!b.sel.skDisabled;
 let it=document.createElement('div');it.className='sk-item ult'+(avail?'':' dim');
 it.textContent='★ '+s.n+' 充:'+s.ch+'/'+b.sel.ch;
 if(avail)it.onclick=(e)=>{e.stopPropagation();doAction(b.sel,'ult',s);};
