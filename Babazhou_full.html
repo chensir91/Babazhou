@@ -640,13 +640,14 @@ hl.style.pointerEvents='auto';
 hl.onclick=()=>{
 let w=mu('毛毛虫',1,0,0,b.sel.tm,x,y,0,[[0,0]]);w.isS=1;w.mst=b.sel;b.us.push(w);
 b.skMode.placed++;
-// 同步所有毛毛虫血量上限
+b.skMode.newWorms.push(w);
+if(b.skMode.placed>=b.skMode.max){
+// 全部放置完成，统一同步
 let allWorms=b.us.filter(v=>v.isS&&v.mst===b.sel&&v.al);
 let wcnt=allWorms.length;
 allWorms.forEach(v=>{v.mH=1+wcnt;if(v.hp>v.mH)v.hp=v.mH;});
-w.hp=w.mH;
-b.lg.push('召唤毛毛虫('+x+','+y+') '+b.skMode.placed+'/'+b.skMode.max);
-if(b.skMode.placed>=b.skMode.max){
+b.skMode.newWorms.forEach(v=>{v.hp=v.mH;});
+b.lg.push('召唤毛毛虫 ×'+b.skMode.placed);
 b.sel.mc=Math.max(0,b.sel.mc-b.skMode.placed);
 b.acted.add(b.sel._uid);b.sel=null;b.skMode=null;
 renderBattle();checkGO();
@@ -854,7 +855,7 @@ let needsTarget=sk.ex.length===3||sk.n==='毛毛虫';
 if(needsTarget){
 if(sk.n==='毛毛虫'){
 let n=unit.mc||0;
-b.skMode={sk:sk,tgt:'empty',max:n,placed:0};
+b.skMode={sk:sk,tgt:'empty',max:n,placed:0,newWorms:[]};
 }else{
 b.skMode={sk:sk,tgt:sk.tp==='ba'||(sk.n==='点赞'||sk.n==='葡萄糖'||sk.n==='飘絮')?'any':'enemy'};
 }
