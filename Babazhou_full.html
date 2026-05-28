@@ -680,7 +680,7 @@ let slot=document.createElement('div');slot.className='slot';
 if(u.x<3)slot.classList.add('p1');else if(u.x>3)slot.classList.add('p2');else slot.classList.add('mid');
 if(b.sel===u)slot.classList.add('sel');
 // 未行动单位黄色高亮
-if(!b.acted.has(u._uid)&&u.tm===b.ct&&u.al&&!b.sel&&!b.skMode)slot.classList.add('ready');
+if(!b.acted.has(u._uid)&&u.tm===b.ct&&u.al&&!b.sel&&!b.skMode&&!u.isS)slot.classList.add('ready');
 slot.style.left=(u.x*56+10)+'px';slot.style.top=((u.y-1)*56+10)+'px';
 slot.style.position='absolute';slot.style.zIndex='2';
 let hpC=u.hp/u.mH>0.5?'#4f4':(u.hp/u.mH>0.25?'#fa0':'#f44');
@@ -793,7 +793,7 @@ return;
 }
 if(!b.sel){
 // 选择未行动单位
-if(!u.al||u.tm!==b.ct||b.acted.has(u._uid))return;
+if(!u.al||u.tm!==b.ct||b.acted.has(u._uid)||u.isS)return;
 b.sel=u;renderBattle();upInfo();return;
 }
 if(u===b.sel){
@@ -1048,7 +1048,7 @@ renderBattle();
 
 function upInfo(){
 let info='第'+b.rn+'回合 | '+(b.ct==='p1'?'🔵蓝':'🔴红')+'方';
-let ready=b.us.filter(u=>u.al&&u.tm===b.ct&&!b.acted.has(u._uid)).length;
+let ready=b.us.filter(u=>u.al&&u.tm===b.ct&&!b.acted.has(u._uid)&&!u.isS).length;
 info+=' | 待行动:'+ready;
 if(b.sel)info+=' | 已选:'+b.sel.n+' HP:'+b.sel.hp+'/'+b.sel.mH;
 if(b.skMode)info+=' | ⚠选择目标中';
