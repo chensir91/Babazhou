@@ -71,8 +71,13 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 .log-content .side-hdr{color:#88f;font-weight:bold;margin:4px 0 2px;font-size:13px}
 .log-content .act{color:#aaa;padding-left:12px}
 .log-content .info{color:#888;padding-left:12px}
-.changelog{margin:12px;padding:8px;background:#1a1a2e;border-radius:4px;font-size:10px;color:#666;line-height:1.6;max-height:120px;overflow-y:auto}
-.changelog .cl-title{color:#888;font-weight:bold;margin-bottom:4px}
+.cl-btn{position:fixed;left:6px;bottom:6px;width:28px;height:28px;border-radius:50%;background:#2a2a44;border:1px solid #555;color:#888;font-size:14px;cursor:pointer;z-index:200;display:flex;align-items:center;justify-content:center}
+.cl-btn:active{background:#444}
+.cl-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:300;flex-direction:column;align-items:center;justify-content:center}
+.cl-modal.show{display:flex}
+.cl-content{background:#1a1a2e;border:1px solid #555;border-radius:8px;padding:16px;max-width:380px;width:90%;max-height:70vh;overflow-y:auto;color:#aaa;font-size:13px;line-height:1.8}
+.cl-content .cl-hdr{color:#fc0;font-size:15px;font-weight:bold;margin-bottom:8px;text-align:center}
+.cl-close{position:absolute;top:10px;right:14px;color:#888;font-size:18px;cursor:pointer;background:none;border:none}
 </style></head>
 <body>
 <div id="app">
@@ -1104,10 +1109,10 @@ html+='<div class="'+cls+'">'+l.msg+'</div>';
 $('logContent').innerHTML=html||'暂无日志';
 }
 function hideLog(){$('logModal').classList.remove('show');}
+function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志</div>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}
+function hideCL(){$('clModal').classList.remove('show');}
 </script>
 
-<div class="changelog" id="changelog">
-<div class="cl-title">改动日志</div>
-<div>2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00</div>
-</div>
+<button class="cl-btn" onclick="showCL()" title="改动日志">📝</button>
+<div class="cl-modal" id="clModal"><button class="cl-close" onclick="hideCL()">✕</button><div class="cl-content" id="clContent"></div></div>
 </body></html>
