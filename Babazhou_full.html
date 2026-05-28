@@ -640,6 +640,10 @@ hl.style.pointerEvents='auto';
 hl.onclick=()=>{
 let w=mu('毛毛虫',1,0,0,b.sel.tm,x,y,0,[[0,0]]);w.isS=1;w.mst=b.sel;b.us.push(w);
 b.skMode.placed++;
+// 同步所有毛毛虫血量上限
+let allWorms=b.us.filter(v=>v.isS&&v.mst===b.sel&&v.al);
+let wcnt=allWorms.length;
+allWorms.forEach(v=>{v.mH=1+wcnt;if(v.hp>v.mH)v.hp=v.mH;});
 b.lg.push('召唤毛毛虫('+x+','+y+') '+b.skMode.placed+'/'+b.skMode.max);
 if(b.skMode.placed>=b.skMode.max){
 b.sel.mc=Math.max(0,b.sel.mc-b.skMode.placed);
@@ -865,7 +869,7 @@ if(!b.go&&allActed())switchTeam();
 }
 
 function allActed(){
-return b.us.filter(u=>u.al&&u.tm===b.ct).every(u=>b.acted.has(u._uid));
+return b.us.filter(u=>u.al&&u.tm===b.ct&&!u.isS).every(u=>b.acted.has(u._uid));
 }
 
 
@@ -935,7 +939,7 @@ let label=repoFirst==='p1'?'🔵蓝方':'🔴红方';
 b.lg.push(label+' 先选位 (敏捷:'+(repoFirst==='p1'?p1a:p2a)+')');
 let sc=repoFirst==='p1'?'p2':'p1';
 repoOrder=[repoFirst,sc,sc,repoFirst,repoFirst,sc,sc,repoFirst,repoFirst,sc];
-repoPool=b.us.filter(u=>u.al);
+repoPool=b.us.filter(u=>u.al&&!u.isS);
 repoPool.forEach(u=>{u.x=-1;u.y=-1});
 repoStep=0;repoCur=null;
 setPhase('deploy');
