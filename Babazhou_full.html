@@ -643,7 +643,6 @@ b.skMode.placed++;
 b.lg.push('召唤毛毛虫('+x+','+y+') '+b.skMode.placed+'/'+b.skMode.max);
 if(b.skMode.placed>=b.skMode.max){
 b.sel.mc=Math.max(0,b.sel.mc-b.skMode.placed);
-b.sel.sC('毛毛虫',8);
 b.acted.add(b.sel._uid);b.sel=null;b.skMode=null;
 renderBattle();checkGO();
 if(!b.go&&allActed())switchTeam();
@@ -719,7 +718,9 @@ sb.appendChild(it);
 });
 let sks=b.sel.sk.filter(s=>s.tp==='sk');
 sks.forEach(s=>{
-let cd=b.sel.gCd(s.n),avail=cd<=0&&(!s.ch||b.sel.ch>=s.ch)&&!b.sel.skDisabled;
+let cd=b.sel.gCd(s.n),avail;
+if(s.n==='毛毛虫'){avail=(b.sel.mc||0)>0&&!b.sel.skDisabled;}
+else{avail=cd<=0&&(!s.ch||b.sel.ch>=s.ch)&&!b.sel.skDisabled;}
 let it=document.createElement('div');it.className='sk-item sk'+(avail?'':' dim');
 it.textContent='✦ '+s.n+(s.n==='毛毛虫'?' 储:'+b.sel.mc:'')+(cd>0?' CD:'+cd:'')+(s.ch?' 充:'+s.ch+'/'+b.sel.ch:'')+(b.sel.skDisabled?' 禁用':'');
 if(avail)it.onclick=(e)=>{e.stopPropagation();doAction(b.sel,'sk',s);};
