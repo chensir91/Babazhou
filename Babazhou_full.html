@@ -274,7 +274,7 @@ o.inRg=function(tx,ty){return inRg(this,tx,ty)};
 o.sk=ROSTER.find(r=>r.n===n)?.sk||[];
 return o;
 }
-function dmg(u,v,p){if(!u.al)return 0;if(u.inv)return 0;let a=v;if(!p&&u.sh>0){let b=Math.min(u.sh,a);u.sh-=b;a-=b}u.hp-=a;let r=Math.max(0,u.hp/u.mH);u._hit={dmg:v,ratio:r,t:Date.now()};if(u.hp<=0){u.hp=0;u.al=0}return v}
+function dmg(u,v,p){if(!u.al)return 0;if(u.inv)return 0;let a=v;if(!p&&u.sh>0){let b=Math.min(u.sh,a);u.sh-=b;a-=b}u.hp-=a;let r=Math.max(0,u.hp/u.mH);if(!u._hits)u._hits=[];u._hits.push({dmg:v,ratio:r,t:Date.now()});if(u.hp<=0){u.hp=0;u.al=0}return v}
 function heal(u,v){if(u.al)u.hp=Math.min(u.mH,u.hp+v)}
 function chg(u,n){if(u.ultDur>0)return;u.ch=Math.min(u.ch+n,u.mxc)}
 function sCd(u,k,v){u.cd[k]=v}
@@ -728,7 +728,7 @@ slot.style.position='absolute';slot.style.zIndex='2';
 let hpC=u.hp/u.mH>0.5?'#4f4':(u.hp/u.mH>0.25?'#fa0':'#f44');
 let cdText='';for(let k in u.cd)if(u.cd[k]>0)cdText+=k.substring(0,1)+':'+u.cd[k]+' ';
 slot.innerHTML='<span class="n">'+u.n.substring(0,3)+'</span><span class="hp" style="color:'+hpC+'">'+u.hp+'/'+u.mH+'</span>'+(cdText?'<span class="cd">'+cdText+'</span>':'')+(u.ch>0?'<span class="cd">⚡'+u.ch+'</span>':'');
-if(u._hit&&Date.now()-u._hit.t<2000){let intensity=Math.min(8,2+u._hit.dmg*.6+(1-u._hit.ratio)*4);slot.style.setProperty('--sx',intensity+'px');slot.classList.add('shake');delete u._hit;}
+if(u._hits&&u._hits.length){let recent=u._hits.filter(h=>Date.now()-h.t<2000);if(recent.length){let mh=recent.reduce((a,b)=>a.dmg>b.dmg?a:b,recent[0]);let intensity=Math.min(8,2+mh.dmg*.6+(1-mh.ratio)*4);slot.style.setProperty('--sx',intensity+'px');slot.classList.add('shake')}delete u._hits;}
 if(dummyMoveMode&&u.isDummy) slot.style.background='#552';
 if(dummySelected===u) slot.style.background='#a55';
 slot.onclick=()=>onBClick(u);
@@ -1162,7 +1162,7 @@ html+='<div class="'+cls+'">'+l.msg+'</div>';
 $('logContent').innerHTML=html||'暂无日志';
 }
 function hideLog(){$('logModal').classList.remove('show');}
-function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志</div>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害&血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}
+function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志</div>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害累加取最强+血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}
 function hideCL(){$('clModal').classList.remove('show');}
 </script>
 
