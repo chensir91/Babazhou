@@ -34,6 +34,8 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 @keyframes pulse{0%,100%{box-shadow:0 0 6px #fc0,0 2px 6px rgba(0,0,0,0.4)}50%{box-shadow:0 0 14px #fa0,0 2px 6px rgba(0,0,0,0.4)}}
 @keyframes shake{0%,100%{transform:translateX(0)}10%{transform:translateX(var(--sx,-3px))}30%{transform:translateX(calc(var(--sx,-3px)*-1))}50%{transform:translateX(var(--sx,-3px))}70%{transform:translateX(calc(var(--sx,-3px)*-1))}90%{transform:translateX(var(--sx,-3px))}}
 .slot.shake{animation:shake .35s ease}
+@keyframes dmgFloat{0%{opacity:1;transform:translate(-50%,0)}60%{opacity:1}100%{opacity:0;transform:translate(-50%,-28px)}}
+.dmg-popup{position:absolute;color:#f44;font-weight:bold;font-size:13px;z-index:10;pointer-events:none;left:50%;top:6px;transform:translateX(-50%);animation:dmgFloat 1s ease-out forwards;text-shadow:0 0 4px rgba(255,0,0,0.5)}
 .slot .n{font-size:8px;font-weight:bold}
 .slot .hp{font-size:7px;color:#4f4}
 .slot .cd{font-size:7px;color:#fc0}
@@ -84,7 +86,7 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 </style></head>
 <body>
 <div id="app">
-<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.09</div>
+<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.10</div>
 
 <div id="ban" class="phase active">
 <h2>🔵 蓝方 BAN（1/4）</h2>
@@ -274,7 +276,7 @@ o.inRg=function(tx,ty){return inRg(this,tx,ty)};
 o.sk=ROSTER.find(r=>r.n===n)?.sk||[];
 return o;
 }
-function dmg(u,v,p){if(!u.al)return 0;if(u.inv)return 0;let a=v;if(!p&&u.sh>0){let b=Math.min(u.sh,a);u.sh-=b;a-=b}u.hp-=a;let r=Math.max(0,u.hp/u.mH);if(!u._hits)u._hits=[];u._hits.push({dmg:v,ratio:r,t:Date.now()});if(u.hp<=0){u.hp=0;u.al=0}return v}
+function dmg(u,v,p){if(!u.al)return 0;if(u.inv)return 0;let a=v;if(!p&&u.sh>0){let b=Math.min(u.sh,a);u.sh-=b;a-=b}let hpB=u.hp;u.hp-=a;let r=Math.max(0,u.hp/u.mH);if(!u._hits)u._hits=[];u._hits.push({dmg:v,hpLoss:a,hpBefore:hpB,ratio:r,t:Date.now()});if(u.hp<=0){u.hp=0;u.al=0}return v}
 function heal(u,v){if(u.al)u.hp=Math.min(u.mH,u.hp+v)}
 function chg(u,n){if(u.ultDur>0)return;u.ch=Math.min(u.ch+n,u.mxc)}
 function sCd(u,k,v){u.cd[k]=v}
@@ -725,10 +727,10 @@ if(b.sel===u)slot.classList.add('sel');
 if(!b.acted.has(u._uid)&&u.tm===b.ct&&u.al&&!b.sel&&!b.skMode&&!u.isS)slot.classList.add('ready');
 slot.style.left=(u.x*56+10)+'px';slot.style.top=((u.y-1)*56+10)+'px';
 slot.style.position='absolute';slot.style.zIndex='2';
-let hpC=u.hp/u.mH>0.5?'#4f4':(u.hp/u.mH>0.25?'#fa0':'#f44');
+let dHp=u.hp;if(u._hits&&u._hits.length){let recent=u._hits.filter(h=>Date.now()-h.t<2000);if(recent.length){let mh=recent.reduce((a,b)=>a.dmg>b.dmg?a:b,recent[0]);dHp=mh.hpBefore;let intensity=Math.min(8,2+mh.dmg*.6+(1-mh.ratio)*4);slot.style.setProperty('--sx',intensity+'px');slot.classList.add('shake');slot.setAttribute('data-dmg',mh.hpLoss||mh.dmg);slot.setAttribute('data-hpA',mh.hpAfter);slot.setAttribute('data-mH',u.mH)}delete u._hits;}
+let hpC=dHp/u.mH>0.5?'#4f4':(dHp/u.mH>0.25?'#fa0':'#f44');
 let cdText='';for(let k in u.cd)if(u.cd[k]>0)cdText+=k.substring(0,1)+':'+u.cd[k]+' ';
-slot.innerHTML='<span class="n">'+u.n.substring(0,3)+'</span><span class="hp" style="color:'+hpC+'">'+u.hp+'/'+u.mH+'</span>'+(cdText?'<span class="cd">'+cdText+'</span>':'')+(u.ch>0?'<span class="cd">⚡'+u.ch+'</span>':'');
-if(u._hits&&u._hits.length){let recent=u._hits.filter(h=>Date.now()-h.t<2000);if(recent.length){let mh=recent.reduce((a,b)=>a.dmg>b.dmg?a:b,recent[0]);let intensity=Math.min(8,2+mh.dmg*.6+(1-mh.ratio)*4);slot.style.setProperty('--sx',intensity+'px');slot.classList.add('shake')}delete u._hits;}
+slot.innerHTML='<span class="n">'+u.n.substring(0,3)+'</span><span class="hp" style="color:'+hpC+'">'+dHp+'/'+u.mH+'</span>'+(cdText?'<span class="cd">'+cdText+'</span>':'')+(u.ch>0?'<span class="cd">⚡'+u.ch+'</span>':'');
 if(dummyMoveMode&&u.isDummy) slot.style.background='#552';
 if(dummySelected===u) slot.style.background='#a55';
 slot.onclick=()=>onBClick(u);
@@ -809,6 +811,7 @@ sb.appendChild(it);
 }else{sb.innerHTML='';}
 // 日志
 /* log displayed via modal */
+setTimeout(function(){document.querySelectorAll('#board2 [data-dmg]').forEach(function(s){var d=parseFloat(s.getAttribute('data-dmg')),hA=parseFloat(s.getAttribute('data-hpA')),mH=parseFloat(s.getAttribute('data-mH'));s.removeAttribute('data-dmg');s.removeAttribute('data-hpA');s.removeAttribute('data-mH');var hpEl=s.querySelector('.hp');if(hpEl){var hpC=hA/mH>0.5?'#4f4':(hA/mH>0.25?'#fa0':'#f44');hpEl.textContent=hA+'/'+mH;hpEl.style.color=hpC}var p=document.createElement('div');p.textContent='-'+Math.round(d);p.className='dmg-popup';s.appendChild(p);setTimeout(function(){p.remove()},1000)})},350);
 }
 
 // 开发者模式: 人机拖动
