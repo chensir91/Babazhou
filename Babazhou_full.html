@@ -86,7 +86,7 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 </style></head>
 <body>
 <div id="app">
-<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.10</div>
+<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.11</div>
 
 <div id="ban" class="phase active">
 <h2>🔵 蓝方 BAN（1/4）</h2>
@@ -264,11 +264,11 @@ class Ail{constructor(t){this.t=t;this.s=0}add(n){this.s+=n;if(this.s>=10){this.
 function mu(n,h,a,g,t,x,y,m,r,isS,mst,isTree){
 let o={n,h,hp:h,mH:h,atk:a,agi:g,tm:t,x,y,mxc:m||5,rg:r||[[0,0]],ch:0,sh:0,al:1,
 st:0,bd:0,bl:0,sth:0,tt:0,inv:0,
-ail:{neuro:new Ail('neuro'),fear:new Ail('fear'),burn:new Ail('burn')},
 cd:{},sk:[],cs:0,isS:isS||0,mst:mst||null,isTree:isTree||0,
 qi:0,ultA:0,fd:0,intel:0,gru:0,rage:0,form:0,xiaoy:0,chging:0,chgSk:null,
 lt:null,tkS:0,idS:0,bns:0,elec:'',imd:0,
 mc:0,ultDur:0,skDisabled:0,_uid:Math.random()};
+o.ail={neuro:new Ail('neuro',o),fear:new Ail('fear',o),burn:new Ail('burn',o)};
 o.dmg=function(v,p){return dmg(this,v,p)};o.heal=function(v){return heal(this,v)};
 o.chg=function(n){return chg(this,n)};o.sC=function(k,v){return sCd(this,k,v)};
 o.gCd=function(k){return gCd(this,k)};o.cdTk=function(){return cdTk(this)};
@@ -959,17 +959,14 @@ else if(!b.go){renderBattle();upInfo();}
 // ===== 冲锋目标选择 =====
 function getChargeTarget(u, bus){
 let dir=u.tm==='p1'?1:-1;
-let sameRow=bus.filter(v=>v.al&&v.y===u.y);
-let fronts=[];
-for(let v of sameRow){
-if(dir===1&&v.x>u.x)fronts.push(v);
-if(dir===-1&&v.x<u.x)fronts.push(v);
-}
-fronts.sort((a,b)=>dir===1?(a.x-b.x):(b.x-a.x));
-if(fronts.length>0)return fronts[0];
-let enemies=bus.filter(v=>v.al&&v.tm!==u.tm);
-if(dir===1){for(let x=6;x>u.x;x--){let e=enemies.find(v=>v.x===x);if(e)return e}}
-else{for(let x=0;x<u.x;x++){let e=enemies.find(v=>v.x===x);if(e)return e}}
+// 同列：身前一整行内离自身最近的单位（我方和敌方）
+let sameRow=bus.filter(v=>v.al&&v.y===u.y&&((dir===1&&v.x>u.x)||(dir===-1&&v.x<u.x)));
+sameRow.sort((a,b)=>dir===1?(a.x-b.x):(b.x-a.x));
+if(sameRow.length>0)return sameRow[0];
+// 相邻行(y-1, y+1)：身前行内离自身最近的单位
+let adjRows=bus.filter(v=>v.al&&(v.y===u.y-1||v.y===u.y+1)&&((dir===1&&v.x>u.x)||(dir===-1&&v.x<u.x)));
+adjRows.sort((a,b)=>{let da=Math.abs(a.x-u.x),db=Math.abs(b.x-u.x);return da!==db?da-db:Math.abs(a.y-u.y)-Math.abs(b.y-u.y)});
+if(adjRows.length>0)return adjRows[0];
 return null;
 }
 function isChargeUnit(u){
@@ -1165,7 +1162,7 @@ html+='<div class="'+cls+'">'+l.msg+'</div>';
 $('logContent').innerHTML=html||'暂无日志';
 }
 function hideLog(){$('logModal').classList.remove('show');}
-function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志</div>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害累加取最强+血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}
+function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志</div>- 2026年05月29日，损伤全局触发（叠满10点自动结算：神经=2伤+眩晕/恐惧=4伤/燃烧=2伤+3回合流血）+ 先手平局随机 + 冲锋全局规则（同列/相邻行取最近单位，含友方）<br>- 2026年05月29日，战斗反馈优化：先震动后出伤（暂显旧HP→震动0.35s→HP更新+红色小字"-x"浮动跳出）<br>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害累加取最强+血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}
 function hideCL(){$('clModal').classList.remove('show');}
 </script>
 
