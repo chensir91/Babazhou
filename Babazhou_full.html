@@ -456,6 +456,7 @@ let rd=pool[p1pick[0]];
 let u=mu(rd.n,rd.h,rd.a,rd.agi||0,'p1',p1deploy[0].x,p1deploy[0].y,rd.m||5,rd.rg||[[0,0]]);
 u.sk=rd.sk||[];u.ch=0;
 if(u.n==='陈色'){u.mc=0;u.sC('毛毛虫',8);u.mxc=3;}
+if(u.n==='周水'){u.sth=1;u.backdoorCd=0}
 if(u.n==='手充')u.sth=999;
 if(u.n==='丁衍征一')u.form=0;
 if(u.n==='科比牢大')u.bns=0;
