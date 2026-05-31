@@ -84,13 +84,11 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 .cl-content .cl-hdr{color:#fc0;font-size:15px;font-weight:bold;margin-bottom:8px;text-align:center}
 .cl-close{position:absolute;top:10px;right:14px;color:#888;font-size:18px;cursor:pointer;background:none;border:none}
 /* 隐匿特效 */
-.unit-sth-mist{animation:mistPulse 1.2s ease-in-out infinite}
-.unit-sth-ghost{animation:ghostFade 1.5s ease-in-out infinite}
-@keyframes mistPulse{0%,100%{opacity:0.7;box-shadow:inset 0 0 16px rgba(120,120,255,0.55),0 0 12px rgba(120,120,255,0.4)}50%{opacity:0.4;box-shadow:inset 0 0 24px rgba(120,120,255,0.8),0 0 20px rgba(120,120,255,0.7)}}
-@keyframes ghostFade{0%,100%{opacity:0.5;box-shadow:inset 0 0 12px rgba(100,255,100,0.4),0 0 8px rgba(100,255,100,0.3)}50%{opacity:0.2;box-shadow:inset 0 0 20px rgba(100,255,100,0.65),0 0 16px rgba(100,255,100,0.6)}}
-.unit-sth{cursor:pointer}
-.sth-overlay.mist{animation:mistPulse 1.2s ease-in-out infinite;background:rgba(100,100,255,0.25)}
-.sth-overlay.ghost{animation:ghostFade 1.5s ease-in-out infinite;background:rgba(100,255,100,0.12)}
+@keyframes stealthGlow{0%,100%{outline-color:rgba(120,120,255,0.4)}50%{outline-color:rgba(120,120,255,0.9)}}
+@keyframes stealthGlowGhost{0%,100%{outline-color:rgba(100,255,100,0.3)}50%{outline-color:rgba(100,255,100,0.8)}}
+.slot.unit-sth{cursor:pointer;filter:brightness(0.55)}
+.slot.unit-sth.mist{outline:3px solid rgba(120,120,255,0.7);outline-offset:-1px;animation:stealthGlow 1.2s ease-in-out infinite}
+.slot.unit-sth.ghost{outline:3px solid rgba(100,255,100,0.6);outline-offset:-1px;animation:stealthGlowGhost 1.5s ease-in-out infinite}
 .sth-gain{position:absolute;top:-14px;left:50%;transform:translateX(-50%);color:#aaf;font-size:10px;font-weight:bold;pointer-events:none;z-index:30;animation:floatUp 1.2s ease-out forwards;text-shadow:0 0 6px rgba(150,150,255,0.6)}
 .sth-lose{position:absolute;top:-14px;left:50%;transform:translateX(-50%);color:#f88;font-size:10px;font-weight:bold;pointer-events:none;z-index:30;animation:floatUp 1.2s ease-out forwards;text-shadow:0 0 6px rgba(255,100,100,0.6)}
 @keyframes floatUp{0%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-22px)}}
@@ -101,7 +99,7 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 </style></head>
 <body>
 <div id="app">
-<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.13</div>
+<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.16</div>
 <div id="sthToggle" class="sth-toggle mist" onclick="toggleSthFx()" title="隐匿特效切换">雾</div>
 
 <div id="ban" class="phase active">
@@ -419,7 +417,7 @@ let ch=document.createElement('div');
 ch.className='chip'+(deployCur?' selected':'');
 ch.textContent=r.n+' 敏捷:'+(r.g||0);
 ch.onclick=()=>{
-deployCur={n:r.n,h:r.h,a:r.a,agi:r.g||0,_pi:p1pick[0],sk:r.sk||[],x:-1,y:-1,rg:r.rg,cls:r.cls};
+deployCur={n:r.n,h:r.h,a:r.a,agi:r.g||0,m:r.mxc,rg:r.rg,cls:r.cls,_pi:p1pick[0],sk:r.sk||[],x:-1,y:-1};
 renderDevDeploy();
 };
 dr.appendChild(ch);
@@ -770,11 +768,7 @@ slot.innerHTML='<span class="n">'+u.n.substring(0,3)+'</span><span class="hp" st
 // 隐匿特效
 if(u.sth>0){
   if(!u._prevSth){u._hadSthGain=1}
-  slot.classList.add('unit-sth');
-  let overlay=document.createElement('div');
-  overlay.className='sth-overlay '+(sthFxMode==='mist'?'mist':'ghost');
-  overlay.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:25;border-radius:4px';
-  slot.appendChild(overlay);
+  slot.classList.add('unit-sth',sthFxMode==='mist'?'mist':'ghost');
   let lbl=document.createElement('span');lbl.className='sth-label';lbl.textContent='隐匿';slot.appendChild(lbl);
   if(u._hadSthGain){
     let gain=document.createElement('span');gain.className='sth-gain';gain.textContent='获得隐匿';slot.appendChild(gain);
@@ -1233,7 +1227,7 @@ html+='<div class="'+cls+'">'+l.msg+'</div>';
 $('logContent').innerHTML=html||'暂无日志';
 }
 function hideLog(){$('logModal').classList.remove('show');}
-function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志 v1.15</div>- 2026年06月01日，隐匿overlay加半透明背景色+inset发光/冲锋选位仅允许x距离最近目标(高亮+点击双限制)<br>- 2026年06月01日，冲锋范围动态检测(同行有敌→仅同行/同行无敌→同行+相邻行)/隐匿独立overlay层+发光模糊动画/冷场按距离排序且不伤自己/周水充能上限2<br>- 2026年05月31日，周水重做(充能改为受击+1上限2/冲锋UI自选目标/自动大招不消耗行动/隐匿雾隐虚影双特效+按钮切换)<br>- 2026年05月31日，周水重做：恐惧震慑改为冲锋自动锁定目标、瞬杀时刻伤害公式改为(已损失+ATK)*2穿透、新增被动后门(开局隐匿/攻击解除/2回合后恢复)、冷场改为对全场触发普攻<br>- 2026年05月29日，损伤全局触发（叠满10点自动结算：神经=2伤+眩晕/恐惧=4伤/燃烧=2伤+3回合流血）+ 先手平局随机 + 冲锋全局规则（同列/相邻行取最近单位，含友方）<br>- 2026年05月29日，战斗反馈优化：先震动后出伤（暂显旧HP→震动0.35s→HP更新+红色小字"-x"浮动跳出）<br>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害累加取最强+血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}
+function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志 v1.16</div>- 2026年06月01日，充能上限修复：deployCur缺少m字段导致mxc回退默认5→改为透传r.mxc/隐匿特效重做：overlay方案改为slot级filter+outline呼吸动画，更稳定可见<br>- 2026年06月01日，隐匿overlay加半透明背景色+inset发光/冲锋选位仅允许x距离最近目标(高亮+点击双限制)<br>- 2026年06月01日，冲锋范围动态检测(同行有敌→仅同行/同行无敌→同行+相邻行)/隐匿独立overlay层+发光模糊动画/冷场按距离排序且不伤自己/周水充能上限2<br>- 2026年05月31日，周水重做(充能改为受击+1上限2/冲锋UI自选目标/自动大招不消耗行动/隐匿雾隐虚影双特效+按钮切换)<br>- 2026年05月31日，周水重做：恐惧震慑改为冲锋自动锁定目标、瞬杀时刻伤害公式改为(已损失+ATK)*2穿透、新增被动后门(开局隐匿/攻击解除/2回合后恢复)、冷场改为对全场触发普攻<br>- 2026年05月29日，损伤全局触发（叠满10点自动结算：神经=2伤+眩晕/恐惧=4伤/燃烧=2伤+3回合流血）+ 先手平局随机 + 冲锋全局规则（同列/相邻行取最近单位，含友方）<br>- 2026年05月29日，战斗反馈优化：先震动后出伤（暂显旧HP→震动0.35s→HP更新+红色小字"-x"浮动跳出）<br>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害累加取最强+血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}
 function hideCL(){$('clModal').classList.remove('show');}
 </script>
 
