@@ -83,12 +83,12 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 .cl-content{background:#1a1a2e;border:1px solid #555;border-radius:8px;padding:16px;max-width:380px;width:90%;max-height:70vh;overflow-y:auto;color:#aaa;font-size:13px;line-height:1.8}
 .cl-content .cl-hdr{color:#fc0;font-size:15px;font-weight:bold;margin-bottom:8px;text-align:center}
 .cl-close{position:absolute;top:10px;right:14px;color:#888;font-size:18px;cursor:pointer;background:none;border:none}
-/* 隐匿特效 */
-@keyframes stealthGlow{0%,100%{outline-color:rgba(120,120,255,0.4)}50%{outline-color:rgba(120,120,255,0.9)}}
-@keyframes stealthGlowGhost{0%,100%{outline-color:rgba(100,255,100,0.3)}50%{outline-color:rgba(100,255,100,0.8)}}
-.slot.unit-sth{cursor:pointer;filter:brightness(0.55)}
-.slot.unit-sth.mist{outline:3px solid rgba(120,120,255,0.7);outline-offset:-1px;animation:stealthGlow 1.2s ease-in-out infinite}
-.slot.unit-sth.ghost{outline:3px solid rgba(100,255,100,0.6);outline-offset:-1px;animation:stealthGlowGhost 1.5s ease-in-out infinite}
+/* 隐匿特效 - box-shadow动画（outline-color不可动画） */
+@keyframes stealthGlow{0%,100%{box-shadow:0 0 0 3px rgba(120,120,255,0.3),inset 0 0 12px rgba(120,120,255,0.12)}50%{box-shadow:0 0 0 3px rgba(120,120,255,0.85),inset 0 0 24px rgba(120,120,255,0.35)}}
+@keyframes stealthGlowGhost{0%,100%{box-shadow:0 0 0 3px rgba(100,255,100,0.25),inset 0 0 12px rgba(100,255,100,0.1)}50%{box-shadow:0 0 0 3px rgba(100,255,100,0.8),inset 0 0 24px rgba(100,255,100,0.3)}}
+.slot.unit-sth{cursor:pointer;filter:brightness(0.45)!important}
+.slot.unit-sth.mist{box-shadow:0 0 0 3px rgba(120,120,255,0.6),inset 0 0 12px rgba(120,120,255,0.2)!important;animation:stealthGlow 1.2s ease-in-out infinite}
+.slot.unit-sth.ghost{box-shadow:0 0 0 3px rgba(100,255,100,0.5),inset 0 0 12px rgba(100,255,100,0.15)!important;animation:stealthGlowGhost 1.5s ease-in-out infinite}
 .sth-gain{position:absolute;top:-14px;left:50%;transform:translateX(-50%);color:#aaf;font-size:10px;font-weight:bold;pointer-events:none;z-index:30;animation:floatUp 1.2s ease-out forwards;text-shadow:0 0 6px rgba(150,150,255,0.6)}
 .sth-lose{position:absolute;top:-14px;left:50%;transform:translateX(-50%);color:#f88;font-size:10px;font-weight:bold;pointer-events:none;z-index:30;animation:floatUp 1.2s ease-out forwards;text-shadow:0 0 6px rgba(255,100,100,0.6)}
 @keyframes floatUp{0%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-22px)}}
@@ -99,7 +99,7 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 </style></head>
 <body>
 <div id="app">
-<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.16</div>
+<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.17</div>
 <div id="sthToggle" class="sth-toggle mist" onclick="toggleSthFx()" title="隐匿特效切换">雾</div>
 
 <div id="ban" class="phase active">
@@ -132,7 +132,7 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 <div id="battleInfo" style="text-align:center;font-size:10px;margin:2px 0"></div>
 <div id="board2" style="position:relative"></div>
 <div id="skillBar"></div>
-<div class="row"><button class="btn" onclick="bSkip()">跳过回合</button><button class="btn" id="btnDummyMove" style="display:none;background:#552" onclick="toggleDummyMove()">📦 调整人机</button><button class="btn" id="btnAddDummy" style="display:none;background:#252" onclick="toggleAddDummy()">+人机</button><button class="btn" id="btnCdMinus" style="display:none;background:#a33" onclick="devCdMinus()">⏱ 全体冷却-1</button><button class="btn" id="btnChgPlus" style="display:none;background:#3a3" onclick="devChgPlus()">⚡ 全体充能+1</button></div>
+<div class="row"><button class="btn" onclick="bSkip()">跳过回合</button><button class="btn" id="btnDummyMove" style="display:none;background:#552" onclick="toggleDummyMove()">📦 调整人机</button><button class="btn" id="btnAddDummy" style="display:none;background:#252" onclick="toggleAddDummy()">+人机</button><button class="btn" id="btnCdMinus" style="display:none;background:#a33" onclick="devCdMinus()">⏱ 全体冷却-1</button><button class="btn" id="btnChgPlus" style="display:none;background:#3a3" onclick="devChgPlus()">⚡ 全体充能+1</button><button class="btn" id="btnTestSth" style="display:none;background:#739" onclick="testSthFx()">🧪 测试隐匿特效</button></div>
 <button class="log-icon" id="logBtn" onclick="showLog()" title="战斗日志">📋</button>
 <div class="log-modal" id="logModal"><button class="log-close" onclick="hideLog()">✕</button><div class="log-content" id="logContent"></div></div>
 </div>
@@ -319,6 +319,21 @@ function toggleSthFx(){
   btn.className='sth-toggle '+(sthFxMode==='mist'?'mist':'ghost');
   btn.textContent=sthFxMode==='mist'?'雾':'虚';
   renderBattle();
+}
+function testSthFx(){
+  let brd=$('board2');
+  let slots=brd.querySelectorAll('.slot');
+  let found=false;
+  slots.forEach(s=>{
+    let n=s.querySelector('.n');
+    if(n&&n.textContent.startsWith('周水')){
+      s.style.filter='brightness(0.3)';
+      s.style.boxShadow='0 0 0 3px rgba(180,80,255,1), 0 0 22px rgba(180,80,255,0.7), inset 0 0 16px rgba(180,80,255,0.4)';
+      found=true;
+    }
+  });
+  if(!found)alert('未找到周水，请先进入战斗阶段');
+  else b.lg.push('测试按钮：对周水施加隐匿特效');
 }
 
 // ===== 战斗引擎 =====
@@ -659,10 +674,12 @@ if(devMode){
 $('btnCdMinus').style.display='inline-block';
 $('btnChgPlus').style.display='inline-block';
 $('btnAddDummy').style.display='inline-block';
+$('btnTestSth').style.display='inline-block';
 }else{
 $('btnCdMinus').style.display='none';
 $('btnChgPlus').style.display='none';
 $('btnAddDummy').style.display='none';
+$('btnTestSth').style.display='none';
 }
 // 攻击范围
 if(b.sel&&!b.skMode){
