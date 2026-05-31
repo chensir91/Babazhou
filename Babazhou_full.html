@@ -83,10 +83,24 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 .cl-content{background:#1a1a2e;border:1px solid #555;border-radius:8px;padding:16px;max-width:380px;width:90%;max-height:70vh;overflow-y:auto;color:#aaa;font-size:13px;line-height:1.8}
 .cl-content .cl-hdr{color:#fc0;font-size:15px;font-weight:bold;margin-bottom:8px;text-align:center}
 .cl-close{position:absolute;top:10px;right:14px;color:#888;font-size:18px;cursor:pointer;background:none;border:none}
+/* 隐匿特效 */
+.unit-sth-mist{animation:mistPulse 1.2s ease-in-out infinite}
+.unit-sth-ghost{animation:ghostFade 1.5s ease-in-out infinite}
+@keyframes mistPulse{0%,100%{filter:brightness(0.9) blur(1px);opacity:0.6}50%{filter:brightness(0.7) blur(2.5px);opacity:0.45}}
+@keyframes ghostFade{0%,100%{opacity:0.55;filter:brightness(0.85)}50%{opacity:0.4;filter:brightness(0.6)}}
+.unit-sth{cursor:pointer}
+.sth-gain{position:absolute;top:-14px;left:50%;transform:translateX(-50%);color:#aaf;font-size:10px;font-weight:bold;pointer-events:none;z-index:30;animation:floatUp 1.2s ease-out forwards;text-shadow:0 0 6px rgba(150,150,255,0.6)}
+.sth-lose{position:absolute;top:-14px;left:50%;transform:translateX(-50%);color:#f88;font-size:10px;font-weight:bold;pointer-events:none;z-index:30;animation:floatUp 1.2s ease-out forwards;text-shadow:0 0 6px rgba(255,100,100,0.6)}
+@keyframes floatUp{0%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-22px)}}
+.sth-label{position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);font-size:8px;color:#aaf;pointer-events:none;z-index:30}
+.sth-toggle{position:fixed;top:30px;right:8px;width:24px;height:24px;border-radius:50%;background:#2a2a44;border:1px solid #555;color:#888;font-size:10px;cursor:pointer;z-index:200;display:flex;align-items:center;justify-content:center}
+.sth-toggle.mist{background:#224;border-color:#448;color:#aaf}
+.sth-toggle.ghost{background:#242;border-color:#484;color:#afa}
 </style></head>
 <body>
 <div id="app">
-<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.12</div>
+<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.13</div>
+<div id="sthToggle" class="sth-toggle mist" onclick="toggleSthFx()" title="隐匿特效切换">雾</div>
 
 <div id="ban" class="phase active">
 <h2>🔵 蓝方 BAN（1/4）</h2>
@@ -153,8 +167,8 @@ u.ch=0;u.ultDur=1;u.skDisabled=1;
 ctx.b.lg.push('虫群发动!下个自身回合开始时触发二次伤害');
 }}
 ]},
-{n:'周水',h:3,a:2,agi:8,cls:'处决者',rg:[[0,0],[1,0]],sk:[
-{tp:'ba',n:'恐惧震慑',ex:(u,t,ctx)=>{let ct=getChargeTarget(u,ctx.b.us);if(!ct)return ctx.b.lg.push('无冲锋目标');t=ct;let d=t.dmg(u.atk);ctx.b.lg.push('恐惧震慑 '+t.n+' '+d+'伤 +5恐惧');t.ail.fear.add(5);u.chg(1);t.chg(1);if(t.sth>0){t.sth=0;ctx.b.lg.push(t.n+' 被击中解除隐匿')}if(u.sth>0){u.sth=0;u.backdoorCd=2;ctx.b.lg.push('后门:隐匿解除,2回合后恢复')}if(!t.al){ctx.b.lg.push('冷场:对全场触发普攻!');ctx.b.us.filter(v=>v.al).forEach(v=>v.dmg(u.atk))}}},
+{n:'周水',h:3,a:2,agi:8,cls:'处决者',mxc:2,rg:[[0,0],[1,0]],sk:[
+{tp:'ba',n:'恐惧震慑',charge:1,ex:(u,t,ctx)=>{let d=t.dmg(u.atk);ctx.b.lg.push('恐惧震慑 '+t.n+' '+d+'伤 +5恐惧');t.ail.fear.add(5);t.chg(1);if(t.sth>0){t.sth=0;ctx.b.lg.push(t.n+' 被击中解除隐匿')}if(u.sth>0){u.sth=0;u.backdoorCd=2;ctx.b.lg.push('后门:隐匿解除,2回合后恢复')}if(!t.al){ctx.b.lg.push('冷场:对全场触发普攻!');ctx.b.us.filter(v=>v.al).forEach(v=>v.dmg(u.atk))}}},
 {tp:'ult',n:'瞬杀时刻',ch:2,auto:1,ex:(u,ctx)=>{let es=ctx.b.us.filter(v=>v.tm!==u.tm&&v.al);if(!es.length)return;es.sort((a,b)=>a.hp-b.hp);let t=es[0];let dmgVal=Math.floor(((u.mH-u.hp)+u.atk)*2);t.dmg(dmgVal,1);ctx.b.lg.push('瞬杀 '+t.n+' '+dmgVal+'穿透伤 +8恐惧');t.ail.fear.add(8);u.ch=0}}
 ]},
 {n:'优南',h:14,a:2,cls:'斗士',rg:[[0,0],[1,0]],sk:[
@@ -276,7 +290,7 @@ o.inRg=function(tx,ty){return inRg(this,tx,ty)};
 o.sk=ROSTER.find(r=>r.n===n)?.sk||[];
 return o;
 }
-function dmg(u,v,p){if(!u.al)return 0;if(u.inv)return 0;let a=v;if(!p&&u.sh>0){let b=Math.min(u.sh,a);u.sh-=b;a-=b}let hpB=u.hp;u.hp-=a;let r=Math.max(0,u.hp/u.mH);if(!u._hits)u._hits=[];u._hits.push({dmg:v,hpLoss:a,hpBefore:hpB,ratio:r,t:Date.now()});if(u.hp<=0){u.hp=0;u.al=0}return v}
+function dmg(u,v,p){if(!u.al)return 0;if(u.inv)return 0;let a=v;if(!p&&u.sh>0){let sb=Math.min(u.sh,a);u.sh-=sb;a-=sb}let hpB=u.hp;u.hp-=a;let r=Math.max(0,u.hp/u.mH);if(!u._hits)u._hits=[];u._hits.push({dmg:v,hpLoss:a,hpBefore:hpB,ratio:r,t:Date.now()});if(u.hp<=0){u.hp=0;u.al=0}if(u.n==='周水'&&u.al){u.chg(1);b.lg.push('周水 受击充能+1')}return v}
 function heal(u,v){if(u.al)u.hp=Math.min(u.mH,u.hp+v)}
 function chg(u,n){if(u.ultDur>0)return;u.ch=Math.min(u.ch+n,u.mxc)}
 function sCd(u,k,v){u.cd[k]=v}
@@ -298,6 +312,14 @@ let deployOrder=['蓝','红','蓝','红','蓝','红','蓝','红','蓝','红'];
 let deployStep=0,deployCur=null;
 let p1deploy=[],p2deploy=[];
 let devMode=false;
+let sthFxMode='mist'; // 'mist' | 'ghost'
+function toggleSthFx(){
+  sthFxMode=sthFxMode==='mist'?'ghost':'mist';
+  let btn=$('sthToggle');
+  btn.className='sth-toggle '+(sthFxMode==='mist'?'mist':'ghost');
+  btn.textContent=sthFxMode==='mist'?'雾':'虚';
+  renderBattle();
+}
 
 // ===== 战斗引擎 =====
 let b={us:[],sel:null,ct:'p1',rn:1,_logs:[],go:0,acted:new Set(),extra:null,skMode:null,_phase:null};
@@ -563,7 +585,7 @@ beginRound();
 
 function beginRound(){
 if(!b._roundLogged){b.logSection('round');b.lg.push('第'+b.rn+'大回合开始');b._roundLogged=1;b.logSection('side');b.lg.push((b.ct==='p1'?'蓝方':'红方')+'行动');}
-b.us.filter(u=>u.al).forEach(u=>{u.chg(1);u.cdTk()});
+b.us.filter(u=>u.al).forEach(u=>{if(u.n!=='周水')u.chg(1);u.cdTk()});
 // 陈色被动：毛毛虫血量上限=当前存活毛毛虫数+1
 b.us.filter(u=>u.al&&u.n==='陈色').forEach(cs=>{
 let ws=b.us.filter(v=>v.isS&&v.mst===cs&&v.al);
@@ -610,7 +632,7 @@ b.acted=new Set();b.sel=null;b.skMode=null;
 let autoUnits=b.us.filter(u=>u.al&&u.tm===b.ct);
 for(let u of autoUnits){
 let au=u.sk.find(s=>s.tp==='ult'&&s.auto&&u.ch>=u.mxc);
-if(au){b.logCtx={u:u,tp:'ult',sn:au.n};au.ex(u,{b,sel:null});b.logCtx=null;b.acted.add(u._uid);}
+if(au){b.logCtx={u:u,tp:'ult',sn:au.n};au.ex(u,{b,sel:null});b.logCtx=null;}
 }
 if(!b.go)checkGO();
 if(!b.go){renderBattle();upInfo()}
@@ -735,6 +757,22 @@ let dHp=u.hp;if(u._hits&&u._hits.length){let recent=u._hits.filter(h=>Date.now()
 let hpC=dHp/u.mH>0.5?'#4f4':(dHp/u.mH>0.25?'#fa0':'#f44');
 let cdText='';for(let k in u.cd)if(u.cd[k]>0)cdText+=k.substring(0,1)+':'+u.cd[k]+' ';
 slot.innerHTML='<span class="n">'+u.n.substring(0,3)+'</span><span class="hp" style="color:'+hpC+'">'+dHp+'/'+u.mH+'</span>'+(cdText?'<span class="cd">'+cdText+'</span>':'')+(u.ch>0?'<span class="cd">⚡'+u.ch+'</span>':'');
+// 隐匿特效
+if(u.sth>0){
+  if(!u._prevSth){u._hadSthGain=1}
+  slot.classList.add('unit-sth');
+  slot.classList.add('unit-sth-'+sthFxMode);
+  let lbl=document.createElement('span');lbl.className='sth-label';lbl.textContent='隐匿';slot.appendChild(lbl);
+  if(u._hadSthGain){
+    let gain=document.createElement('span');gain.className='sth-gain';gain.textContent='获得隐匿';slot.appendChild(gain);
+    setTimeout(()=>gain.remove(),1300);
+    u._hadSthGain=0;
+  }
+}else if(u._prevSth>0){
+  let lose=document.createElement('span');lose.className='sth-lose';lose.textContent='破隐';slot.appendChild(lose);
+  setTimeout(()=>lose.remove(),1300);
+}
+u._prevSth=u.sth;
 if(dummyMoveMode&&u.isDummy) slot.style.background='#552';
 if(dummySelected===u) slot.style.background='#a55';
 slot.onclick=()=>onBClick(u);
@@ -804,12 +842,12 @@ it.textContent='✦ '+s.n+(s.n==='毛毛虫'?' 储:'+b.sel.mc:'')+(cd>0?' CD:'+c
 if(avail)it.onclick=(e)=>{e.stopPropagation();doAction(b.sel,'sk',s);};
 sb.appendChild(it);
 });
-let ults=b.sel.sk.filter(s=>s.tp==='ult'&&!s.auto);
+let ults=b.sel.sk.filter(s=>s.tp==='ult');
 ults.forEach(s=>{
-let avail=b.sel.ch>=b.sel.mxc&&!b.sel.skDisabled;
+let avail=s.auto||(b.sel.ch>=b.sel.mxc&&!b.sel.skDisabled);
 let it=document.createElement('div');it.className='sk-item ult'+(avail?'':' dim');
-it.textContent='★ '+s.n+' 充:'+s.ch+'/'+b.sel.ch;
-if(avail)it.onclick=(e)=>{e.stopPropagation();doAction(b.sel,'ult',s);};
+it.textContent='★ '+s.n+(s.auto?' [自动]':'')+' 充:'+b.sel.ch+'/'+(s.auto?b.sel.mxc:s.ch);
+if(!s.auto&&avail)it.onclick=(e)=>{e.stopPropagation();doAction(b.sel,'ult',s);};
 sb.appendChild(it);
 });
 }else{sb.innerHTML='';}
@@ -976,9 +1014,8 @@ return null;
 function isChargeUnit(u){
 let e=ROSTER.find(r=>r.n===u.n);
 if(e&&e.cls==='冲锋手')return true;
-// 检查是否有冲锋相关技能
-let skNames=u.sk?u.sk.map(s=>s.n):[];
-let hasChargeSkill=skNames.some(n=>n.includes('冲锋')||n.includes('千鸟')||n.includes('扶摇'));
+// 检查是否有冲锋相关技能或BA带charge标记
+let hasChargeSkill=u.sk.some(s=>(s.tp==='ba'&&s.charge)||s.n.includes('冲锋')||s.n.includes('千鸟')||s.n.includes('扶摇'));
 if(hasChargeSkill)return true;
 // 检查 chging 状态
 if(u.chging)return true;
@@ -1166,7 +1203,7 @@ html+='<div class="'+cls+'">'+l.msg+'</div>';
 $('logContent').innerHTML=html||'暂无日志';
 }
 function hideLog(){$('logModal').classList.remove('show');}
-function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志</div>- 2026年05月31日，周水重做：恐惧震慑改为冲锋自动锁定目标、瞬杀时刻伤害公式改为(已损失+ATK)*2穿透、新增被动后门(开局隐匿/攻击解除/2回合后恢复)、冷场改为对全场触发普攻<br>- 2026年05月29日，损伤全局触发（叠满10点自动结算：神经=2伤+眩晕/恐惧=4伤/燃烧=2伤+3回合流血）+ 先手平局随机 + 冲锋全局规则（同列/相邻行取最近单位，含友方）<br>- 2026年05月29日，战斗反馈优化：先震动后出伤（暂显旧HP→震动0.35s→HP更新+红色小字"-x"浮动跳出）<br>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害累加取最强+血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}
+function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志</div>- 2026年05月31日，周水重做(充能改为受击+1上限2/冲锋UI自选目标/自动大招不消耗行动/隐匿雾隐虚影双特效+按钮切换)<br>- 2026年05月31日，周水重做：恐惧震慑改为冲锋自动锁定目标、瞬杀时刻伤害公式改为(已损失+ATK)*2穿透、新增被动后门(开局隐匿/攻击解除/2回合后恢复)、冷场改为对全场触发普攻<br>- 2026年05月29日，损伤全局触发（叠满10点自动结算：神经=2伤+眩晕/恐惧=4伤/燃烧=2伤+3回合流血）+ 先手平局随机 + 冲锋全局规则（同列/相邻行取最近单位，含友方）<br>- 2026年05月29日，战斗反馈优化：先震动后出伤（暂显旧HP→震动0.35s→HP更新+红色小字"-x"浮动跳出）<br>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害累加取最强+血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}
 function hideCL(){$('clModal').classList.remove('show');}
 </script>
 
