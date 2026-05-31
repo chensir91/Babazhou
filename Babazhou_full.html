@@ -86,9 +86,11 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 /* 隐匿特效 */
 .unit-sth-mist{animation:mistPulse 1.2s ease-in-out infinite}
 .unit-sth-ghost{animation:ghostFade 1.5s ease-in-out infinite}
-@keyframes mistPulse{0%,100%{filter:brightness(0.9) blur(1px);opacity:0.6}50%{filter:brightness(0.7) blur(2.5px);opacity:0.45}}
-@keyframes ghostFade{0%,100%{opacity:0.55;filter:brightness(0.85)}50%{opacity:0.4;filter:brightness(0.6)}}
+@keyframes mistPulse{0%,100%{filter:brightness(0.75) blur(2px)!important;opacity:0.35!important;box-shadow:0 0 12px rgba(120,120,255,0.5)!important}50%{filter:brightness(0.5) blur(4px)!important;opacity:0.2!important;box-shadow:0 0 20px rgba(120,120,255,0.8)!important}}
+@keyframes ghostFade{0%,100%{opacity:0.3!important;filter:brightness(0.6)!important;box-shadow:0 0 10px rgba(100,255,100,0.4)!important}50%{opacity:0.15!important;filter:brightness(0.4)!important;box-shadow:0 0 18px rgba(100,255,100,0.7)!important}}
 .unit-sth{cursor:pointer}
+.sth-overlay.mist{animation:mistPulse 1.2s ease-in-out infinite}
+.sth-overlay.ghost{animation:ghostFade 1.5s ease-in-out infinite}
 .sth-gain{position:absolute;top:-14px;left:50%;transform:translateX(-50%);color:#aaf;font-size:10px;font-weight:bold;pointer-events:none;z-index:30;animation:floatUp 1.2s ease-out forwards;text-shadow:0 0 6px rgba(150,150,255,0.6)}
 .sth-lose{position:absolute;top:-14px;left:50%;transform:translateX(-50%);color:#f88;font-size:10px;font-weight:bold;pointer-events:none;z-index:30;animation:floatUp 1.2s ease-out forwards;text-shadow:0 0 6px rgba(255,100,100,0.6)}
 @keyframes floatUp{0%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-22px)}}
@@ -168,7 +170,7 @@ ctx.b.lg.push('虫群发动!下个自身回合开始时触发二次伤害');
 }}
 ]},
 {n:'周水',h:3,a:2,agi:8,cls:'处决者',mxc:2,rg:[[0,0],[1,0]],sk:[
-{tp:'ba',n:'恐惧震慑',charge:1,ex:(u,t,ctx)=>{let d=t.dmg(u.atk);ctx.b.lg.push('恐惧震慑 '+t.n+' '+d+'伤 +5恐惧');t.ail.fear.add(5);t.chg(1);if(t.sth>0){t.sth=0;ctx.b.lg.push(t.n+' 被击中解除隐匿')}if(u.sth>0){u.sth=0;u.backdoorCd=2;ctx.b.lg.push('后门:隐匿解除,2回合后恢复')}if(!t.al){ctx.b.lg.push('冷场:对全场触发普攻!');ctx.b.us.filter(v=>v.al).forEach(v=>v.dmg(u.atk))}}},
+{tp:'ba',n:'恐惧震慑',charge:1,ex:(u,t,ctx)=>{let d=t.dmg(u.atk);ctx.b.lg.push('恐惧震慑 '+t.n+' '+d+'伤 +5恐惧');t.ail.fear.add(5);t.chg(1);if(t.sth>0){t.sth=0;ctx.b.lg.push(t.n+' 被击中解除隐匿')}if(u.sth>0){u.sth=0;u.backdoorCd=2;ctx.b.lg.push('后门:隐匿解除,2回合后恢复')}if(!t.al){ctx.b.lg.push('冷场:对全场触发普攻!');let targets=ctx.b.us.filter(v=>v.al&&v!==u);targets.sort((a,b)=>Math.abs(a.x-u.x)-Math.abs(b.x-u.x));targets.forEach(v=>v.dmg(u.atk))}}},
 {tp:'ult',n:'瞬杀时刻',ch:2,auto:1,ex:(u,ctx)=>{let es=ctx.b.us.filter(v=>v.tm!==u.tm&&v.al);if(!es.length)return;es.sort((a,b)=>a.hp-b.hp);let t=es[0];let dmgVal=Math.floor(((u.mH-u.hp)+u.atk)*2);t.dmg(dmgVal,1);ctx.b.lg.push('瞬杀 '+t.n+' '+dmgVal+'穿透伤 +8恐惧');t.ail.fear.add(8);u.ch=0}}
 ]},
 {n:'优南',h:14,a:2,cls:'斗士',rg:[[0,0],[1,0]],sk:[
@@ -667,11 +669,10 @@ $('btnAddDummy').style.display='none';
 // 攻击范围
 if(b.sel&&!b.skMode){
 let isChg=isChargeUnit(b.sel);
-let chgDir=isChg?(b.sel.tm==='p1'?1:-1):0;
-let chgRows=b.sel.chging?2:1;
+let chgRows=isChg?getChargeRows(b.sel,b.us).rows:null;
 for(let x=0;x<7;x++)for(let y=1;y<6;y++){
 let inR=isChg?(
-Math.abs(b.sel.y-y)<chgRows&&((chgDir===1&&x>b.sel.x)||(chgDir===-1&&x<b.sel.x))
+chgRows.includes(y)&&((b.sel.tm==='p1'&&x>b.sel.x)||(b.sel.tm==='p2'&&x<b.sel.x))
 ):b.sel.inRg(x,y);
 if(inR){
 let hl=document.createElement('div');
@@ -693,7 +694,7 @@ if(isBA){
 // 普攻模式：高亮可攻击敌方
 let u=b.us.find(v=>v.al&&v.x===x&&v.y===y);
 if(u&&u.tm!==b.sel.tm&&!u.sth){
-let chgR=b.sel.chging?2:1;let canAtk=isChargeUnit(b.sel)?(Math.abs(b.sel.y-y)<chgR&&((b.sel.tm==='p1'&&x>b.sel.x)||(b.sel.tm==='p2'&&x<b.sel.x))):b.sel.inRg(x,y);
+let chgR=isChargeUnit(b.sel)?getChargeRows(b.sel,b.us).rows:null;let canAtk=isChargeUnit(b.sel)?(chgR.includes(y)&&((b.sel.tm==='p1'&&x>b.sel.x)||(b.sel.tm==='p2'&&x<b.sel.x))):b.sel.inRg(x,y);
 if(canAtk){
 let hl=document.createElement('div');
 hl.style.cssText='position:absolute;left:'+(x*56+10)+'px;top:'+((y-1)*56+10)+'px;width:56px;height:56px;background:rgba(255,80,80,0.3);border:2px solid rgba(255,80,80,0.7);border-radius:4px;pointer-events:none;z-index:3';
@@ -761,7 +762,10 @@ slot.innerHTML='<span class="n">'+u.n.substring(0,3)+'</span><span class="hp" st
 if(u.sth>0){
   if(!u._prevSth){u._hadSthGain=1}
   slot.classList.add('unit-sth');
-  slot.classList.add('unit-sth-'+sthFxMode);
+  let overlay=document.createElement('div');
+  overlay.className='sth-overlay '+(sthFxMode==='mist'?'mist':'ghost');
+  overlay.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:25;border-radius:4px';
+  slot.appendChild(overlay);
   let lbl=document.createElement('span');lbl.className='sth-label';lbl.textContent='隐匿';slot.appendChild(lbl);
   if(u._hadSthGain){
     let gain=document.createElement('span');gain.className='sth-gain';gain.textContent='获得隐匿';slot.appendChild(gain);
@@ -892,7 +896,7 @@ if(b.skMode){
 if(b.skMode.isBA){
 b.logCtx={u:b.sel,tp:'ba',sn:b.skMode.sk.n};
 // 普攻选目标：检查是否可攻击
-let chgR=b.sel.chging?2:1;let canAtk=isChargeUnit(b.sel)?(Math.abs(b.sel.y-u.y)<chgR&&((b.sel.tm==='p1'&&u.x>b.sel.x)||(b.sel.tm==='p2'&&u.x<b.sel.x))):b.sel.inRg(u.x,u.y);
+let chgR=isChargeUnit(b.sel)?getChargeRows(b.sel,b.us).rows:null;let canAtk=isChargeUnit(b.sel)?(chgR.includes(u.y)&&((b.sel.tm==='p1'&&u.x>b.sel.x)||(b.sel.tm==='p2'&&u.x<b.sel.x))):b.sel.inRg(u.x,u.y);
 if(u.tm!==b.sel.tm&&canAtk&&!u.sth){
 let ba=b.skMode.sk;
 let ctx={b,sel:u};
@@ -946,7 +950,7 @@ function doAction(unit,tp,sk){
 b.logCtx={u:unit,tp:tp,sn:sk.n};
 if(tp==='ba'){
 // 检查是否有可攻击的目标（排除隐匿单位）
-let cR=unit.chging?2:1;let hasTarget=b.us.some(v=>v.tm!==unit.tm&&v.al&&!v.sth&&(isChargeUnit(unit)?(Math.abs(unit.y-v.y)<cR&&((unit.tm==='p1'&&v.x>unit.x)||(unit.tm==='p2'&&v.x<unit.x))):unit.inRg(v.x,v.y)));
+let cR=isChargeUnit(unit)?getChargeRows(unit,b.us).rows:null;let hasTarget=b.us.some(v=>v.tm!==unit.tm&&v.al&&!v.sth&&(isChargeUnit(unit)?(cR.includes(v.y)&&((unit.tm==='p1'&&v.x>unit.x)||(unit.tm==='p2'&&v.x<unit.x))):unit.inRg(v.x,v.y)));
 if(!hasTarget){
 // 无有效目标，直接执行（如丁衍征一的自身技能）
 try{
@@ -1020,6 +1024,17 @@ if(hasChargeSkill)return true;
 // 检查 chging 状态
 if(u.chging)return true;
 return false;
+}
+
+function getChargeRows(unit, bus){
+// 返回冲锋可选的行号数组 + 是否仅同行
+let dir=unit.tm==='p1'?1:-1;
+let sameHas=bus.some(v=>v.tm!==unit.tm&&v.al&&!v.sth&&v.y===unit.y&&((dir===1&&v.x>unit.x)||(dir===-1&&v.x<unit.x)));
+if(sameHas)return {rows:[unit.y],sameOnly:1};
+let adj=[unit.y];
+if(unit.y-1>=1)adj.push(unit.y-1);
+if(unit.y+1<=5)adj.push(unit.y+1);
+return {rows:adj,sameOnly:0};
 }
 
 function switchTeam(){
@@ -1203,7 +1218,7 @@ html+='<div class="'+cls+'">'+l.msg+'</div>';
 $('logContent').innerHTML=html||'暂无日志';
 }
 function hideLog(){$('logModal').classList.remove('show');}
-function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志</div>- 2026年05月31日，周水重做(充能改为受击+1上限2/冲锋UI自选目标/自动大招不消耗行动/隐匿雾隐虚影双特效+按钮切换)<br>- 2026年05月31日，周水重做：恐惧震慑改为冲锋自动锁定目标、瞬杀时刻伤害公式改为(已损失+ATK)*2穿透、新增被动后门(开局隐匿/攻击解除/2回合后恢复)、冷场改为对全场触发普攻<br>- 2026年05月29日，损伤全局触发（叠满10点自动结算：神经=2伤+眩晕/恐惧=4伤/燃烧=2伤+3回合流血）+ 先手平局随机 + 冲锋全局规则（同列/相邻行取最近单位，含友方）<br>- 2026年05月29日，战斗反馈优化：先震动后出伤（暂显旧HP→震动0.35s→HP更新+红色小字"-x"浮动跳出）<br>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害累加取最强+血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}
+function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志 v1.14</div>- 2026年06月01日，冲锋范围动态检测(同行有敌→仅同行/同行无敌→同行+相邻行)/隐匿独立overlay层+发光模糊动画/冷场按距离排序且不伤自己/周水充能上限2<br>- 2026年05月31日，周水重做(充能改为受击+1上限2/冲锋UI自选目标/自动大招不消耗行动/隐匿雾隐虚影双特效+按钮切换)<br>- 2026年05月31日，周水重做：恐惧震慑改为冲锋自动锁定目标、瞬杀时刻伤害公式改为(已损失+ATK)*2穿透、新增被动后门(开局隐匿/攻击解除/2回合后恢复)、冷场改为对全场触发普攻<br>- 2026年05月29日，损伤全局触发（叠满10点自动结算：神经=2伤+眩晕/恐惧=4伤/燃烧=2伤+3回合流血）+ 先手平局随机 + 冲锋全局规则（同列/相邻行取最近单位，含友方）<br>- 2026年05月29日，战斗反馈优化：先震动后出伤（暂显旧HP→震动0.35s→HP更新+红色小字"-x"浮动跳出）<br>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害累加取最强+血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}
 function hideCL(){$('clModal').classList.remove('show');}
 </script>
 
