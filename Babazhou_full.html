@@ -99,7 +99,7 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 </style></head>
 <body>
 <div id="app">
-<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.17</div>
+<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.18</div>
 <div id="sthToggle" class="sth-toggle mist" onclick="toggleSthFx()" title="隐匿特效切换">雾</div>
 
 <div id="ban" class="phase active">
@@ -292,7 +292,16 @@ return o;
 }
 function dmg(u,v,p){if(!u.al)return 0;if(u.inv)return 0;let a=v;if(!p&&u.sh>0){let sb=Math.min(u.sh,a);u.sh-=sb;a-=sb}let hpB=u.hp;u.hp-=a;let r=Math.max(0,u.hp/u.mH);if(!u._hits)u._hits=[];u._hits.push({dmg:v,hpLoss:a,hpBefore:hpB,ratio:r,t:Date.now()});if(u.hp<=0){u.hp=0;u.al=0}if(u.n==='周水'&&u.al){u.chg(1);b.lg.push('周水 受击充能+1')}return v}
 function heal(u,v){if(u.al)u.hp=Math.min(u.mH,u.hp+v)}
-function chg(u,n){if(u.ultDur>0)return;u.ch=Math.min(u.ch+n,u.mxc)}
+function chg(u,n){if(u.ultDur>0)return;u.ch=Math.min(u.ch+n,u.mxc);
+if(u.ch>=u.mxc&&u.al&&!b._inAutoUlt){
+let ult=u.sk.find(s=>s.tp==='ult'&&s.auto);
+if(ult){
+b._inAutoUlt=true;let prev=b.logCtx;
+b.lg.push(u.n+' 充能满自动释放·'+ult.n);
+b.logCtx={u:u,tp:'ult',sn:ult.n};
+u.ch=0;ult.ex(u,{b:b,us:b.us});
+b.logCtx=prev;b._inAutoUlt=false;
+}}
 function sCd(u,k,v){u.cd[k]=v}
 function gCd(u,k){return u.cd[k]||0}
 function cdTk(u){for(let k in u.cd)if(u.cd[k]>0)u.cd[k]--}
@@ -569,7 +578,7 @@ startBattle();
 function startBattle(){
 b.us=[];let allD=[...p1deploy.map(d=>({...d,tm:'p1'})),...p2deploy.map(d=>({...d,tm:'p2'}))];
 allD.forEach(d=>{
-let u=mu(d.n,d.h,d.a,d.agi||0,d.tm,d.x,d.y,d.m||5,d.rg||[[0,0]]);
+let u=mu(d.n,d.h,d.a,d.agi||0,d.tm,d.x,d.y,d.mxc||5,d.rg||[[0,0]]);
 u.sk=d.sk||[];
 u.ch=0;
 u.sk.filter(s=>s.st&&s.tp==='sk').forEach(s=>u.sC(s.n,s.st));
