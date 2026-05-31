@@ -794,6 +794,7 @@ let cdText='';for(let k in u.cd)if(u.cd[k]>0)cdText+=k.substring(0,1)+':'+u.cd[k
 slot.innerHTML='<span class="n">'+u.n.substring(0,3)+'</span><span class="hp" style="color:'+hpC+'">'+dHp+'/'+u.mH+'</span>'+(cdText?'<span class="cd">'+cdText+'</span>':'')+(u.ch>0?'<span class="cd">⚡'+u.ch+'</span>':'');
 // 隐匿特效
 if(u.sth>0){
+  if(u.n==='周水')slot.style.border='3px solid #f0f';
   if(!u._prevSth){u._hadSthGain=1}
   slot.classList.add('unit-sth',sthFxMode==='mist'?'mist':'ghost');
   let lbl=document.createElement('span');lbl.className='sth-label';lbl.textContent='隐匿';slot.appendChild(lbl);
