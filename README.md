@@ -1,3 +1,6 @@
+## v1.20 (2026-06-02)
+- 选中隐匿单位不破隐修复：新增.slot.unit-sth.sel规则，选中时仅金色边框标记不覆盖隐匿box-shadow
+
 ## v1.19 (2026-06-02)
 - 周水隐匿不显示修复：beginRound中sth递减从renderBattle之前移到之后，解决第一回合渲染时sth已被归零导致隐匿特效不显示
 - 开发者模式充能上限修复：startDevBattle中rd.m→rd.mxc
