@@ -100,7 +100,7 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 </style></head>
 <body>
 <div id="app">
-<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.21</div>
+<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.22</div>
 <div id="sthToggle" class="sth-toggle mist" onclick="toggleSthFx()" title="隐匿特效切换">雾</div>
 
 <div id="ban" class="phase active">
@@ -133,9 +133,11 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 <div id="battleInfo" style="text-align:center;font-size:10px;margin:2px 0"></div>
 <div id="board2" style="position:relative"></div>
 <div id="skillBar"></div>
-<div class="row"><button class="btn" onclick="bSkip()">跳过回合</button><button class="btn" id="btnDummyMove" style="display:none;background:#552" onclick="toggleDummyMove()">📦 调整人机</button><button class="btn" id="btnAddDummy" style="display:none;background:#252" onclick="toggleAddDummy()">+人机</button><button class="btn" id="btnCdMinus" style="display:none;background:#a33" onclick="devCdMinus()">⏱ 全体冷却-1</button><button class="btn" id="btnChgPlus" style="display:none;background:#3a3" onclick="devChgPlus()">⚡ 全体充能+1</button><button class="btn" id="btnTestSth" style="display:none;background:#739" onclick="testSthFx()">🧪 测试隐匿特效</button></div>
+<div class="row"><button class="btn" onclick="bSkip()">跳过回合</button><button class="btn" id="btnDummyMove" style="display:none;background:#552" onclick="toggleDummyMove()">📦 调整人机</button><button class="btn" id="btnAddDummy" style="display:none;background:#252" onclick="toggleAddDummy()">+人机</button><button class="btn" id="btnCdMinus" style="display:none;background:#a33" onclick="devCdMinus()">⏱ 全体冷却-1</button><button class="btn" id="btnChgPlus" style="display:none;background:#3a3" onclick="devChgPlus()">⚡ 全体充能+1</button><button class="btn" id="btnTestSth" style="display:none;background:#739" onclick="testSthFx()">🧪 测试隐匿特效</button><button class="btn" style="background:#448" onclick="showRules()">📖 规则</button><button class="btn" style="background:#484" onclick="showGuide()">📚 角色图鉴</button></div>
 <button class="log-icon" id="logBtn" onclick="showLog()" title="战斗日志">📋</button>
 <div class="log-modal" id="logModal"><button class="log-close" onclick="hideLog()">✕</button><div class="log-content" id="logContent"></div></div>
+<div class="log-modal" id="rulesModal"><button class="log-close" onclick="$('rulesModal').style.display='none'">✕</button><div class="log-content" id="rulesContent"></div></div>
+<div class="log-modal" id="guideModal"><button class="log-close" onclick="$('guideModal').style.display='none'">✕</button><div class="log-content" id="guideContent"></div></div>
 </div>
 
 <div id="gameover" class="phase">
@@ -169,8 +171,8 @@ ctx.b.lg.push('虫群发动!下个自身回合开始时触发二次伤害');
 }}
 ]},
 {n:'周水',h:3,a:2,agi:8,cls:'处决者',mxc:2,rg:[[0,0],[1,0]],sk:[
-{tp:'ba',n:'恐惧震慑',charge:1,ex:(u,t,ctx)=>{let d=t.dmg(u.atk);ctx.b.lg.push('恐惧震慑 '+t.n+' '+d+'伤 +5恐惧');t.ail.fear.add(5);t.chg(1);if(t.sth>0){t.sth=0;ctx.b.lg.push(t.n+' 被击中解除隐匿')}if(u.sth>0){u.sth=0;u.backdoorCd=2;ctx.b.lg.push('后门:隐匿解除,2回合后恢复')}if(!t.al){ctx.b.lg.push('冷场:对全场触发普攻!');let targets=ctx.b.us.filter(v=>v.al&&v!==u);targets.sort((a,b)=>Math.abs(a.x-u.x)-Math.abs(b.x-u.x));targets.forEach(v=>v.dmg(u.atk))}}},
-{tp:'ult',n:'瞬杀时刻',ch:2,auto:1,ex:(u,ctx)=>{let es=ctx.b.us.filter(v=>v.tm!==u.tm&&v.al);if(!es.length)return;es.sort((a,b)=>a.hp-b.hp);let t=es[0];let dmgVal=Math.floor(((u.mH-u.hp)+u.atk)*2);t.dmg(dmgVal,1);ctx.b.lg.push('瞬杀 '+t.n+' '+dmgVal+'穿透伤 +8恐惧');t.ail.fear.add(8);u.ch=0}}
+{tp:'ba',n:'恐惧震慑',charge:1,ex:(u,t,ctx)=>{let d=t.dmg(u.atk);ctx.b.lg.push('恐惧震慑 '+t.n+' '+d+'伤 +5恐惧');t.ail.fear.add(5);t.chg(1);if(u.sth>0){u.sth=0;u.backdoorCd=2;ctx.b.lg.push('后门:隐匿解除,2回合后恢复')}if(!t.al)triggerColdField(u,ctx.b)}},
+{tp:'ult',n:'瞬杀时刻',ch:2,auto:1,ex:(u,ctx)=>{let es=ctx.b.us.filter(v=>v.tm!==u.tm&&v.al);if(!es.length)return;es.sort((a,b)=>a.hp-b.hp);let t=es[0];let dmgVal=Math.floor(((u.mH-u.hp)+u.atk)*2);t.dmg(dmgVal);ctx.b.lg.push('瞬杀 '+t.n+' '+dmgVal+'伤 +8恐惧');t.ail.fear.add(8);u.ch=0;if(u.sth>0){u.sth=0;u.backdoorCd=2;ctx.b.lg.push('后门:隐匿解除,2回合后恢复')}if(!t.al)triggerColdField(u,ctx.b)}}
 ]},
 {n:'优南',h:14,a:2,cls:'斗士',rg:[[0,0],[1,0]],sk:[
 {tp:'ba',n:'冲拳',ex:(u,t,ctx)=>{let ct=getChargeTarget(u,ctx.b.us);if(!ct)return ctx.b.lg.push('无冲锋目标');t=ct;let has=t.ail.neuro.s>0||t.ail.fear.s>0||t.ail.burn.s>0;let mul=u.qi>=2?3:1;let d=t.dmg(u.atk*mul+(has?1:0));ctx.b.lg.push('冲拳'+(has?'重拳':'')+(mul>1?'×3':'')+' '+d+'伤');if(u.qi>=2){t.ail.fear.add(2);u.qi=0}u.chg(1);t.chg(1)}},
@@ -781,6 +783,20 @@ let hint=document.createElement('div');hint.className='skmode-hint';
 hint.textContent=b.skMode.isBA?'点击敌方普攻':(b.skMode.tgt==='empty'?'点击空格召唤('+b.skMode.placed+'/'+b.skMode.max+')':'选择'+(b.skMode.tgt==='enemy'?'敌方':'')+'目标');
 brd.appendChild(hint);
 }
+// 冷场选目标高亮
+if(b.coldField){
+for(let x=0;x<7;x++)for(let y=1;y<6;y++){
+let u=b.us.find(v=>v.al&&v.x===x&&v.y===y);
+if(u&&b.coldField.targets.includes(u)){
+let hl=document.createElement('div');
+hl.style.cssText='position:absolute;left:'+(x*56+10)+'px;top:'+((y-1)*56+10)+'px;width:56px;height:56px;background:rgba(255,215,0,0.35);border:2px solid rgba(255,215,0,0.7);border-radius:4px;pointer-events:none;z-index:3';
+brd.appendChild(hl);
+}
+}
+let hint=document.createElement('div');hint.className='skmode-hint';
+hint.textContent='冷场:点击目标(ATK×1 +5恐惧) 剩余'+b.coldField.targets.length;
+brd.appendChild(hint);
+}
 // 单位
 b.us.forEach(u=>{if(!u.al)return;
 let slot=document.createElement('div');slot.className='slot';
@@ -812,7 +828,7 @@ if(u.sth>0){
 u._prevSth=u.sth;
 if(dummyMoveMode&&u.isDummy) slot.style.background='#552';
 if(dummySelected===u) slot.style.background='#a55';
-slot.onclick=()=>onBClick(u);
+slot.onclick=()=>{if(b.coldField&&b.coldField.targets.includes(u)){let cf=b.coldField;let d=u.dmg(cf.u.atk);b.lg.push('冷场 '+u.n+' '+d+'伤 +5恐惧');u.ail.fear.add(5);cf.targets.splice(cf.targets.indexOf(u),1);cf.done.push(u);if(!cf.targets.length){b.lg.push('冷场结束');b.coldField=null}renderBattle()}else onBClick(u)};
 brd.appendChild(slot);
 });
 // 开发者模式: 空格点击移动人机
@@ -1027,6 +1043,15 @@ finishAction(unit);
 
 function allActed(){
 return b.us.filter(u=>u.al&&u.tm===b.ct&&!u.isS&&!u.isDummy).every(u=>b.acted.has(u._uid));
+}
+
+// 冷场：周水击杀后对全场单位自选目标
+function triggerColdField(u,b){
+let targets=b.us.filter(v=>v.al&&v._uid!==u._uid);
+if(!targets.length){b.lg.push('冷场:无可选目标');return;}
+b.lg.push('冷场:对全场触发!请逐个选择目标');
+b.coldField={u:u,targets:targets,done:[]};
+renderBattle();
 }
 
 // 动作后摇：1秒延迟后继续
@@ -1257,8 +1282,42 @@ html+='<div class="'+cls+'">'+l.msg+'</div>';
 $('logContent').innerHTML=html||'暂无日志';
 }
 function hideLog(){$('logModal').classList.remove('show');}
-function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志 v1.21</div>- 2026年06月02日，选中周水不破隐修复：beginRound中sth递减跳过周水(后门隐匿由攻击机制管理，不自动过期)<br>- 2026年06月02日，选中隐匿单位不破隐修复：新增.slot.unit-sth.sel规则，选中时仅金色边框标记不覆盖隐匿box-shadow<br>- 2026年06月02日，周水隐匿不显示修复：beginRound中sth递减从renderBattle之前移到之后(解决第一回合渲染时sth已被归零)/开发者模式充能上限修复：startDevBattle中rd.m→rd.mxc<br>- 2026年06月01日，充能上限修复：startBattle正常部署路径d.m→d.mxc/自动大招：chg()充能达到上限时自动触发auto:1大招/开发者模式补周水sth=1<br>- 2026年06月01日，隐匿特效根因修复：outline-color不是CSS可动画属性→改为box-shadow内外发光呼吸动画+加!important/新增测试隐匿特效按钮(内联强制渲染)<br>- 2026年06月01日，充能上限修复：deployCur缺少m字段导致mxc回退默认5→改为透传r.mxc/隐匿特效重做：overlay方案改为slot级filter+outline呼吸动画，更稳定可见<br>- 2026年06月01日，隐匿overlay加半透明背景色+inset发光/冲锋选位仅允许x距离最近目标(高亮+点击双限制)<br>- 2026年06月01日，冲锋范围动态检测(同行有敌→仅同行/同行无敌→同行+相邻行)/隐匿独立overlay层+发光模糊动画/冷场按距离排序且不伤自己/周水充能上限2<br>- 2026年05月31日，周水重做(充能改为受击+1上限2/冲锋UI自选目标/自动大招不消耗行动/隐匿雾隐虚影双特效+按钮切换)<br>- 2026年05月31日，周水重做：恐惧震慑改为冲锋自动锁定目标、瞬杀时刻伤害公式改为(已损失+ATK)*2穿透、新增被动后门(开局隐匿/攻击解除/2回合后恢复)、冷场改为对全场触发普攻<br>- 2026年05月29日，损伤全局触发（叠满10点自动结算：神经=2伤+眩晕/恐惧=4伤/燃烧=2伤+3回合流血）+ 先手平局随机 + 冲锋全局规则（同列/相邻行取最近单位，含友方）<br>- 2026年05月29日，战斗反馈优化：先震动后出伤（暂显旧HP→震动0.35s→HP更新+红色小字"-x"浮动跳出）<br>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害累加取最强+血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}
+function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志 v1.22</div>- 2026年06月02日，周水重做：冷场改为自选目标逐个造成ATK×1伤害+5层恐惧(全图)/大招瞬杀时刻去掉穿透/新增规则按钮+角色图鉴按钮(陈色+周水)<br>- 2026年06月02日，选中周水不破隐修复：beginRound中sth递减跳过周水(后门隐匿由攻击机制管理，不自动过期)<br>- 2026年06月02日，选中隐匿单位不破隐修复：新增.slot.unit-sth.sel规则，选中时仅金色边框标记不覆盖隐匿box-shadow<br>- 2026年06月02日，周水隐匿不显示修复：beginRound中sth递减从renderBattle之前移到之后(解决第一回合渲染时sth已被归零)/开发者模式充能上限修复：startDevBattle中rd.m→rd.mxc<br>- 2026年06月01日，充能上限修复：startBattle正常部署路径d.m→d.mxc/自动大招：chg()充能达到上限时自动触发auto:1大招/开发者模式补周水sth=1<br>- 2026年06月01日，隐匿特效根因修复：outline-color不是CSS可动画属性→改为box-shadow内外发光呼吸动画+加!important/新增测试隐匿特效按钮(内联强制渲染)<br>- 2026年06月01日，充能上限修复：deployCur缺少m字段导致mxc回退默认5→改为透传r.mxc/隐匿特效重做：overlay方案改为slot级filter+outline呼吸动画，更稳定可见<br>- 2026年06月01日，隐匿overlay加半透明背景色+inset发光/冲锋选位仅允许x距离最近目标(高亮+点击双限制)<br>- 2026年06月01日，冲锋范围动态检测(同行有敌→仅同行/同行无敌→同行+相邻行)/隐匿独立overlay层+发光模糊动画/冷场按距离排序且不伤自己/周水充能上限2<br>- 2026年05月31日，周水重做(充能改为受击+1上限2/冲锋UI自选目标/自动大招不消耗行动/隐匿雾隐虚影双特效+按钮切换)<br>- 2026年05月31日，周水重做：恐惧震慑改为冲锋自动锁定目标、瞬杀时刻伤害公式改为(已损失+ATK)*2穿透、新增被动后门(开局隐匿/攻击解除/2回合后恢复)、冷场改为对全场触发普攻<br>- 2026年05月29日，损伤全局触发（叠满10点自动结算：神经=2伤+眩晕/恐惧=4伤/燃烧=2伤+3回合流血）+ 先手平局随机 + 冲锋全局规则（同列/相邻行取最近单位，含友方）<br>- 2026年05月29日，战斗反馈优化：先震动后出伤（暂显旧HP→震动0.35s→HP更新+红色小字"-x"浮动跳出）<br>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害累加取最强+血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}
 function hideCL(){$('clModal').classList.remove('show');}
+function showRules(){
+var h='<div class="cl-hdr">八宝舟 总体规则</div>';
+h+='<p><b>术语定义</b><br>';
+h+='<b>单位：</b>指敌方和我方的所有角色和召唤物<br>';
+h+='<b>操作：</b>角色的普攻、技能、大招<br>';
+h+='<b>攻击：</b>角色介绍中能造成伤害的操作</p>';
+h+='<p><b>基本规则</b><br>';
+h+='棋盘为7列×5行（x:0~6, y:1~5），中线x=3分隔蓝方(p1)和红方(p2)<br>';
+h+='每回合按敏捷总和决定先手方，同值随机<br>';
+h+='每个单位每大回合只能行动一次<br>';
+h+='召唤物不可被选中、不占行动次数<br>';
+h+='损伤系统：神经/恐惧/燃烧各10层，叠满自动结算</p>';
+h+='<p><b>冲锋规则</b><br>';
+h+='冲锋单位只能攻击同行最接近的敌方，同行无敌时扩展至相邻行最近敌方</p>';
+$('rulesContent').innerHTML=h;
+$('rulesModal').style.display='flex';
+}
+function showGuide(){
+var h='<div class="cl-hdr">角色图鉴</div>';
+// 陈色
+h+='<div style="margin:8px 0;padding:8px;background:#1a1a3e;border-radius:6px;border-left:3px solid #8af">';
+h+='<b style="font-size:13px;color:#8af">陈色 — 召唤师</b> HP16 | ATK0 | 敏捷7 | 充能上限3';
+h+='<p style="margin:4px 0;font-size:10px;color:#aaa">技能「毛毛虫」CD8：选择空格召唤毛毛虫（储虫数=已存活毛毛虫数）<br>';
+h+='大招「虫群」充能3：消耗所有毛毛虫，总HP×2对敌方均分伤害，友方全体ATK+1，下个自身回合开始时触发二次伤害</p></div>';
+// 周水
+h+='<div style="margin:8px 0;padding:8px;background:#1a1a3e;border-radius:6px;border-left:3px solid #f0f">';
+h+='<b style="font-size:13px;color:#f0f">周水 — 处决者</b> HP3 | ATK2 | 敏捷8 | 充能上限2 | 攻击范围：前方1格';
+h+='<p style="margin:4px 0;font-size:10px;color:#aaa">被动「后门」：开局隐匿，攻击后解除隐匿，下下个大回合后自动恢复<br>';
+h+='被动「冷场」：因自身操作击杀单位后对全场单位自选顺序依次造成1倍伤害+5层恐惧<br>';
+h+='普攻「恐惧震慑」：冲锋，对目标造成伤害+5层恐惧<br>';
+h+='大招「瞬杀时刻」（受击充能，上限2，自动释放）：对血量最低敌方造成(已损失HP+ATK)×2伤害+8层恐惧</p></div>';
+$('guideContent').innerHTML=h;
+$('guideModal').style.display='flex';
+}
 </script>
 
 <button class="cl-btn" onclick="showCL()" title="改动日志">📝</button>
