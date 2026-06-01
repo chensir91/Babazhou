@@ -1,3 +1,7 @@
+## v1.19 (2026-06-02)
+- 周水隐匿不显示修复：beginRound中sth递减从renderBattle之前移到之后，解决第一回合渲染时sth已被归零导致隐匿特效不显示
+- 开发者模式充能上限修复：startDevBattle中rd.m→rd.mxc
+
 # 《八宝舟》— Unity 项目说明
 
 ## 项目结构
