@@ -83,25 +83,26 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 .cl-content{background:#1a1a2e;border:1px solid #555;border-radius:8px;padding:16px;max-width:380px;width:90%;max-height:70vh;overflow-y:auto;color:#aaa;font-size:13px;line-height:1.8}
 .cl-content .cl-hdr{color:#fc0;font-size:15px;font-weight:bold;margin-bottom:8px;text-align:center}
 .cl-close{position:absolute;top:10px;right:14px;color:#888;font-size:18px;cursor:pointer;background:none;border:none}
-/* 隐匿特效 - box-shadow动画（outline-color不可动画） */
-@keyframes stealthGlow{0%,100%{box-shadow:0 0 0 3px rgba(120,120,255,0.3),inset 0 0 12px rgba(120,120,255,0.12)}50%{box-shadow:0 0 0 3px rgba(120,120,255,0.85),inset 0 0 24px rgba(120,120,255,0.35)}}
-@keyframes stealthGlowGhost{0%,100%{box-shadow:0 0 0 3px rgba(100,255,100,0.25),inset 0 0 12px rgba(100,255,100,0.1)}50%{box-shadow:0 0 0 3px rgba(100,255,100,0.8),inset 0 0 24px rgba(100,255,100,0.3)}}
-.slot.unit-sth{cursor:pointer;filter:brightness(0.45)!important}
-.slot.unit-sth.mist{box-shadow:0 0 0 3px rgba(120,120,255,0.6),inset 0 0 12px rgba(120,120,255,0.2)!important;animation:stealthGlow 1.2s ease-in-out infinite}
-.slot.unit-sth.ghost{box-shadow:0 0 0 3px rgba(100,255,100,0.5),inset 0 0 12px rgba(100,255,100,0.15)!important;animation:stealthGlowGhost 1.5s ease-in-out infinite}
-.slot.unit-sth.sel{border-color:#fc0!important} /* 隐匿单位选中：仅金色边框，保留隐匿box-shadow */
-.sth-gain{position:absolute;top:-14px;left:50%;transform:translateX(-50%);color:#aaf;font-size:10px;font-weight:bold;pointer-events:none;z-index:30;animation:floatUp 1.2s ease-out forwards;text-shadow:0 0 6px rgba(150,150,255,0.6)}
-.sth-lose{position:absolute;top:-14px;left:50%;transform:translateX(-50%);color:#f88;font-size:10px;font-weight:bold;pointer-events:none;z-index:30;animation:floatUp 1.2s ease-out forwards;text-shadow:0 0 6px rgba(255,100,100,0.6)}
+/* 隐匿三态特效 */
+.slot.unit-sth{opacity:0.5;position:relative}
+.slot.unit-sth::before{content:'';position:absolute;inset:-5px;border-radius:6px;background:radial-gradient(1px 1px at 15% 25%,rgba(255,255,255,0.7),transparent),radial-gradient(1px 1px at 55% 65%,rgba(255,255,255,0.5),transparent),radial-gradient(1.5px 1.5px at 75% 20%,rgba(255,255,255,0.6),transparent),radial-gradient(1px 1px at 35% 80%,rgba(255,255,255,0.4),transparent),radial-gradient(1px 1px at 85% 50%,rgba(255,255,255,0.55),transparent),radial-gradient(1.5px 1.5px at 65% 35%,rgba(255,255,255,0.6),transparent),radial-gradient(1px 1px at 25% 70%,rgba(255,255,255,0.45),transparent),radial-gradient(1px 1px at 45% 15%,rgba(255,255,255,0.5),transparent);animation:mistDrift 2.5s ease-in-out infinite;pointer-events:none;z-index:2}
+.slot.unit-sth.sel{border-color:#fc0!important}
+@keyframes mistDrift{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.03)}}
+/* 获得隐匿：白雾从脚下升腾 */
+.sth-gain-wrap{position:absolute;left:0;bottom:0;width:100%;height:120%;overflow:hidden;pointer-events:none;z-index:25}
+.sth-gain-fog{position:absolute;left:0;bottom:0;width:100%;height:60px;background:linear-gradient(to top,rgba(255,255,255,0.05),rgba(255,255,255,0.5) 40%,rgba(255,255,255,0.1));animation:fogRise 0.9s ease-out forwards}
+@keyframes fogRise{0%{opacity:1;transform:translateY(0) scaleX(0.6)}100%{opacity:0;transform:translateY(-55px) scaleX(1.2)}}
+.sth-gain{position:absolute;top:-16px;left:50%;transform:translateX(-50%);color:#fff;font-size:10px;font-weight:bold;pointer-events:none;z-index:30;animation:floatUp 1.2s ease-out forwards;text-shadow:0 0 8px rgba(255,255,255,0.7)}
+/* 解除隐匿：雾气瞬间炸散 */
+.sth-burst{position:absolute;inset:-6px;border-radius:6px;background:radial-gradient(circle,rgba(255,255,255,0.35) 10%,transparent 70%);animation:burstDisperse .4s ease-out forwards;pointer-events:none;z-index:25}
+@keyframes burstDisperse{0%{transform:scale(0.6);opacity:1}100%{transform:scale(2.2);opacity:0}}
+.sth-lose{position:absolute;top:-16px;left:50%;transform:translateX(-50%);color:#faa;font-size:10px;font-weight:bold;pointer-events:none;z-index:30;animation:floatUp 1.2s ease-out forwards;text-shadow:0 0 8px rgba(255,100,100,0.7)}
 @keyframes floatUp{0%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-22px)}}
-.sth-label{position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);font-size:8px;color:#aaf;pointer-events:none;z-index:30}
-.sth-toggle{position:fixed;top:30px;right:8px;width:24px;height:24px;border-radius:50%;background:#2a2a44;border:1px solid #555;color:#888;font-size:10px;cursor:pointer;z-index:200;display:flex;align-items:center;justify-content:center}
-.sth-toggle.mist{background:#224;border-color:#448;color:#aaf}
-.sth-toggle.ghost{background:#242;border-color:#484;color:#afa}
+.sth-label{position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);font-size:8px;color:#ccc;pointer-events:none;z-index:30}
 </style></head>
 <body>
 <div id="app">
-<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.23</div>
-<div id="sthToggle" class="sth-toggle mist" onclick="toggleSthFx()" title="隐匿特效切换">雾</div>
+<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.24</div>
 
 <div id="ban" class="phase active">
 <h2>🔵 蓝方 BAN（1/4）</h2>
@@ -133,7 +134,7 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 <div id="battleInfo" style="text-align:center;font-size:10px;margin:2px 0"></div>
 <div id="board2" style="position:relative"></div>
 <div id="skillBar"></div>
-<div class="row"><button class="btn" onclick="bSkip()">跳过回合</button><button class="btn" id="btnDummyMove" style="display:none;background:#552" onclick="toggleDummyMove()">📦 调整人机</button><button class="btn" id="btnAddDummy" style="display:none;background:#252" onclick="toggleAddDummy()">+人机</button><button class="btn" id="btnCdMinus" style="display:none;background:#a33" onclick="devCdMinus()">⏱ 全体冷却-1</button><button class="btn" id="btnChgPlus" style="display:none;background:#3a3" onclick="devChgPlus()">⚡ 全体充能+1</button><button class="btn" id="btnTestSth" style="display:none;background:#739" onclick="testSthFx()">🧪 测试隐匿特效</button><button class="btn" style="background:#448" onclick="showRules()">📖 规则</button><button class="btn" style="background:#484" onclick="showGuide()">📚 角色图鉴</button></div>
+<div class="row"><button class="btn" onclick="bSkip()">跳过回合</button><button class="btn" id="btnDummyMove" style="display:none;background:#552" onclick="toggleDummyMove()">📦 调整人机</button><button class="btn" id="btnAddDummy" style="display:none;background:#252" onclick="toggleAddDummy()">+人机</button><button class="btn" id="btnCdMinus" style="display:none;background:#a33" onclick="devCdMinus()">⏱ 全体冷却-1</button><button class="btn" id="btnChgPlus" style="display:none;background:#3a3" onclick="devChgPlus()">⚡ 全体充能+1</button><button class="btn" style="background:#448" onclick="showRules()">📖 规则</button><button class="btn" style="background:#484" onclick="showGuide()">📚 角色图鉴</button></div>
 <button class="log-icon" id="logBtn" onclick="showLog()" title="战斗日志">📋</button>
 <div class="log-modal" id="logModal"><button class="log-close" onclick="hideLog()">✕</button><div class="log-content" id="logContent"></div></div>
 <div class="log-modal" id="rulesModal"><button class="log-close" onclick="$('rulesModal').style.display='none'">✕</button><div class="log-content" id="rulesContent"></div></div>
@@ -324,29 +325,6 @@ let deployOrder=['蓝','红','蓝','红','蓝','红','蓝','红','蓝','红'];
 let deployStep=0,deployCur=null;
 let p1deploy=[],p2deploy=[];
 let devMode=false;
-let sthFxMode='mist'; // 'mist' | 'ghost'
-function toggleSthFx(){
-  sthFxMode=sthFxMode==='mist'?'ghost':'mist';
-  let btn=$('sthToggle');
-  btn.className='sth-toggle '+(sthFxMode==='mist'?'mist':'ghost');
-  btn.textContent=sthFxMode==='mist'?'雾':'虚';
-  renderBattle();
-}
-function testSthFx(){
-  let brd=$('board2');
-  let slots=brd.querySelectorAll('.slot');
-  let found=false;
-  slots.forEach(s=>{
-    let n=s.querySelector('.n');
-    if(n&&n.textContent.startsWith('周水')){
-      s.style.filter='brightness(0.3)';
-      s.style.boxShadow='0 0 0 3px rgba(180,80,255,1), 0 0 22px rgba(180,80,255,0.7), inset 0 0 16px rgba(180,80,255,0.4)';
-      found=true;
-    }
-  });
-  if(!found)alert('未找到周水，请先进入战斗阶段');
-  else b.lg.push('测试按钮：对周水施加隐匿特效');
-}
 
 // ===== 战斗引擎 =====
 let b={us:[],sel:null,ct:'p1',rn:1,_logs:[],go:0,acted:new Set(),extra:null,skMode:null,_phase:null};
@@ -688,12 +666,10 @@ if(devMode){
 $('btnCdMinus').style.display='inline-block';
 $('btnChgPlus').style.display='inline-block';
 $('btnAddDummy').style.display='inline-block';
-$('btnTestSth').style.display='inline-block';
 }else{
 $('btnCdMinus').style.display='none';
 $('btnChgPlus').style.display='none';
 $('btnAddDummy').style.display='none';
-$('btnTestSth').style.display='none';
 }
 // 攻击范围
 if(b.sel&&!b.skMode){
@@ -813,17 +789,21 @@ slot.innerHTML='<span class="n">'+u.n.substring(0,3)+'</span><span class="hp" st
 // 隐匿特效
 if(u.sth>0){
   if(u.n==='周水')slot.style.border='3px solid #f0f';
-  if(!u._prevSth){u._hadSthGain=1}
-  slot.classList.add('unit-sth',sthFxMode==='mist'?'mist':'ghost');
+  if(!u._prevSth)u._hadSthGain=1;
+  slot.classList.add('unit-sth');
   let lbl=document.createElement('span');lbl.className='sth-label';lbl.textContent='隐匿';slot.appendChild(lbl);
   if(u._hadSthGain){
+    let wrap=document.createElement('div');wrap.className='sth-gain-wrap';
+    let fog=document.createElement('div');fog.className='sth-gain-fog';
+    wrap.appendChild(fog);slot.appendChild(wrap);
     let gain=document.createElement('span');gain.className='sth-gain';gain.textContent='获得隐匿';slot.appendChild(gain);
-    setTimeout(()=>gain.remove(),1300);
+    setTimeout(()=>{wrap.remove();gain.remove()},1300);
     u._hadSthGain=0;
   }
 }else if(u._prevSth>0){
+  let burst=document.createElement('div');burst.className='sth-burst';slot.appendChild(burst);
   let lose=document.createElement('span');lose.className='sth-lose';lose.textContent='破隐';slot.appendChild(lose);
-  setTimeout(()=>lose.remove(),1300);
+  setTimeout(()=>{burst.remove();lose.remove()},1300);
 }
 u._prevSth=u.sth;
 if(dummyMoveMode&&u.isDummy) slot.style.background='#552';
@@ -1296,7 +1276,7 @@ html+='<div class="'+cls+'">'+l.msg+'</div>';
 $('logContent').innerHTML=html||'暂无日志';
 }
 function hideLog(){$('logModal').classList.remove('show');}
-function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志 v1.23</div>- 2026年06月02日，冷场改为额外回合：普攻/大招击杀后finishAction完成→插入冷场额外回合(不占行动/不计算冷却充能)→冷场结束后继续正常回合<br>- 2026年06月02日，周水重做：冷场改为自选目标逐个造成ATK×1伤害+5层恐惧(全图)/大招瞬杀时刻去掉穿透/新增规则按钮+角色图鉴按钮(陈色+周水)<br>- 2026年06月02日，选中周水不破隐修复：beginRound中sth递减跳过周水(后门隐匿由攻击机制管理，不自动过期)<br>- 2026年06月02日，选中隐匿单位不破隐修复：新增.slot.unit-sth.sel规则，选中时仅金色边框标记不覆盖隐匿box-shadow<br>- 2026年06月02日，周水隐匿不显示修复：beginRound中sth递减从renderBattle之前移到之后(解决第一回合渲染时sth已被归零)/开发者模式充能上限修复：startDevBattle中rd.m→rd.mxc<br>- 2026年06月01日，充能上限修复：startBattle正常部署路径d.m→d.mxc/自动大招：chg()充能达到上限时自动触发auto:1大招/开发者模式补周水sth=1<br>- 2026年06月01日，隐匿特效根因修复：outline-color不是CSS可动画属性→改为box-shadow内外发光呼吸动画+加!important/新增测试隐匿特效按钮(内联强制渲染)<br>- 2026年06月01日，充能上限修复：deployCur缺少m字段导致mxc回退默认5→改为透传r.mxc/隐匿特效重做：overlay方案改为slot级filter+outline呼吸动画，更稳定可见<br>- 2026年06月01日，隐匿overlay加半透明背景色+inset发光/冲锋选位仅允许x距离最近目标(高亮+点击双限制)<br>- 2026年06月01日，冲锋范围动态检测(同行有敌→仅同行/同行无敌→同行+相邻行)/隐匿独立overlay层+发光模糊动画/冷场按距离排序且不伤自己/周水充能上限2<br>- 2026年05月31日，周水重做(充能改为受击+1上限2/冲锋UI自选目标/自动大招不消耗行动/隐匿雾隐虚影双特效+按钮切换)<br>- 2026年05月31日，周水重做：恐惧震慑改为冲锋自动锁定目标、瞬杀时刻伤害公式改为(已损失+ATK)*2穿透、新增被动后门(开局隐匿/攻击解除/2回合后恢复)、冷场改为对全场触发普攻<br>- 2026年05月29日，损伤全局触发（叠满10点自动结算：神经=2伤+眩晕/恐惧=4伤/燃烧=2伤+3回合流血）+ 先手平局随机 + 冲锋全局规则（同列/相邻行取最近单位，含友方）<br>- 2026年05月29日，战斗反馈优化：先震动后出伤（暂显旧HP→震动0.35s→HP更新+红色小字"-x"浮动跳出）<br>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害累加取最强+血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}
+function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志 v1.24</div>- 2026年06月02日，隐匿三态特效重做：获得隐匿(白雾升腾+文字)/持有隐匿(半透明+白色雾气粒子飘散+"隐匿"小字)/解除隐匿(雾气炸散+"破隐"文字)；删除隐匿特效切换按钮(统一雾隐)<br>- 2026年06月02日，冷场改为额外回合：普攻/大招击杀后finishAction完成→插入冷场额外回合(不占行动/不计算冷却充能)→冷场结束后继续正常回合<br>- 2026年06月02日，周水重做：冷场改为自选目标逐个造成ATK×1伤害+5层恐惧(全图)/大招瞬杀时刻去掉穿透/新增规则按钮+角色图鉴按钮(陈色+周水)<br>- 2026年06月02日，选中周水不破隐修复：beginRound中sth递减跳过周水(后门隐匿由攻击机制管理，不自动过期)<br>- 2026年06月02日，选中隐匿单位不破隐修复：新增.slot.unit-sth.sel规则，选中时仅金色边框标记不覆盖隐匿box-shadow<br>- 2026年06月02日，周水隐匿不显示修复：beginRound中sth递减从renderBattle之前移到之后(解决第一回合渲染时sth已被归零)/开发者模式充能上限修复：startDevBattle中rd.m→rd.mxc<br>- 2026年06月01日，充能上限修复：startBattle正常部署路径d.m→d.mxc/自动大招：chg()充能达到上限时自动触发auto:1大招/开发者模式补周水sth=1<br>- 2026年06月01日，隐匿特效根因修复：outline-color不是CSS可动画属性→改为box-shadow内外发光呼吸动画+加!important/新增测试隐匿特效按钮(内联强制渲染)<br>- 2026年06月01日，充能上限修复：deployCur缺少m字段导致mxc回退默认5→改为透传r.mxc/隐匿特效重做：overlay方案改为slot级filter+outline呼吸动画，更稳定可见<br>- 2026年06月01日，隐匿overlay加半透明背景色+inset发光/冲锋选位仅允许x距离最近目标(高亮+点击双限制)<br>- 2026年06月01日，冲锋范围动态检测(同行有敌→仅同行/同行无敌→同行+相邻行)/隐匿独立overlay层+发光模糊动画/冷场按距离排序且不伤自己/周水充能上限2<br>- 2026年05月31日，周水重做(充能改为受击+1上限2/冲锋UI自选目标/自动大招不消耗行动/隐匿雾隐虚影双特效+按钮切换)<br>- 2026年05月31日，周水重做：恐惧震慑改为冲锋自动锁定目标、瞬杀时刻伤害公式改为(已损失+ATK)*2穿透、新增被动后门(开局隐匿/攻击解除/2回合后恢复)、冷场改为对全场触发普攻<br>- 2026年05月29日，损伤全局触发（叠满10点自动结算：神经=2伤+眩晕/恐惧=4伤/燃烧=2伤+3回合流血）+ 先手平局随机 + 冲锋全局规则（同列/相邻行取最近单位，含友方）<br>- 2026年05月29日，战斗反馈优化：先震动后出伤（暂显旧HP→震动0.35s→HP更新+红色小字"-x"浮动跳出）<br>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害累加取最强+血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}
 function hideCL(){$('clModal').classList.remove('show');}
 function showRules(){
 var h='<div class="cl-hdr">八宝舟 总体规则</div>';
