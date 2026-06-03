@@ -184,8 +184,8 @@ ctx.b.lg.push('虫群发动!下个自身回合开始时触发二次伤害');
 }}
 ]},
 {n:'周水',h:3,a:2,agi:8,cls:'处决者',mxc:2,rg:[[0,0],[1,0]],sk:[
-{tp:'ba',n:'恐惧震慑',charge:1,ex:(u,t,ctx)=>{let d=t.dmg(u.atk);ctx.b.lg.push('恐惧震慑 '+t.n+' '+d+'伤 +5恐惧');t.ail.fear.add(5,t);t.chg(1);if(u.sth>0){u.sth=0;u.backdoorCd=2;ctx.b.lg.push('后门:隐匿解除,2回合后恢复')}if(!t.al)triggerColdField(u,ctx.b)}},
-{tp:'ult',n:'瞬杀时刻',ch:2,auto:1,ex:(u,ctx)=>{let es=ctx.b.us.filter(v=>v.tm!==u.tm&&v.al);if(!es.length)return;es.sort((a,b)=>a.hp-b.hp);let t=es[0];let dmgVal=Math.floor(((u.mH-u.hp)+u.atk)*2);t.dmg(dmgVal);ctx.b.lg.push('瞬杀 '+t.n+' '+dmgVal+'伤 +8恐惧');t.ail.fear.add(8,t);u.ch=0;if(u.sth>0){u.sth=0;u.backdoorCd=2;ctx.b.lg.push('后门:隐匿解除,2回合后恢复')}if(!t.al)triggerColdField(u,ctx.b)}}
+{tp:'ba',n:'恐惧震慑',charge:1,ex:(u,t,ctx)=>{let d=t.dmg(u.atk);ctx.b.lg.push('恐惧震慑 '+t.n+' '+d+'伤 +5恐惧');t.ail.fear.add(5,t);t.chg(1);if(u.sth>0){u.sth=0;u.backdoorCd=2;ctx.b.lg.push('后门:隐匿解除,2回合后恢复')}if(!t.al||t._dying)triggerColdField(u,ctx.b)}},
+{tp:'ult',n:'瞬杀时刻',ch:2,auto:1,ex:(u,ctx)=>{let es=ctx.b.us.filter(v=>v.tm!==u.tm&&v.al);if(!es.length)return;es.sort((a,b)=>a.hp-b.hp);let t=es[0];let dmgVal=Math.floor(((u.mH-u.hp)+u.atk)*2);t.dmg(dmgVal);ctx.b.lg.push('瞬杀 '+t.n+' '+dmgVal+'伤 +8恐惧');t.ail.fear.add(8,t);u.ch=0;if(u.sth>0){u.sth=0;u.backdoorCd=2;ctx.b.lg.push('后门:隐匿解除,2回合后恢复')}if(!t.al||t._dying)triggerColdField(u,ctx.b)}}
 ]},
 {n:'优南',h:14,a:2,cls:'斗士',rg:[[0,0],[1,0]],sk:[
 {tp:'ba',n:'冲拳',ex:(u,t,ctx)=>{let ct=getChargeTarget(u,ctx.b.us);if(!ct)return ctx.b.lg.push('无冲锋目标');t=ct;let has=t.ail.neuro.s>0||t.ail.fear.s>0||t.ail.burn.s>0;let mul=u.qi>=2?3:1;let d=t.dmg(u.atk*mul+(has?1:0));ctx.b.lg.push('冲拳'+(has?'重拳':'')+(mul>1?'×3':'')+' '+d+'伤');if(u.qi>=2){t.ail.fear.add(2,t);u.qi=0}u.chg(1);t.chg(1)}},
