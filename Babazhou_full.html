@@ -99,6 +99,11 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 .sth-lose{position:absolute;top:-16px;left:50%;transform:translateX(-50%);color:#faa;font-size:10px;font-weight:bold;pointer-events:none;z-index:30;animation:floatUp 1.2s ease-out forwards;text-shadow:0 0 8px rgba(255,100,100,0.7)}
 @keyframes floatUp{0%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-22px)}}
 .sth-label{position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);font-size:8px;color:#ccc;pointer-events:none;z-index:30}
+/* 死亡粒子消散 */
+.slot.dying{animation:dyingDissolve .6s ease-out forwards;pointer-events:none}
+@keyframes dyingDissolve{0%{opacity:1;filter:brightness(1) blur(0)}40%{opacity:.6;filter:brightness(2.5) blur(1px)}100%{opacity:0;filter:brightness(4) blur(4px)}}
+.dying-particle{position:absolute;border-radius:50%;pointer-events:none;z-index:20;animation:particleFly .7s ease-out forwards}
+@keyframes particleFly{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--px),var(--py)) scale(0)}}
 </style></head>
 <body>
 <div id="app">
@@ -294,7 +299,7 @@ o.inRg=function(tx,ty){return inRg(this,tx,ty)};
 o.sk=ROSTER.find(r=>r.n===n)?.sk||[];
 return o;
 }
-function dmg(u,v,p){if(!u.al)return 0;if(u.inv)return 0;let a=v;if(!p&&u.sh>0){let sb=Math.min(u.sh,a);u.sh-=sb;a-=sb}let hpB=u.hp;u.hp-=a;let r=Math.max(0,u.hp/u.mH);if(!u._hits)u._hits=[];u._hits.push({dmg:v,hpLoss:a,hpBefore:hpB,ratio:r,t:Date.now()});if(u.hp<=0){u.hp=0;u.al=0}if(u.n==='周水'&&u.al){u.chg(1);b.lg.push('周水 受击充能+1')}return v}
+function dmg(u,v,p){if(!u.al)return 0;if(u.inv)return 0;if(u._dying)return 0;let a=v;if(!p&&u.sh>0){let sb=Math.min(u.sh,a);u.sh-=sb;a-=sb}let hpB=u.hp;u.hp-=a;let r=Math.max(0,u.hp/u.mH);if(!u._hits)u._hits=[];u._hits.push({dmg:v,hpLoss:a,hpBefore:hpB,ratio:r,t:Date.now()});if(u.hp<=0){u.hp=0;u._dying=1}if(u.n==='周水'&&u.al&&!u._dying){u.chg(1);b.lg.push('周水 受击充能+1')}return v}
 function heal(u,v){if(u.al)u.hp=Math.min(u.mH,u.hp+v)}
 function chg(u,n){if(u.ultDur>0)return;u.ch=Math.min(u.ch+n,u.mxc);}
 function sCd(u,k,v){u.cd[k]=v}
@@ -747,19 +752,21 @@ hint.textContent='冷场:点击目标(ATK×1 +5恐惧) 剩余'+b.coldField.targe
 brd.appendChild(hint);
 }
 // 单位
-b.us.forEach(u=>{if(!u.al)return;
+b.us.forEach(u=>{if(!u.al&&!u._dying)return;
 let slot=document.createElement('div');slot.className='slot';
 if(u.x<3)slot.classList.add('p1');else if(u.x>3)slot.classList.add('p2');else slot.classList.add('mid');
 if(b.sel===u)slot.classList.add('sel');
 // 未行动单位黄色高亮
-if(!b.acted.has(u._uid)&&u.tm===b.ct&&u.al&&!b.sel&&!b.skMode&&!b.coldField&&!u.isS)slot.classList.add('ready');
+if(!b.acted.has(u._uid)&&u.tm===b.ct&&u.al&&!u._dying&&!b.sel&&!b.skMode&&!b.coldField&&!u.isS)slot.classList.add('ready');
 slot.style.left=(u.x*56+10)+'px';slot.style.top=((u.y-1)*56+10)+'px';
 slot.style.position='absolute';slot.style.zIndex='2';
+if(u._dying){slot.classList.add('dying');slot.style.zIndex='3';}
 let dHp=u.hp;if(u._hits&&u._hits.length){let recent=u._hits.filter(h=>Date.now()-h.t<2000);if(recent.length){let mh=recent.reduce((a,b)=>a.dmg>b.dmg?a:b,recent[0]);dHp=mh.hpBefore;let intensity=Math.min(8,2+mh.dmg*.6+(1-mh.ratio)*4);slot.style.setProperty('--sx',intensity+'px');slot.classList.add('shake');slot.setAttribute('data-dmg',mh.hpLoss||mh.dmg);slot.setAttribute('data-hpA',mh.hpAfter);slot.setAttribute('data-mH',u.mH)}delete u._hits;}
 let hpC=dHp/u.mH>0.5?'#4f4':(dHp/u.mH>0.25?'#fa0':'#f44');
 let cdText='';for(let k in u.cd)if(u.cd[k]>0)cdText+=k.substring(0,1)+':'+u.cd[k]+' ';
 slot.innerHTML='<span class="n">'+u.n.substring(0,3)+'</span><span class="hp" style="color:'+hpC+'">'+dHp+'/'+u.mH+'</span>'+(cdText?'<span class="cd">'+cdText+'</span>':'')+(u.ch>0?'<span class="cd">⚡'+u.ch+'</span>':'');
-// 隐匿特效
+// 隐匿特效（濒死单位跳过隐匿特效）
+if(!u._dying){
 if(u.sth>0){
   if(!u._prevSth)u._hadSthGain=1;
   slot.classList.add('unit-sth');
@@ -778,10 +785,22 @@ if(u.sth>0){
   setTimeout(()=>{burst.remove();lose.remove()},1300);
 }
 u._prevSth=u.sth;
+}
 if(dummyMoveMode&&u.isDummy) slot.style.background='#552';
 if(dummySelected===u) slot.style.background='#a55';
-slot.onclick=()=>{if(b.coldField&&b.coldField.targets.includes(u)){let cf=b.coldField;let d=u.dmg(cf.u.atk);b.lg.push('冷场 '+u.n+' '+d+'伤 +5恐惧');u.ail.fear.add(5);cf.targets.splice(cf.targets.indexOf(u),1);cf.done.push(u);if(!cf.targets.length){b.lg.push('冷场结束');b.coldField=null;renderBattle();setTimeout(function(){if(!b.go&&allActed())switchTeam();else if(!b.go){renderBattle();upInfo()}},500)}else renderBattle()}else onBClick(u)};
+slot.onclick=()=>{if(u._dying)return;if(b.coldField&&b.coldField.targets.includes(u)){let cf=b.coldField;let d=u.dmg(cf.u.atk);b.lg.push('冷场 '+u.n+' '+d+'伤 +5恐惧');u.ail.fear.add(5);cf.targets.splice(cf.targets.indexOf(u),1);cf.done.push(u);if(!cf.targets.length){b.lg.push('冷场结束');b.coldField=null;renderBattle();setTimeout(function(){if(!b.go&&allActed())switchTeam();else if(!b.go){renderBattle();upInfo()}},500)}else renderBattle()}else onBClick(u)};
 brd.appendChild(slot);
+// 濒死单位生成粒子
+if(u._dying){
+let colors=['#f44','#fa0','#fff','#f88','#ff4','#f66'];
+for(let i=0;i<12;i++){
+let p=document.createElement('div');p.className='dying-particle';
+let angle=(i/12)*Math.PI*2;let dist=15+Math.random()*25;
+let size=2+Math.random()*3;
+p.style.cssText='width:'+size+'px;height:'+size+'px;background:'+colors[i%6]+';left:50%;top:50%;--px:'+(Math.cos(angle)*dist)+'px;--py:'+(Math.sin(angle)*dist)+'px;animation-delay:'+(Math.random()*.15)+'s';
+slot.appendChild(p);
+}
+}
 });
 // 开发者模式: 空格点击移动人机
 if(dummyMoveMode&&dummySelected){
@@ -858,7 +877,13 @@ sb.appendChild(it);
 }else{sb.innerHTML='';}
 // 日志
 /* log displayed via modal */
-setTimeout(function(){document.querySelectorAll('#board2 [data-dmg]').forEach(function(s){var d=parseFloat(s.getAttribute('data-dmg')),hA=parseFloat(s.getAttribute('data-hpA')),mH=parseFloat(s.getAttribute('data-mH'));s.removeAttribute('data-dmg');s.removeAttribute('data-hpA');s.removeAttribute('data-mH');var hpEl=s.querySelector('.hp');if(hpEl){var hpC=hA/mH>0.5?'#4f4':(hA/mH>0.25?'#fa0':'#f44');hpEl.textContent=hA+'/'+mH;hpEl.style.color=hpC}var p=document.createElement('div');p.textContent='-'+Math.round(d);p.className='dmg-popup';s.appendChild(p);setTimeout(function(){p.remove()},1000)})},350);
+setTimeout(function(){document.querySelectorAll('#board2 [data-dmg]').forEach(function(s){var d=parseFloat(s.getAttribute('data-dmg')),hA=parseFloat(s.getAttribute('data-hpA')),mH=parseFloat(s.getAttribute('data-mH'));s.removeAttribute('data-dmg');s.removeAttribute('data-hpA');s.removeAttribute('data-mH');var hpEl=s.querySelector('.hp');if(hpEl){var hpC=hA/mH>0.5?'#4f4':(hA/mH>0.25?'#fa0':'#f44');hpEl.textContent=hA+'/'+mH;hpEl.style.color=hpC}var p=document.createElement('div');p.textContent='-'+Math.round(d);p.className='dmg-popup';s.appendChild(p);setTimeout(function(){p.remove()},1000)});
+// 处理濒死单位：动画结束后正式移除
+setTimeout(function(){
+let dy=b.us.filter(u=>u._dying);
+dy.forEach(u=>{u.al=0;delete u._dying});
+if(dy.length){checkGO();renderBattle();upInfo()}
+},650);},350);
 }
 
 // 开发者模式: 人机拖动
@@ -1267,7 +1292,7 @@ html+='<div class="'+cls+'">'+l.msg+'</div>';
 $('logContent').innerHTML=html||'暂无日志';
 }
 function hideLog(){$('logModal').classList.remove('show');}
-function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志 v1.32</div>- 2026年06月03日，布阵顺序修复：deployOrder从1212121212改为1221122112<br>- 2026年06月03日，删除周水隐匿紫色测试边框<br>- 2026年06月03日，跳过冷却修复：bSkip（跳过回合）补调cdTk，每次跳过也触发全体冷却-1，与普攻/技能一致<br>- 2026年06月03日，冷却修复补充：红方人机跳过时补调cdTk，每跳过一个调用一次致全体冷却-1，恢复每大回合10次冷却流逝的正常节奏<br>- 2026年06月03日，冷却机制修复：cdTk从switchTeam（切换行动方时调用）移至finishAction（每个小回合完成时调用），实现每过1个任意角色小回合冷却-1而非每大回合/切换行动方时-1<br>- 2026年06月03日，showRules重写为三部分格式（全局规则/角色通用规则/角色专属规则）并同步showGuide角色图鉴<br>- 2026年06月03日，更新showRules: 公共区域"禁止进入"→"任何单位不能在上面"、攻击优先级补充嘲讽机制、冲锋描述更新、自充描述明确(每个自身小回合+1/除周水外); 陈色充能加入自充(不再排除)<br>- 2026年06月02日，先手判定改为三级(敏捷→HP上限更低→攻击力更高)；自动大招触发时机从大回合开始改为小回合结束时(按敏捷降序)；储存机制通用化(cdTk冷却归零自动存储/毛毛虫加str:4)<br>- 2026年06月02日，充能方式调整：除陈色和周水外所有角色改为自动充能(每大回合+1)；删除除陈色和周水外所有角色的被动(王土回血/手充减上限/科比牢大bns/蓝主任积怨/大树回血)；冷却改为每小回合(切换行动方时)-1<br>- 2026年06月02日，隐匿三态特效重做：获得隐匿(白雾升腾+文字)/持有隐匿(半透明+白色雾气粒子飘散+"隐匿"小字)/解除隐匿(雾气炸散+"破隐"文字)；删除隐匿特效切换按钮(统一雾隐)<br>- 2026年06月02日，冷场改为额外回合：普攻/大招击杀后finishAction完成→插入冷场额外回合(不占行动/不计算冷却充能)→冷场结束后继续正常回合<br>- 2026年06月02日，周水重做：冷场改为自选目标逐个造成ATK×1伤害+5层恐惧(全图)/大招瞬杀时刻去掉穿透/新增规则按钮+角色图鉴按钮(陈色+周水)<br>- 2026年06月02日，选中周水不破隐修复：beginRound中sth递减跳过周水(后门隐匿由攻击机制管理，不自动过期)<br>- 2026年06月02日，选中隐匿单位不破隐修复：新增.slot.unit-sth.sel规则，选中时仅金色边框标记不覆盖隐匿box-shadow<br>- 2026年06月02日，周水隐匿不显示修复：beginRound中sth递减从renderBattle之前移到之后(解决第一回合渲染时sth已被归零)/开发者模式充能上限修复：startDevBattle中rd.m→rd.mxc<br>- 2026年06月01日，充能上限修复：startBattle正常部署路径d.m→d.mxc/自动大招：chg()充能达到上限时自动触发auto:1大招/开发者模式补周水sth=1<br>- 2026年06月01日，隐匿特效根因修复：outline-color不是CSS可动画属性→改为box-shadow内外发光呼吸动画+加!important/新增测试隐匿特效按钮(内联强制渲染)<br>- 2026年06月01日，充能上限修复：deployCur缺少m字段导致mxc回退默认5→改为透传r.mxc/隐匿特效重做：overlay方案改为slot级filter+outline呼吸动画，更稳定可见<br>- 2026年06月01日，隐匿overlay加半透明背景色+inset发光/冲锋选位仅允许x距离最近目标(高亮+点击双限制)<br>- 2026年06月01日，冲锋范围动态检测(同行有敌→仅同行/同行无敌→同行+相邻行)/隐匿独立overlay层+发光模糊动画/冷场按距离排序且不伤自己/周水充能上限2<br>- 2026年05月31日，周水重做(充能改为受击+1上限2/冲锋UI自选目标/自动大招不消耗行动/隐匿雾隐虚影双特效+按钮切换)<br>- 2026年05月31日，周水重做：恐惧震慑改为冲锋自动锁定目标、瞬杀时刻伤害公式改为(已损失+ATK)*2穿透、新增被动后门(开局隐匿/攻击解除/2回合后恢复)、冷场改为对全场触发普攻<br>- 2026年05月29日，损伤全局触发（叠满10点自动结算：神经=2伤+眩晕/恐惧=4伤/燃烧=2伤+3回合流血）+ 先手平局随机 + 冲锋全局规则（同列/相邻行取最近单位，含友方）<br>- 2026年05月29日，战斗反馈优化：先震动后出伤（暂显旧HP→震动0.35s→HP更新+红色小字"-x"浮动跳出）<br>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害累加取最强+血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}
+function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志 v1.32</div>- 2026年06月03日，修复致死伤害不播放受击动画：dmg()致死时改设_dying=1保持al=1→renderBattle渲染濒死单位+震动+浮动伤害→动画结束后al=0+checkGO；新增死亡粒子消散动画<br>- 2026年06月03日，跳过冷却修复：bSkip（跳过回合）补调cdTk，每次跳过也触发全体冷却-1，与普攻/技能一致<br>- 2026年06月03日，冷却修复补充：红方人机跳过时补调cdTk，每跳过一个调用一次致全体冷却-1，恢复每大回合10次冷却流逝的正常节奏<br>- 2026年06月03日，冷却机制修复：cdTk从switchTeam（切换行动方时调用）移至finishAction（每个小回合完成时调用），实现每过1个任意角色小回合冷却-1而非每大回合/切换行动方时-1<br>- 2026年06月03日，showRules重写为三部分格式（全局规则/角色通用规则/角色专属规则）并同步showGuide角色图鉴<br>- 2026年06月03日，更新showRules: 公共区域"禁止进入"→"任何单位不能在上面"、攻击优先级补充嘲讽机制、冲锋描述更新、自充描述明确(每个自身小回合+1/除周水外); 陈色充能加入自充(不再排除)<br>- 2026年06月02日，先手判定改为三级(敏捷→HP上限更低→攻击力更高)；自动大招触发时机从大回合开始改为小回合结束时(按敏捷降序)；储存机制通用化(cdTk冷却归零自动存储/毛毛虫加str:4)<br>- 2026年06月02日，充能方式调整：除陈色和周水外所有角色改为自动充能(每大回合+1)；删除除陈色和周水外所有角色的被动(王土回血/手充减上限/科比牢大bns/蓝主任积怨/大树回血)；冷却改为每小回合(切换行动方时)-1<br>- 2026年06月02日，隐匿三态特效重做：获得隐匿(白雾升腾+文字)/持有隐匿(半透明+白色雾气粒子飘散+"隐匿"小字)/解除隐匿(雾气炸散+"破隐"文字)；删除隐匿特效切换按钮(统一雾隐)<br>- 2026年06月02日，冷场改为额外回合：普攻/大招击杀后finishAction完成→插入冷场额外回合(不占行动/不计算冷却充能)→冷场结束后继续正常回合<br>- 2026年06月02日，周水重做：冷场改为自选目标逐个造成ATK×1伤害+5层恐惧(全图)/大招瞬杀时刻去掉穿透/新增规则按钮+角色图鉴按钮(陈色+周水)<br>- 2026年06月02日，选中周水不破隐修复：beginRound中sth递减跳过周水(后门隐匿由攻击机制管理，不自动过期)<br>- 2026年06月02日，选中隐匿单位不破隐修复：新增.slot.unit-sth.sel规则，选中时仅金色边框标记不覆盖隐匿box-shadow<br>- 2026年06月02日，周水隐匿不显示修复：beginRound中sth递减从renderBattle之前移到之后(解决第一回合渲染时sth已被归零)/开发者模式充能上限修复：startDevBattle中rd.m→rd.mxc<br>- 2026年06月01日，充能上限修复：startBattle正常部署路径d.m→d.mxc/自动大招：chg()充能达到上限时自动触发auto:1大招/开发者模式补周水sth=1<br>- 2026年06月01日，隐匿特效根因修复：outline-color不是CSS可动画属性→改为box-shadow内外发光呼吸动画+加!important/新增测试隐匿特效按钮(内联强制渲染)<br>- 2026年06月01日，充能上限修复：deployCur缺少m字段导致mxc回退默认5→改为透传r.mxc/隐匿特效重做：overlay方案改为slot级filter+outline呼吸动画，更稳定可见<br>- 2026年06月01日，隐匿overlay加半透明背景色+inset发光/冲锋选位仅允许x距离最近目标(高亮+点击双限制)<br>- 2026年06月01日，冲锋范围动态检测(同行有敌→仅同行/同行无敌→同行+相邻行)/隐匿独立overlay层+发光模糊动画/冷场按距离排序且不伤自己/周水充能上限2<br>- 2026年05月31日，周水重做(充能改为受击+1上限2/冲锋UI自选目标/自动大招不消耗行动/隐匿雾隐虚影双特效+按钮切换)<br>- 2026年05月31日，周水重做：恐惧震慑改为冲锋自动锁定目标、瞬杀时刻伤害公式改为(已损失+ATK)*2穿透、新增被动后门(开局隐匿/攻击解除/2回合后恢复)、冷场改为对全场触发普攻<br>- 2026年05月29日，损伤全局触发（叠满10点自动结算：神经=2伤+眩晕/恐惧=4伤/燃烧=2伤+3回合流血）+ 先手平局随机 + 冲锋全局规则（同列/相邻行取最近单位，含友方）<br>- 2026年05月29日，战斗反馈优化：先震动后出伤（暂显旧HP→震动0.35s→HP更新+红色小字"-x"浮动跳出）<br>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害累加取最强+血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}
 function hideCL(){$('clModal').classList.remove('show');}
 function showRules(){
 var h='<div class="cl-hdr">八宝舟 总体规则</div>';
