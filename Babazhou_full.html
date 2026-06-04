@@ -437,16 +437,16 @@ g.style.cssText='left:'+(x*42+4)+'px;top:'+((y-1)*42+4)+'px;width:42px;height:42
 g.dataset.x=x;g.dataset.y=y;
 d.appendChild(g);
 }
-let idxC=0;
-for(let y=1;y<6&&idxC<pool.length;y++){
-for(let x=0;x<7&&idxC<pool.length;x++){
-let r=pool[idxC];
+for(let y=1;y<6;y++){
+for(let x=0;x<7;x++){
+let idx=(y-1)*7+x;
+if(idx>=pool.length)continue;
+let r=pool[idx];
 let slot=d.querySelector('[data-x="'+x+'"][data-y="'+y+'"]');
 if(slot){
 slot.innerHTML='<span>'+r.n+'</span><small style="font-size:6px;color:#fc0">敏'+(r.agi||0)+'</small>';
 slot.style.cursor='pointer';
-(function(i){slot.onclick=()=>{p1pick=[i];p2pick=[];for(let j=0;j<10;j++)p2pick.push(-1);startDevDeploy();}})(idxC);
-idxC++;
+(function(i){slot.onclick=()=>{p1pick=[i];p2pick=[];for(let j=0;j<10;j++)p2pick.push(-1);startDevDeploy();}})(idx);
 }
 }
 }
@@ -569,18 +569,18 @@ g.style.cssText='left:'+(x*42+4)+'px;top:'+((y-1)*42+4)+'px;width:42px;height:42
 g.dataset.x=x;g.dataset.y=y;
 d.appendChild(g);
 }
-// Place available characters
-let chars=pool.map((r,i)=>({r,i})).filter(c=>!bans.includes(c.i)&&!p1pick.includes(c.i)&&!p2pick.includes(c.i));
-let idx=0;
-for(let y=1;y<6&&idx<chars.length;y++){
-for(let x=0;x<7&&idx<chars.length;x++){
-let c=chars[idx];
+// Place available characters (fixed position by pool index, picked ones leave empty slots)
+for(let y=1;y<6;y++){
+for(let x=0;x<7;x++){
+let idx=(y-1)*7+x;
+if(idx>=pool.length)continue;
+let r=pool[idx];
+if(bans.includes(idx)||p1pick.includes(idx)||p2pick.includes(idx))continue;
 let slot=d.querySelector('[data-x="'+x+'"][data-y="'+y+'"]');
 if(slot){
-slot.innerHTML='<span>'+c.r.n+'</span><small style="font-size:6px;color:#fc0">敏'+(c.r.agi||0)+'</small>';
+slot.innerHTML='<span>'+r.n+'</span><small style="font-size:6px;color:#fc0">敏'+(r.agi||0)+'</small>';
 slot.style.cursor='pointer';
-(function(i){slot.onclick=()=>doPick(i,pt)})(c.i);
-idx++;
+(function(i){slot.onclick=()=>doPick(i,pt)})(idx);
 }
 }
 }
