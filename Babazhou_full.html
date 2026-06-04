@@ -21,21 +21,19 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 .btn{padding:8px 14px;border-radius:6px;border:none;background:#336;color:#fff;font-size:12px;cursor:pointer;margin:3px}
 .btn:active{background:#558}
 .btn.dis{opacity:0.4;pointer-events:none}
-#board,#board2{position:relative;width:420px;height:300px;margin:0 auto;background:linear-gradient(90deg,rgba(30,40,80,0.4) 0%,rgba(30,40,80,0.4) 40%,transparent 40%,transparent 60%,rgba(80,25,25,0.4) 60%,rgba(80,25,25,0.4) 100%),#151525;border-radius:4px;box-shadow:0 3px 16px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.02);border:1px solid #2a2a44}
-.deploy-wrap{display:flex;gap:4px;align-items:flex-start;justify-content:center;margin-top:2px}
-.deploy-wrap #board{width:316px;height:240px}
-.deploy-wrap .slot{width:42px;height:42px;font-size:8px}
-.deploy-side{width:74px;flex-shrink:0;display:flex;flex-direction:column;gap:2px;max-height:240px;overflow-y:auto}
-.deploy-side .side-unit{padding:3px 4px;border-radius:3px;font-size:9px;text-align:center;color:#ccc;border:1px solid #2a2a44;min-height:20px;cursor:default;background:#1a1a2e}
-.deploy-side .side-unit.p1{border-left:2px solid #2a4477}
-.deploy-side .side-unit.p2{border-left:2px solid #552a2a}
-.deploy-side .side-unit.placed{opacity:0.45;font-size:8px}
-.deploy-side .side-unit.current{border-color:#fc0!important;background:#332200;cursor:pointer}
-.deploy-side .side-unit.pick{cursor:pointer}
-.deploy-side .side-title{font-size:8px;color:#888;text-align:center;padding:2px 0;border-bottom:1px solid #222}
-.deploy-side .side-note{font-size:7px;color:#666;margin-top:2px}
+#board,#board2{position:relative;width:316px;height:240px;margin:0 auto;background:linear-gradient(90deg,rgba(30,40,80,0.4) 0%,rgba(30,40,80,0.4) 40%,transparent 40%,transparent 60%,rgba(80,25,25,0.4) 60%,rgba(80,25,25,0.4) 100%),#151525;border-radius:4px;box-shadow:0 3px 16px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.02);border:1px solid #2a2a44}
+.main-grid{display:flex;gap:4px;align-items:flex-start;justify-content:center;margin-top:2px}
+.main-grid #board,.main-grid #board2{width:316px;height:240px}
+.main-grid .slot{width:44px;height:44px;font-size:8px}
+.side-col{width:52px;flex-shrink:0;display:flex;flex-direction:column;gap:2px}
+.side-cell{width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:#1a1a2e;border:1px solid #2a2a44;border-radius:3px;font-size:8px;color:#ccc;text-align:center;flex-direction:column;box-sizing:border-box}
+.side-cell.p1{border-left:2px solid #2a4477}
+.side-cell.p2{border-left:2px solid #552a2a}
+.side-cell.picked{background:#1a2e2e;border-color:#3a6}
+.side-cell.dead{background:#1a1a1a;border-color:#444;color:#a33;font-size:7px}
+.side-cell.current{border-color:#fc0!important;background:#332200;cursor:pointer}
 
-.slot{position:absolute;width:56px;height:56px;border:1px solid #333355;background:#1e1e3a;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:9px;box-shadow:inset 0 1px 4px rgba(0,0,0,0.35)}
+.slot{position:absolute;width:44px;height:44px;border:1px solid #333355;background:#1e1e3a;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:9px;box-shadow:inset 0 1px 4px rgba(0,0,0,0.35)}
 .slot.mid{background:linear-gradient(180deg,#0c0c1a,#121225);border-color:#1a1a33;border-left-width:2px;border-right-width:2px}
 .slot.p1{background:linear-gradient(180deg,#1a2e50,#162540);border-color:#2a4477;box-shadow:inset 0 0 8px rgba(50,100,200,0.08),inset 0 1px 4px rgba(0,0,0,0.3)}
 .slot.p2{background:linear-gradient(180deg,#3a1a1a,#2a1515);border-color:#552a2a;box-shadow:inset 0 0 8px rgba(200,50,50,0.06),inset 0 1px 4px rgba(0,0,0,0.3)}
@@ -67,16 +65,6 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 .grid6{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;max-width:288px;margin:0 auto;padding:4px}
 .gcell{aspect-ratio:1;border-radius:4px;border:1px solid #444;background:#1a1a33;display:flex;flex-items:center;justify-content:center;font-size:9px;cursor:pointer;color:#ccc;text-align:center;position:relative;padding:2px;flex-direction:column;line-height:1.1}
 .gcell:hover{background:#2a2a44}
-.gcell.banned{background:#331111!important;color:#664!important;pointer-events:none;border-color:#633}
-.gcell.picked{background:#222!important;color:#444!important;pointer-events:none;border-color:#333}
-.gcell .xmark{position:absolute;font-size:24px;color:#f44;pointer-events:none;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:bold}
-.pick-layout{display:flex;align-items:flex-start;justify-content:center;gap:4px;padding:4px}
-.pick-col{width:72px;display:flex;flex-direction:column;gap:2px}
-.pick-col .punit{padding:3px;border-radius:3px;font-size:9px;text-align:center;border:1px solid #555}
-.pick-col.p1 .punit{background:#223355;color:#aaf;border-color:#448}
-.pick-col.p2 .punit{background:#332222;color:#faa;border-color:#844}
-.pick-col .plabel{font-size:9px;text-align:center;color:#aaa;padding:2px}
-.pick-col .ptotal{padding:3px;border-radius:3px;font-size:10px;text-align:center;border:1px solid #fc0;color:#fc0;background:#221;margin-top:4px}
 .grid6-wrap{flex:1;max-width:288px}
 
 .log-icon{position:fixed;bottom:8px;right:8px;width:36px;height:36px;border-radius:50%;background:#336;color:#fff;font-size:18px;border:none;cursor:pointer;z-index:50;display:flex;align-items:center;justify-content:center;line-height:1}
@@ -129,9 +117,6 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 .home-btn:hover{background:#2a2a44;border-color:#fc0}
 .home-btn.dev{background:#1a2a1a;border-color:#3a3}
 .home-btn.dev:hover{background:#2a3a2a;border-color:#4f4}
-/* 选人格子方形 */
-.pick-col .punit{aspect-ratio:1;display:flex;align-items:center;justify-content:center;width:43px;height:43px;padding:3px;font-size:9px;border-radius:4px;text-align:center;margin:1px 0}
-.pick-col{width:51px;padding:0 3px}
 /* 战斗操作面板 */
 .battle-panel{display:none;margin:6px auto;max-width:420px;background:#151525;border-radius:6px;border:1px solid #2a2a44;overflow:hidden}
 .battle-panel.show{display:flex}
@@ -184,27 +169,31 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 <div id="pick" class="phase">
 <h2 id="pickTitle"></h2>
 <div class="info" id="pickInfo"></div>
-<div class="pick-layout">
-<div class="pick-col p1" id="pickLeft"></div>
-<div class="grid6-wrap"><div id="pickPool" class="grid6"></div></div>
-<div class="pick-col p2" id="pickRight"></div>
+<div class="main-grid">
+<div class="side-col" id="pickSideL"></div>
+<div id="pickBoard"></div>
+<div class="side-col" id="pickSideR"></div>
 </div>
 </div>
 
 <div id="deploy" class="phase">
 <h2 id="deployTitle">布阵</h2>
 <div class="info" id="deployInfo"></div>
-<div class="deploy-wrap">
-<div class="deploy-side" id="deploySideL"></div>
+<div class="main-grid">
+<div class="side-col" id="deploySideL"></div>
 <div id="board"></div>
-<div class="deploy-side" id="deploySideR"></div>
+<div class="side-col" id="deploySideR"></div>
 </div>
 <div class="row" id="deployRoster"></div>
 </div>
 
 <div id="battle" class="phase">
 <div id="battleInfo" style="text-align:center;font-size:10px;margin:2px 0"></div>
+<div class="main-grid">
+<div class="side-col" id="batSideL"></div>
 <div id="board2" style="position:relative"></div>
+<div class="side-col" id="batSideR"></div>
+</div>
 <div id="battlePanel" class="battle-panel"></div>
 <div id="bpLog" class="bp-log"></div>
 <div class="row"><button class="btn" onclick="bSkip()">跳过回合</button><button class="btn" id="btnDummyMove" style="display:none;background:#552" onclick="toggleDummyMove()">📦 调整人机</button><button class="btn" id="btnAddDummy" style="display:none;background:#252" onclick="toggleAddDummy()">+人机</button><button class="btn" id="btnCdMinus" style="display:none;background:#a33" onclick="devCdMinus()">⏱ 全体冷却-1</button><button class="btn" id="btnChgPlus" style="display:none;background:#3a3" onclick="devChgPlus()">⚡ 全体充能+1</button><button class="btn" style="background:#448" onclick="showRules()">📖 规则</button><button class="btn" style="background:#484" onclick="showGuide()">📚 角色图鉴</button></div>
@@ -437,17 +426,38 @@ setPhase('pick');renderDevPick();
 }
 function renderDevPick(){
 $('pickTitle').textContent='🔵 蓝方 选择1个角色';
-let d=$('pickPool');d.innerHTML='';
-pool.forEach((r,i)=>{
-let g=document.createElement('div');g.className='gcell';
-g.innerHTML='<span>'+r.n+'</span><small style="font-size:9px;color:#fc0">敏捷:'+(r.agi||0)+'</small>';
-g.onclick=()=>{p1pick=[i];p2pick=[];for(let j=0;j<10;j++)p2pick.push(-1);startDevDeploy();};
+$('pickInfo').textContent='点击角色选取';
+let d=$('pickBoard');
+d.style.cssText='position:relative;width:316px;height:240px;margin:0 auto;background:#151525;border-radius:4px;border:1px solid #2a2a44';
+d.innerHTML='';
+for(let x=0;x<7;x++)for(let y=1;y<6;y++){
+let g=document.createElement('div');
+g.className='slot';
+if(x===3)g.classList.add('mid');
+g.style.left=(x*44+11)+'px';g.style.top=((y-1)*44+11)+'px';
+g.style.width='44px';g.style.height='44px';
+g.style.fontSize='8px';
 d.appendChild(g);
-});
-for(let i=pool.length;i<36;i++){let g=document.createElement('div');g.className='gcell';g.style.background='#111';g.style.border='none';d.appendChild(g);}
-let pl=$('pickLeft');pl.innerHTML='<div class="plabel">🔵蓝方</div>';
-let pr=$('pickRight');pr.innerHTML='<div class="plabel">🔴红方(人机)</div>';
-pr.innerHTML+='<div class="punit" style="font-size:10px;color:#888">×10 10/1/0</div>';
+}
+let idxC=0;
+for(let y=1;y<6&&idxC<pool.length;y++){
+for(let x=0;x<7&&idxC<pool.length;x++){
+if(x===3)continue;
+let r=pool[idxC];
+let slot=d.querySelector('[style*="left:'+(x*44+11)+'px"][style*="top:'+((y-1)*44+11)+'px"]');
+if(slot){
+slot.innerHTML='<span>'+r.n+'</span><small style="font-size:6px;color:#fc0">敏'+(r.agi||0)+'</small>';
+slot.style.cursor='pointer';
+slot.classList.add('p1');
+(function(i){slot.onclick=()=>{p1pick=[i];p2pick=[];for(let j=0;j<10;j++)p2pick.push(-1);startDevDeploy();}})(idxC);
+idxC++;
+}
+}
+}
+let pl=$('pickSideL');pl.innerHTML='';
+for(let i=0;i<5;i++){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.3';c.textContent='-';pl.appendChild(c);}
+let pr=$('pickSideR');pr.innerHTML='';
+for(let i=0;i<5;i++){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.3';c.textContent='-';pr.appendChild(c);}
 }
 function startDevDeploy(){
 deployStep=0;deployCur=null;
@@ -464,7 +474,7 @@ let slot=document.createElement('div');slot.className='slot';
 if(x===3)slot.classList.add('mid');
 else if(x<3)slot.classList.add('p1');
 else slot.classList.add('p2');
-slot.style.left=(x*42+11)+'px';slot.style.top=((y-1)*42+11)+'px';
+slot.style.left=(x*44+11)+'px';slot.style.top=((y-1)*44+11)+'px';
 slot.dataset.x=x;slot.dataset.y=y;
 let dep=depAll.find(d=>d.x===x&&d.y===y);
 if(dep){slot.innerHTML='<span class="n">'+dep.n.substring(0,2)+'</span>';slot.classList.add('unit')}
@@ -482,20 +492,21 @@ brd.appendChild(slot);
 }
 // 侧栏
 let sl=$('deploySideL'),sr=$('deploySideR');
-sl.innerHTML='<div class="side-title">🔵 蓝方</div>';
-sr.innerHTML='<div class="side-title">🔴 红方(人机)</div>';
+sl.innerHTML='';
+sr.innerHTML='';
 let r=pool[p1pick[0]];
 let placed=p1deploy.length>0;
-let u=document.createElement('div');
-u.className='side-unit p1'+(placed?' placed':' pick');
-u.textContent=placed?r.n+' @'+p1deploy[0].y:r.n;
-if(!placed){u.onclick=()=>{
+let c=document.createElement('div');
+c.className='side-cell p1'+(placed?' placed':'');
+c.textContent=r.n.substring(0,2);
+if(!placed){c.onclick=()=>{
 deployCur={n:r.n,h:r.h,a:r.a,agi:r.g||0,m:r.mxc,rg:r.rg,cls:r.cls,_pi:p1pick[0],sk:r.sk||[],x:-1,y:-1};
 renderDevDeploy();
-};}
-if(deployCur)u.classList.add('current');
-sl.appendChild(u);
-sr.innerHTML+='<div class="side-unit p2" style="font-size:8px;color:#888">×10 人机</div>';
+};c.classList.add('pick');}
+if(deployCur)c.classList.add('current');
+sl.appendChild(c);
+for(let i=0;i<4;i++){let e=document.createElement('div');e.className='side-cell';e.style.opacity='0.3';e.textContent='-';sl.appendChild(e);}
+for(let i=0;i<5;i++){let e=document.createElement('div');e.className='side-cell p2';e.style.opacity='0.3';e.textContent='机';sr.appendChild(e);}
 let dr=$('deployRoster');dr.innerHTML='';
 if(p1deploy.length===0){
 let ch=document.createElement('div');
@@ -549,27 +560,48 @@ setPhase('pick');renderPick();
 function renderPick(){
 let pt=pickOrder[pickTurn];
 $('pickTitle').textContent=(pt==='蓝'?'🔵':'🔴')+' '+pt+'方选人 ('+(pickTurn+1)+'/10)';
-let d=$('pickPool');d.innerHTML='';
-pool.forEach((r,i)=>{
-if(bans.includes(i))return;
-let picked=p1pick.includes(i)||p2pick.includes(i);
-let g=document.createElement('div');g.className='gcell'+(picked?' picked':'');
-g.innerHTML='<span>'+r.n+'</span><small style="font-size:9px;color:#fc0">敏捷:'+(r.agi||0)+'</small>';
-if(!picked)g.onclick=()=>doPick(i,pt);
+$('pickInfo').textContent='点击角色选取';
+let d=$('pickBoard');
+d.style.cssText='position:relative;width:316px;height:240px;margin:0 auto;background:linear-gradient(90deg,rgba(30,40,80,0.3) 0%,rgba(30,40,80,0.3) 40%,transparent 40%,transparent 60%,rgba(80,25,25,0.3) 60%,rgba(80,25,25,0.3) 100%),#151525;border-radius:4px;border:1px solid #2a2a44';
+d.innerHTML='';
+// Render 7×5 grid
+for(let x=0;x<7;x++)for(let y=1;y<6;y++){
+let g=document.createElement('div');
+g.className='slot';
+if(x===3)g.classList.add('mid');
+g.style.left=(x*44+11)+'px';g.style.top=((y-1)*44+11)+'px';
+g.style.width='44px';g.style.height='44px';
+g.style.fontSize='8px';
 d.appendChild(g);
-});
-// 填充空位
-let shown=pool.filter((r,i)=>!bans.includes(i)).length;
-for(let i=shown;i<36;i++){let g=document.createElement('div');g.className='gcell';g.style.background='#111';g.style.border='none';d.appendChild(g);}
-// 左右列
+}
+// Place available characters
+let chars=pool.map((r,i)=>({r,i})).filter(c=>!bans.includes(c.i)&&!p1pick.includes(c.i)&&!p2pick.includes(c.i));
+let idx=0;
+for(let y=1;y<6&&idx<chars.length;y++){
+for(let x=0;x<7&&idx<chars.length;x++){
+if(x===3)continue;
+let c=chars[idx];
+let slot=d.querySelector('[style*="left:'+(x*44+11)+'px"][style*="top:'+((y-1)*44+11)+'px"]');
+if(slot){
+slot.innerHTML='<span>'+c.r.n+'</span><small style="font-size:6px;color:#fc0">敏'+(c.r.agi||0)+'</small>';
+slot.style.cursor='pointer';
+slot.classList.add('p1');
+(function(i){slot.onclick=()=>doPick(i,pt)})(c.i);
+idx++;
+}
+}
+}
+// Side columns
 let p1a=p1pick.reduce((s,pi)=>{let r=pool[pi];return s+(r.agi||0)},0);
 let p2a=p2pick.reduce((s,pi)=>{let r=pool[pi];return s+(r.agi||0)},0);
-let pl=$('pickLeft');pl.innerHTML='<div class="plabel">🔵蓝方</div>';
-p1pick.forEach(pi=>{let r=pool[pi];let u=document.createElement('div');u.className='punit';u.textContent=r.n+'('+(r.agi||0)+')';pl.appendChild(u);});
-pl.innerHTML+='<div class="ptotal">总敏捷:'+p1a+'</div>';
-let pr=$('pickRight');pr.innerHTML='<div class="plabel">🔴红方</div>';
-p2pick.forEach(pi=>{let r=pool[pi];let u=document.createElement('div');u.className='punit';u.textContent=r.n+'('+(r.agi||0)+')';pr.appendChild(u);});
-pr.innerHTML+='<div class="ptotal">总敏捷:'+p2a+'</div>';
+let pl=$('pickSideL');pl.innerHTML='';
+p1pick.forEach(pi=>{let r=pool[pi];let c=document.createElement('div');c.className='side-cell p1 picked';c.textContent=r.n.substring(0,2);c.title=r.n+' 敏'+(r.agi||0);pl.appendChild(c);});
+for(let i=p1pick.length;i<5;i++){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.3';c.textContent='-';pl.appendChild(c);}
+let sa=document.createElement('div');sa.className='side-cell';sa.style.cssText='border:none;background:none;font-size:7px;color:#88a';sa.textContent='敏'+p1a;pl.appendChild(sa);
+let pr=$('pickSideR');pr.innerHTML='';
+p2pick.forEach(pi=>{let r=pool[pi];let c=document.createElement('div');c.className='side-cell p2 picked';c.textContent=r.n.substring(0,2);c.title=r.n+' 敏'+(r.agi||0);pr.appendChild(c);});
+for(let i=p2pick.length;i<5;i++){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.3';c.textContent='-';pr.appendChild(c);}
+let sb=document.createElement('div');sb.className='side-cell';sb.style.cssText='border:none;background:none;font-size:7px;color:#a88';sb.textContent='敏'+p2a;pr.appendChild(sb);
 }
 function doPick(i,pt){
 if(pt==='蓝'){p1pick.push(i)}else{p2pick.push(i)}
@@ -595,7 +627,7 @@ let isMid=x===3,isP1=x<3,isP2=x>3;
 if(isMid)slot.classList.add('mid');
 else if(isP1)slot.classList.add('p1');
 else slot.classList.add('p2');
-slot.style.left=(x*42+11)+'px';slot.style.top=((y-1)*42+11)+'px';
+slot.style.left=(x*44+11)+'px';slot.style.top=((y-1)*44+11)+'px';
 slot.dataset.x=x;slot.dataset.y=y;
 let dep=depAll.find(d=>d.x===x&&d.y===y);
 if(dep){slot.innerHTML='<span class="n">'+dep.n.substring(0,2)+'</span>';slot.classList.add('unit')}
@@ -615,36 +647,37 @@ brd.appendChild(slot);
 }
 // 侧栏
 let sl=$('deploySideL'),sr=$('deploySideR');
-sl.innerHTML='<div class="side-title">🔵 蓝方</div>';
-sr.innerHTML='<div class="side-title">🔴 红方</div>';
+sl.innerHTML='';sr.innerHTML='';
 p1pick.forEach(pi=>{
 let r=pool[pi];
 let placed=depAll.find(d=>d._pi===pi);
-let u=document.createElement('div');
-u.className='side-unit p1'+(placed?' placed':' pick');
-u.textContent=placed?r.n+' @'+placed.y:r.n;
-if(!placed){u.onclick=()=>{
+let c=document.createElement('div');
+c.className='side-cell p1'+(placed?' placed':'');
+c.textContent=r.n.substring(0,2);
+if(!placed){c.onclick=()=>{
 if(deployCur&&deployCur._pi===pi){deployCur=null;renderDeploy();return}
 deployCur={n:r.n,...r,_pi:pi,sk:r.sk||[],x:-1,y:-1};
 renderDeploy();
-};}
-if(deployCur&&deployCur._pi===pi)u.classList.add('current');
-sl.appendChild(u);
+};c.classList.add('pick');}
+if(deployCur&&deployCur._pi===pi)c.classList.add('current');
+sl.appendChild(c);
 });
+for(let i=p1pick.length;i<5;i++){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.3';c.textContent='-';sl.appendChild(c);}
 p2pick.forEach(pi=>{
 let r=pool[pi];
 let placed=depAll.find(d=>d._pi===pi);
-let u=document.createElement('div');
-u.className='side-unit p2'+(placed?' placed':' pick');
-u.textContent=placed?r.n+' @'+placed.y:r.n;
-if(!placed){u.onclick=()=>{
+let c=document.createElement('div');
+c.className='side-cell p2'+(placed?' placed':'');
+c.textContent=r.n.substring(0,2);
+if(!placed){c.onclick=()=>{
 if(deployCur&&deployCur._pi===pi){deployCur=null;renderDeploy();return}
 deployCur={n:r.n,...r,_pi:pi,sk:r.sk||[],x:-1,y:-1};
 renderDeploy();
-};}
-if(deployCur&&deployCur._pi===pi)u.classList.add('current');
-sr.appendChild(u);
+};c.classList.add('pick');}
+if(deployCur&&deployCur._pi===pi)c.classList.add('current');
+sr.appendChild(c);
 });
+for(let i=p2pick.length;i<5;i++){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.3';c.textContent='-';sr.appendChild(c);}
 let dr=$('deployRoster');dr.innerHTML='';
 let picks=t==='蓝'?p1pick:p2pick;
 picks.forEach((pi,i)=>{
@@ -699,6 +732,7 @@ let p1a=b.us.filter(u=>u.tm==='p1'&&u.al).reduce((s,u)=>s+u.agi,0);
 let p2a=b.us.filter(u=>u.tm==='p2'&&u.al).reduce((s,u)=>s+u.agi,0);
 if(p1a!==p2a)b.ct=p1a>p2a?'p1':'p2';
 beginRound();
+renderBattleSides();
 }
 
 function beginRound(){
@@ -740,6 +774,7 @@ b.us.forEach(u=>{if(u.n!=='周水'&&u.n!=='陈色')u.sth=Math.max(0,u.sth-1)});
 }
 
 function renderBattle(){
+renderBattleSides();
 let brd=$('board2');brd.innerHTML='';
 // 战斗棋盘背景格子（与部署界面保持一致）
 for(let x=0;x<7;x++)for(let y=1;y<6;y++){
@@ -747,11 +782,13 @@ let slot=document.createElement('div');slot.className='slot';
 if(x===3)slot.classList.add('mid');
 else if(x<3)slot.classList.add('p1');
 else slot.classList.add('p2');
-slot.style.left=(x*56+10)+'px';slot.style.top=((y-1)*56+10)+'px';
+slot.style.left=(x*44+11)+'px';slot.style.top=((y-1)*44+11)+'px';
+slot.style.width='44px';slot.style.height='44px';
+slot.style.fontSize='8px';
 slot.style.zIndex='0';
 brd.appendChild(slot);
 }
-brd.style.width='420px';brd.style.height='300px';brd.style.position='relative';brd.style.background='#1a1a2e';brd.style.margin='0 auto';brd.style.borderRadius='4px';
+brd.style.width='316px';brd.style.height='240px';brd.style.position='relative';brd.style.background='linear-gradient(90deg,rgba(30,40,80,0.4) 0%,rgba(30,40,80,0.4) 40%,transparent 40%,transparent 60%,rgba(80,25,25,0.4) 60%,rgba(80,25,25,0.4) 100%),#151525';brd.style.margin='0 auto';brd.style.borderRadius='4px';brd.style.boxShadow='0 3px 16px rgba(0,0,0,0.6)';brd.style.border='1px solid #2a2a44';
 // 开发者模式: 显示调整人机按钮
 if(b.us.some(u=>u.isDummy))$('btnDummyMove').style.display='inline-block';
 else $('btnDummyMove').style.display='none';
@@ -775,7 +812,7 @@ chgRows.includes(y)&&((b.sel.tm==='p1'&&x>b.sel.x)||(b.sel.tm==='p2'&&x<b.sel.x)
 ):b.sel.inRg(x,y);
 if(inR){
 let hl=document.createElement('div');
-hl.style.cssText='position:absolute;left:'+(x*56+10)+'px;top:'+((y-1)*56+10)+'px;width:56px;height:56px;';
+hl.style.cssText='position:absolute;left:'+(x*44+11)+'px;top:'+((y-1)*44+11)+'px;width:44px;height:44px;';
 let isEnemy=b.us.some(u=>u.tm!==b.sel.tm&&u.al&&u.x===x&&u.y===y&&!u.sth);
 hl.style.background=isEnemy?'rgba(255,80,80,0.2)':'rgba(100,180,255,0.1)';
 hl.style.border=isEnemy?'2px solid rgba(255,80,80,0.5)':'1px dashed rgba(100,180,255,0.3)';
@@ -805,7 +842,7 @@ let chgR=isChargeUnit(b.sel)?getChargeRows(b.sel,b.us).rows:null;let canAtk=isCh
 if(isChargeUnit(b.sel)&&canAtk&&Math.abs(x-b.sel.x)!==chgMinX)canAtk=false;
 if(canAtk){
 let hl=document.createElement('div');
-hl.style.cssText='position:absolute;left:'+(x*56+10)+'px;top:'+((y-1)*56+10)+'px;width:56px;height:56px;background:rgba(255,80,80,0.3);border:2px solid rgba(255,80,80,0.7);border-radius:4px;pointer-events:none;z-index:3';
+hl.style.cssText='position:absolute;left:'+(x*44+11)+'px;top:'+((y-1)*44+11)+'px;width:44px;height:44px;background:rgba(255,80,80,0.3);border:2px solid rgba(255,80,80,0.7);border-radius:4px;pointer-events:none;z-index:3';
 brd.appendChild(hl);
 }
 }
@@ -813,7 +850,7 @@ continue;
 }
 if(!hasUnit&&x!==3){
 let hl=document.createElement('div');
-hl.style.cssText='position:absolute;left:'+(x*56+10)+'px;top:'+((y-1)*56+10)+'px;width:56px;height:56px;background:rgba(100,255,100,0.15);border:2px dashed rgba(100,255,100,0.4);border-radius:4px;pointer-events:none;z-index:3';
+hl.style.cssText='position:absolute;left:'+(x*44+11)+'px;top:'+((y-1)*44+11)+'px;width:44px;height:44px;background:rgba(100,255,100,0.15);border:2px dashed rgba(100,255,100,0.4);border-radius:4px;pointer-events:none;z-index:3';
 if(b.skMode.tgt==='empty'&&b.skMode.placed<b.skMode.max){
 hl.style.pointerEvents='auto';
 hl.onclick=()=>{
@@ -839,12 +876,12 @@ brd.appendChild(hl);
 let u=b.us.find(v=>v.al&&v.x===x&&v.y===y);
 if(b.skMode.tgt==='enemy'&&u.tm!==b.sel.tm){
 let hl=document.createElement('div');
-hl.style.cssText='position:absolute;left:'+(x*56+10)+'px;top:'+((y-1)*56+10)+'px;width:56px;height:56px;background:rgba(255,80,80,0.25);border:2px solid rgba(255,80,80,0.6);border-radius:4px;pointer-events:none;z-index:3';
+hl.style.cssText='position:absolute;left:'+(x*44+11)+'px;top:'+((y-1)*44+11)+'px;width:44px;height:44px;background:rgba(255,80,80,0.25);border:2px solid rgba(255,80,80,0.6);border-radius:4px;pointer-events:none;z-index:3';
 brd.appendChild(hl);
 }
 if(b.skMode.tgt==='ally'&&u.tm===b.sel.tm&&u!==b.sel){
 let hl=document.createElement('div');
-hl.style.cssText='position:absolute;left:'+(x*56+10)+'px;top:'+((y-1)*56+10)+'px;width:56px;height:56px;background:rgba(100,180,255,0.2);border:2px solid rgba(100,180,255,0.6);border-radius:4px;pointer-events:none;z-index:3';
+hl.style.cssText='position:absolute;left:'+(x*44+11)+'px;top:'+((y-1)*44+11)+'px;width:44px;height:44px;background:rgba(100,180,255,0.2);border:2px solid rgba(100,180,255,0.6);border-radius:4px;pointer-events:none;z-index:3';
 brd.appendChild(hl);
 }
 }
@@ -859,7 +896,7 @@ for(let x=0;x<7;x++)for(let y=1;y<6;y++){
 let u=b.us.find(v=>v.al&&v.x===x&&v.y===y);
 if(u&&b.coldField.targets.includes(u)){
 let hl=document.createElement('div');
-hl.style.cssText='position:absolute;left:'+(x*56+10)+'px;top:'+((y-1)*56+10)+'px;width:56px;height:56px;background:rgba(255,215,0,0.35);border:2px solid rgba(255,215,0,0.7);border-radius:4px;pointer-events:none;z-index:3';
+hl.style.cssText='position:absolute;left:'+(x*44+11)+'px;top:'+((y-1)*44+11)+'px;width:44px;height:44px;background:rgba(255,215,0,0.35);border:2px solid rgba(255,215,0,0.7);border-radius:4px;pointer-events:none;z-index:3';
 brd.appendChild(hl);
 }
 }
@@ -874,7 +911,7 @@ if(u.x<3)slot.classList.add('p1');else if(u.x>3)slot.classList.add('p2');else sl
 if(b.sel===u)slot.classList.add('sel');
 // 未行动单位黄色高亮
 if(!b.acted.has(u._uid)&&u.tm===b.ct&&u.al&&!u._dying&&!b.sel&&!b.skMode&&!b.coldField&&!u.isS)slot.classList.add('ready');
-slot.style.left=(u.x*56+10)+'px';slot.style.top=((u.y-1)*56+10)+'px';
+slot.style.left=(u.x*44+11)+'px';slot.style.top=((u.y-1)*44+11)+'px';
 slot.style.position='absolute';slot.style.zIndex='2';
 if(u._dying){slot.classList.add('dying');slot.style.zIndex='3';}
 let dHp=u.hp;if(u._hits&&u._hits.length){let recent=u._hits.filter(h=>Date.now()-h.t<2000);if(recent.length){let mh=recent.reduce((a,b)=>a.dmg>b.dmg?a:b,recent[0]);dHp=mh.hpBefore;let intensity=Math.min(8,2+mh.dmg*.6+(1-mh.ratio)*4);slot.style.setProperty('--sx',intensity+'px');slot.classList.add('shake');slot.setAttribute('data-dmg',mh.hpLoss||mh.dmg);slot.setAttribute('data-hpA',mh.hpAfter);slot.setAttribute('data-mH',u.mH)}delete u._hits;}
@@ -934,7 +971,7 @@ for(let x=0;x<7;x++)for(let y=1;y<6;y++){
 let hasUnit=b.us.some(v=>v.al&&v.x===x&&v.y===y);
 if(!hasUnit&&x!==3){
 let ds=document.createElement('div');
-ds.style.cssText='position:absolute;left:'+(x*56+10)+'px;top:'+((y-1)*56+10)+'px;width:56px;height:56px;background:rgba(100,255,100,0.15);border:2px dashed rgba(100,255,100,0.4);border-radius:4px;z-index:5';
+ds.style.cssText='position:absolute;left:'+(x*44+11)+'px;top:'+((y-1)*44+11)+'px;width:44px;height:44px;background:rgba(100,255,100,0.15);border:2px dashed rgba(100,255,100,0.4);border-radius:4px;z-index:5';
 ds.onclick=(()=>{
 let ox=x,oy=y;
 return()=>{
@@ -953,7 +990,7 @@ for(let x=0;x<7;x++)for(let y=1;y<6;y++){
 let hasUnit=b.us.some(v=>v.al&&v.x===x&&v.y===y);
 if(!hasUnit&&x!==3){
 let ds=document.createElement('div');
-ds.style.cssText='position:absolute;left:'+(x*56+10)+'px;top:'+((y-1)*56+10)+'px;width:56px;height:56px;background:rgba(100,255,200,0.2);border:2px dashed rgba(100,255,200,0.5);border-radius:4px;z-index:5';
+ds.style.cssText='position:absolute;left:'+(x*44+11)+'px;top:'+((y-1)*44+11)+'px;width:44px;height:44px;background:rgba(100,255,200,0.2);border:2px dashed rgba(100,255,200,0.5);border-radius:4px;z-index:5';
 ds.onclick=(()=>{
 let ox=x,oy=y;
 return()=>{
@@ -1322,7 +1359,7 @@ let slot=document.createElement('div');slot.className='slot';
 if(x===3)slot.classList.add('mid');
 else if(x<3)slot.classList.add('p1');
 else slot.classList.add('p2');
-slot.style.left=(x*42+11)+'px';slot.style.top=((y-1)*42+11)+'px';
+slot.style.left=(x*44+11)+'px';slot.style.top=((y-1)*44+11)+'px';
 slot.dataset.x=x;slot.dataset.y=y;
 let u=allOcc.find(v=>v.x===x&&v.y===y)||placed.find(v=>v.x===x&&v.y===y);
 if(u){slot.innerHTML='<span class="n">'+u.n.substring(0,2)+'</span><span class="hp">'+u.hp+'/'+u.mH+'</span>';slot.classList.add('unit')}
@@ -1338,36 +1375,39 @@ brd.appendChild(slot);
 }
 // 侧栏：双方已选+未选角色
 let sl=$('deploySideL'),sr=$('deploySideR');
-sl.innerHTML='<div class="side-title">🔵 蓝方</div>';
-sr.innerHTML='<div class="side-title">🔴 红方</div>';
+sl.innerHTML='';sr.innerHTML='';
 repoPool.filter(u=>u.tm==='p1').forEach(u=>{
 let el=document.createElement('div');
 let isPl=u.x>=0;
-el.className='side-unit p1'+(isPl?' placed':' pick');
-el.textContent=isPl?u.n+' @'+u.y:u.n+' HP:'+u.hp;
+el.className='side-cell p1'+(isPl?' placed':'');
+el.textContent=u.n.substring(0,2);
+el.title=u.n+' HP:'+u.hp;
 if(!isPl&&cur==='p1'){
 el.onclick=()=>{
 if(repoCur===u){repoCur=null;renderReposition();return}
 repoCur=u;renderReposition();
-};
+};el.classList.add('pick');
 }
 if(repoCur===u)el.classList.add('current');
 sl.appendChild(el);
 });
+while(sl.children.length<5){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.3';c.textContent='-';sl.appendChild(c);}
 repoPool.filter(u=>u.tm==='p2').forEach(u=>{
 let el=document.createElement('div');
 let isPl=u.x>=0;
-el.className='side-unit p2'+(isPl?' placed':' pick');
-el.textContent=isPl?u.n+' @'+u.y:u.n+' HP:'+u.hp;
+el.className='side-cell p2'+(isPl?' placed':'');
+el.textContent=u.n.substring(0,2);
+el.title=u.n+' HP:'+u.hp;
 if(!isPl&&cur==='p2'){
 el.onclick=()=>{
 if(repoCur===u){repoCur=null;renderReposition();return}
 repoCur=u;renderReposition();
-};
+};el.classList.add('pick');
 }
 if(repoCur===u)el.classList.add('current');
 sr.appendChild(el);
 });
+while(sr.children.length<5){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.3';c.textContent='-';sr.appendChild(c);}
 // 可选角色
 let dr=$('deployRoster');dr.innerHTML='';
 let avail=repoPool.filter(u=>u.al&&u.tm===cur&&u.x<0);
@@ -1396,7 +1436,33 @@ dr.appendChild(ch);
 function confirmReposition(){
 setPhase('battle');
 beginRound();
+renderBattleSides();
 if(!b.go){renderBattle();upInfo()}
+}
+
+function renderBattleSides(){
+let sl=$('batSideL'),sr=$('batSideR');
+sl.innerHTML='';sr.innerHTML='';
+let p1u=b.us.filter(u=>u.tm==='p1'&&!u.isS);
+if(p1pick.length>0)p1u.sort((a,b)=>(p1pick.indexOf(a._pi)-p1pick.indexOf(b._pi)));
+let p2u=b.us.filter(u=>u.tm==='p2'&&!u.isS);
+if(p2pick.length>0)p2u.sort((a,b)=>(p2pick.indexOf(a._pi)-p2pick.indexOf(b._pi)));
+p1u.forEach(u=>{
+let c=document.createElement('div');
+c.className='side-cell p1'+(u.al?'':' dead');
+if(!u.al){c.style.background='#331';c.style.color='#a33';c.textContent='死';}
+else c.textContent=u.n.substring(0,2);
+sl.appendChild(c);
+});
+while(sl.children.length<5){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.2';c.textContent='-';sl.appendChild(c);}
+p2u.forEach(u=>{
+let c=document.createElement('div');
+c.className='side-cell p2'+(u.al?'':' dead');
+if(!u.al){c.style.background='#331';c.style.color='#a33';c.textContent='死';}
+else c.textContent=u.n.substring(0,2);
+sr.appendChild(c);
+});
+while(sr.children.length<5){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.2';c.textContent='-';sr.appendChild(c);}
 }
 
 function checkGO(){
