@@ -1,3 +1,12 @@
+# 改动日志 v1.54
+- 2026年06月05日，修复选人界面角色消失：slot定位从style属性子串匹配改为dataset属性(x/y)，解决浏览器style格式化空格导致的querySelector匹配失败
+
+# 改动日志 v1.52
+- 2026年06月05日，移动端适配：main-grid整体缩小(棋盘302×220+侧栏32px,格42×42,侧格28×42)使总宽374px适配375px手机；棋盘背景改为纯色消除"两个地图"错觉；去掉user-scalable=no允许手动缩放
+
+# 改动日志 v1.50
+- 2026年06月05日，选位界面重构：已选角色放两侧（左蓝右红），地图居中缩小（格子56→42px，地图420→316px），角色名缩为2字；三处布阵页面统一适配
+
 ---
 AIGC:
     Label: "1"
@@ -9,7 +18,7 @@ AIGC:
     ReservedCode2: i8f7qkpdsz5r6s2PNztGbIPoVoq/4Sh1FPE7FmC4NCM18e2z2gKhKoMJ+jBCejZMLb+ScrLjQDK2ZQV3Wk4HwERGzR1e4ghy4GRumrzmiL5+DPBSAK6aQY2T450wNW5fIp0CI3v11RJE00ctYMBsa9Apxabfn5DazPWNsB7PPWS1zdpD9wfLKWqF0jY=
 ---
 
-## v1.48 (2026-06-05)
+## v1.49 (2026-06-05)
 - 选人界面适配手机：角色格子56→72px、待选池360→420px、字体放大
 
 ## v1.47 (2026-06-05)
