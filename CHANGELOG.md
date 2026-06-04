@@ -1,3 +1,34 @@
+---
+AIGC:
+    Label: "1"
+    ContentProducer: 001191440300708461136T1XGW3
+    ProduceID: 3e7a21d22b4f638615e70677f235852f_42716442603b11f1960a5254007bceed
+    ReservedCode1: i8f7qkpdsz5r6s2PNztGbIPoVoq/4Sh1FPE7FmC4NCM18e2z2gKhKoMJ+jBCejZMLb+ScrLjQDK2ZQV3Wk4HwERGzR1e4ghy4GRumrzmiL5+DPBSAK6aQY2T450wNW5fIp0CI3v11RJE00ctYMBsa9Apxabfn5DazPWNsB7PPWS1zdpD9wfLKWqF0jY=
+    ContentPropagator: 001191440300708461136T1XGW3
+    PropagateID: 3e7a21d22b4f638615e70677f235852f_42716442603b11f1960a5254007bceed
+    ReservedCode2: i8f7qkpdsz5r6s2PNztGbIPoVoq/4Sh1FPE7FmC4NCM18e2z2gKhKoMJ+jBCejZMLb+ScrLjQDK2ZQV3Wk4HwERGzR1e4ghy4GRumrzmiL5+DPBSAK6aQY2T450wNW5fIp0CI3v11RJE00ctYMBsa9Apxabfn5DazPWNsB7PPWS1zdpD9wfLKWqF0jY=
+---
+
+## v1.46 (2026-06-05)
+- 充能初始化规则：所有角色初始无充能方式，陈色仅自充(beginRound)，周水仅受充(dmg)
+
+## v1.45 (2026-06-05)
+- 自充根因修复：beginRound每大回合被调用两次（己方回合开始+切换行动方）导致双倍充能
+- 充能逻辑移入_roundLogged守卫内，确保每大回合仅充能+1
+
+## v1.44 (2026-06-05)
+- 自充bug修复：移除bpClick两处全局敌方充能泄露（每次攻击后不再给敌方全队+1充能）
+- 新增点击敌方查看描述：红色[敌]标记，技能全灰不可用，可查看描述
+
+## v1.43 (2026-06-05)
+- 充能三分法：自充(beginRound每大回合+1)/攻充(普攻目标后+1)/受充(每受击+1)严格区分
+- 分类：陈色→自充，周水→受充，其余→自充
+- 所有普攻移除u.chg(1)攻充逻辑，beginRound回退排除周水（周水仅靠dmg受充）
+
+## v1.42 (2026-06-04)
+- auto大招不显示「使用」按钮（周水瞬杀时刻等充能满后自动释放），面板渲染与bpClick双重拦截
+- 自充逻辑修复：beginRound移除周水排除，所有角色大回合开始时统一充能+1
+
 ## v1.41 (2026-06-04)
 - 修复Python脚本替换丢失箭头函数>导致JS语法错误（网站全页无响应），4处ex:(u,ctx)={补回=>{
 
@@ -9,3 +40,4 @@
 - 2026年06月04日，战斗面板操作改为两步：点击选项查看描述+「使用」按钮→点击按钮执行；被动选项可点击查看描述；选中友方切换时自动重置面板默认状态
 - 2026年06月04日，修复开发者模式选人界面空白：startDevMode()跳过ban阶段导致pool未初始化，补pool=ROSTER.map(r=>({...r}))
 - 2026年06月04日，修复规则/角色图鉴弹窗在首页无法显示（弹窗从battle div内移至全局#app下）
+*（内容由AI生成，仅供参考）*
