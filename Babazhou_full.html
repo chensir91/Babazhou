@@ -151,7 +151,7 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 </style></head>
 <body>
 <div id="app">
-<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.43</div>
+<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.44</div>
 
 <div id="home" class="phase active">
 <h2 style="text-align:center;color:#fc0;font-size:22px;margin:30px 0 10px">八宝舟</h2>
@@ -478,7 +478,7 @@ dr.appendChild(ch);
 }
 }
 function startDevBattle(){
-b.us=[];b.go=0;b.sel=null;b.acted=new Set();b.extra=null;b.skMode=null;
+b.us=[];b.go=0;b.sel=null;b.acted=new Set();b.extra=null;b.skMode=null;b._selEnemy=0;
 b.gU=function(x,y){return this.us.find(u=>u.al&&u.x===x&&u.y===y)};
 b.fE=function(x1,x2,y1,y2){for(let x=Math.max(0,x1);x<=Math.min(6,x2);x++)for(let y=Math.max(1,y1);y<=Math.min(5,y2);y++){if(!this.gU(x,y)&&x!==3)return{x,y}}return null};
 // 蓝方角色
@@ -627,7 +627,7 @@ b.ct='p1';b.rn=1;b._logs=[];b._phase=null;b.logCtx=null;
 b.lg={push:function(m){var fm=m;if(b.logCtx){var tmL=b.logCtx.u.tm==='p1'?'蓝方':'红方';var tpL=b.logCtx.tp==='ba'?'普攻':b.logCtx.tp==='sk'?'技能':b.logCtx.tp==='ult'?'大招':'';fm=tmL+b.logCtx.u.n+'使用'+tpL+'·'+b.logCtx.sn+'：'+m;}b._logs.push({r:b._phase?b._phase.r:b.rn,tp:b._phase?b._phase.tp:'act',side:b._phase?b._phase.side:null,msg:fm});},get length(){return b._logs.length;}};
 b.logSection=function(tp){b._phase={r:b.rn,tp:tp,side:b.ct};};
 b.logRepo=function(){b._phase={r:b.rn,tp:'repo',side:null};};
-b.go=0;b.sel=null;b.acted=new Set();b.extra=null;b.skMode=null;
+b.go=0;b.sel=null;b.acted=new Set();b.extra=null;b.skMode=null;b._selEnemy=0;
 b.gU=function(x,y){return this.us.find(u=>u.al&&u.x===x&&u.y===y)};
 b.fE=function(x1,x2,y1,y2){for(let x=Math.max(0,x1);x<=Math.min(6,x2);x++)for(let y=Math.max(1,y1);y<=Math.min(5,y2);y++){if(!this.gU(x,y)&&x!==3)return{x,y}}return null};
 setPhase('battle');
@@ -670,7 +670,7 @@ b.lg.push(u.n+' 虫群结束');
 });
 b.us.filter(u=>u.al&&u.bl>0).forEach(u=>{dmg(u,2,1);b.lg.push(u.n+' 流血-2');u.bl--});
 b.us.forEach(u=>{u.tt=0;u.bd=Math.max(0,u.bd-1)});
-b.acted=new Set();b.sel=null;b.skMode=null;
+b.acted=new Set();b.sel=null;b.skMode=null;b._selEnemy=0;
 if(!b.go)checkGO();
 if(!b.go){renderBattle();upInfo()}
 b.us.forEach(u=>{if(u.n!=='周水'&&u.n!=='陈色')u.sth=Math.max(0,u.sth-1)});
@@ -912,24 +912,24 @@ brd.appendChild(ds);
 // 战斗操作面板
 let bp=$('battlePanel');_bpSelAction=null;
 if(b.sel&&!b.skMode){
-let u=b.sel;bp.classList.add('show');
+let u=b.sel;let isEn=b._selEnemy;bp.classList.add('show');
 let h='<div class="bp-left">';
-h+='<div class="bp-name-hp"><span class="bp-name">'+u.n+'</span><span class="bp-hp">'+u.hp+'/'+u.mH+'</span><button class="bp-skip" onclick="bSkip()">跳过回合</button></div>';
+h+='<div class="bp-name-hp"><span class="bp-name"'+(isEn?' style="color:#f66"':'')+'>'+u.n+(isEn?' [敌]':'')+'</span><span class="bp-hp">'+u.hp+'/'+u.mH+'</span>'+(isEn?'':'<button class="bp-skip" onclick="bSkip()">跳过回合</button>')+'</div>';
 let als=[{n:'燃烧',s:u.ail.burn.s,c:'#f80'},{n:'恐惧',s:u.ail.fear.s,c:'#c80'},{n:'神经',s:u.ail.neuro.s,c:'#a6f'}];
 als.sort((a,b)=>b.s-a.s);
 let topA=als.find(a=>a.s>0)||als[0];
 h+='<div class="bp-ailments"><div class="bp-ail-bar" id="bpAilBar" onclick="bpCycleAil()"><div class="fill" style="width:'+(topA.s*10)+'%;background:'+topA.c+'"></div>'+topA.n+' '+topA.s+'/10</div></div>';
-if(u.pa)h+='<div class="bp-opt pa" onclick="bpClick(\'pa\',\'\')">被动：'+u.pa+'</div>';
+if(u.pa)h+='<div class="bp-opt pa dim" onclick="bpClick(\'pa\',\'\')">被动：'+u.pa+'</div>';
 let ba=u.sk.find(s=>s.tp==='ba');
-if(ba){let baOk=u.atk>0;h+='<div class="bp-opt ba'+(baOk?'':' dim')+'" onclick="bpClick(\'ba\',\''+ba.n+'\')">普攻：'+ba.n+'</div>';}
+if(ba){let baOk=!isEn&&u.atk>0;h+='<div class="bp-opt ba'+(baOk?'':' dim')+'" onclick="bpClick(\'ba\',\''+ba.n+'\')">普攻：'+ba.n+'</div>';}
 u.sk.filter(s=>s.tp==='sk').forEach(s=>{
 let cd=u.gCd(s.n),avail;
-if(s.n==='毛毛虫')avail=(u.mc||0)>0&&!u.skDisabled;
-else avail=cd<=0&&(!s.ch||u.ch>=s.ch)&&!u.skDisabled;
+if(s.n==='毛毛虫')avail=!isEn&&(u.mc||0)>0&&!u.skDisabled;
+else avail=!isEn&&cd<=0&&(!s.ch||u.ch>=s.ch)&&!u.skDisabled;
 h+='<div class="bp-opt sk'+(avail?'':' dim')+'" onclick="bpClick(\'sk\',\''+s.n+'\')">技能：'+s.n+' 冷'+cd+'存'+(s.st||0)+(s.n==='毛毛虫'?' 储'+(u.mc||0):'')+'</div>';
 });
 u.sk.filter(s=>s.tp==='ult').forEach(s=>{
-let avail=!s.auto&&u.ch>=u.mxc&&!u.skDisabled;
+let avail=!isEn&&!s.auto&&u.ch>=u.mxc&&!u.skDisabled;
 h+='<div class="bp-opt ult'+(avail?'':' dim')+'" onclick="bpClick(\'ult\',\''+s.n+'\')">大招：'+s.n+' 充'+u.ch+'/'+(s.auto?u.mxc:s.ch)+'</div>';
 });
 h+='</div><div class="bp-right" id="bpDesc">点击选项查看描述</div>';
@@ -1003,7 +1003,6 @@ let ctx={b,sel:u};
 b.logCtx={u:b.sel,tp:'ba',sn:ba.n};
 ba.ex(b.sel,u,ctx);b.logCtx=null;
 if(b.sel.n==='手充'&&b.sel.ultA>0){b.us.filter(v=>v.tm!==b.sel.tm&&v.al&&Math.abs(v.x-u.x)<=1&&Math.abs(v.y-u.y)<=1&&v!==u).forEach(v=>dmg(v,b.sel.atk));b.sel.ultA--}
-b.us.filter(v=>v.al&&v.tm!==b.sel.tm).forEach(v=>v.chg(1));
 if(b.sel.chging){b.sel.chging=0;b.lg.push(b.sel.n+' 蓄力释放!')}
 finishAction(b.sel);
 }
@@ -1016,15 +1015,23 @@ finishAction(b.sel);
 return;
 }
 if(!b.sel){
-// 选择未行动单位
-if(!u.al||u.tm!==b.ct||b.acted.has(u._uid)||u.isS)return;
-b.sel=u;renderBattle();upInfo();return;
+// 无选中：可查看己方或敌方（队友选为操作，敌方仅查看）
+if(u.al&&!u.isS){
+if(u.tm===b.ct&&!b.acted.has(u._uid)){b.sel=u;b._selEnemy=0;renderBattle();upInfo();return;}
+if(u.tm!==b.ct){b.sel=u;b._selEnemy=1;renderBattle();upInfo();return;}
+}
+return;
 }
 if(u===b.sel){
-// 点自己取消或切换（如果是在己方队伍且是队友）
-b.sel=null;b.logCtx=null;renderBattle();upInfo();return;
+// 点自己取消
+b.sel=null;b.logCtx=null;b._selEnemy=0;renderBattle();upInfo();return;
 }
-// 选中单位后点击敌方→普攻
+// 查看敌方时点击其他敌方→切换查看
+if(b._selEnemy&&u.tm!==b.ct){b.sel=u;renderBattle();upInfo();return;}
+// 查看敌方时点击己方可行动单位→切换到己方
+if(b._selEnemy&&u.tm===b.ct&&!b.acted.has(u._uid)){b.sel=u;b._selEnemy=0;renderBattle();upInfo();return;}
+if(b._selEnemy)return;
+// 己方选中→点击敌方→普攻
 let cr=b.sel.chging?2:1;let canAtk=isChargeUnit(b.sel)?(
 Math.abs(b.sel.y-u.y)<cr&&((b.sel.tm==='p1'&&u.x>b.sel.x)||(b.sel.tm==='p2'&&u.x<b.sel.x))
 ):b.sel.inRg(u.x,u.y);
@@ -1035,7 +1042,6 @@ let ctx={b,sel:u};
 b.logCtx={u:b.sel,tp:'ba',sn:ba.n};
 ba.ex(b.sel,u,ctx);b.logCtx=null;
 if(b.sel.n==='手充'&&b.sel.ultA>0){b.us.filter(v=>v.tm!==b.sel.tm&&v.al&&Math.abs(v.x-u.x)<=1&&Math.abs(v.y-u.y)<=1&&v!==u).forEach(v=>dmg(v,b.sel.atk));b.sel.ultA--}
-b.us.filter(v=>v.al&&v.tm!==b.sel.tm).forEach(v=>v.chg(1));
 if(b.sel.chging){b.sel.chging=0;b.lg.push(b.sel.n+' 蓄力释放!')}
 finishAction(b.sel);
 }
@@ -1058,7 +1064,7 @@ let ctx={b,sel:null};
 sk.ex(unit,null,ctx);
 }catch(e){
 b.lg.push(unit.n+' 范围内无目标');
-b.sel=null;renderBattle();return;
+b.sel=null;b._selEnemy=0;renderBattle();return;
 }
 finishAction(unit);
 return;
@@ -1100,7 +1106,7 @@ b.coldFieldPending=u;
 
 // 动作后摇：1秒延迟后继续
 function finishAction(unit){
-b._actionDelay=1;b.acted.add(unit._uid);b.sel=null;b.skMode=null;b.logCtx=null;
+b._actionDelay=1;b.acted.add(unit._uid);b.sel=null;b.skMode=null;b.logCtx=null;b._selEnemy=0;
 b.us.filter(u=>u.al).forEach(u=>u.cdTk());
 renderBattle();checkGO();
 setTimeout(function(){
@@ -1165,7 +1171,7 @@ function switchTeam(){
 if(!b.us.some(u=>u.tm==='p1'&&u.al)||!b.us.some(u=>u.tm==='p2'&&u.al)){checkGO();return}
 if(b.extra){
 let eu=b.extra;b.extra=null;
-if(eu.al&&eu.tm===b.ct){b.acted.delete(eu._uid);b.lg.push(eu.n+' 额外行动!');b.sel=null;b.skMode=null;renderBattle();upInfo();return}
+if(eu.al&&eu.tm===b.ct){b.acted.delete(eu._uid);b.lg.push(eu.n+' 额外行动!');b.sel=null;b.skMode=null;b._selEnemy=0;renderBattle();upInfo();return}
 }
 // 小回合结束：自动大招（按敏捷降序）
 let autoUnits=b.us.filter(u=>u.al&&u.ch>=u.mxc).sort((a,b)=>b.agi-a.agi);
@@ -1194,7 +1200,7 @@ b.lg.push('人机自动跳过');
 switchTeam();
 return;
 }
-b.sel=null;b.skMode=null;
+b.sel=null;b.skMode=null;b._selEnemy=0;
 beginRound();
 if(!b.go){renderBattle();upInfo()}
 }
@@ -1203,7 +1209,7 @@ if(!b.go){renderBattle();upInfo()}
 let repoStep=0,repoCur=null,repoOrder=[],repoFirst='',repoPool=[];
 
 function startReposition(){
-b.sel=null;b.skMode=null;b.acted=new Set();
+b.sel=null;b.skMode=null;b.acted=new Set();b._selEnemy=0;
 let p1u=b.us.filter(u=>u.al&&u.tm==='p1');let p2u=b.us.filter(u=>u.al&&u.tm==='p2');
 let p1a=p1u.reduce((s,u)=>s+u.agi,0);let p2a=p2u.reduce((s,u)=>s+u.agi,0);
 let reason='敏捷';
@@ -1301,7 +1307,7 @@ let p2=b.us.some(u=>u.tm==='p2'&&u.al);
 if(!p1||!p2){b.go=1;setPhase('gameover');$('winnerText').textContent=(p1?'🔵 蓝方':'🔴 红方')+' 获胜!'}
 }
 
-function bSkip(){if(!b.sel)return;b.acted.add(b.sel._uid);b.us.filter(u=>u.al).forEach(u=>u.cdTk());b.sel=null;renderBattle();if(allActed())switchTeam()}
+function bSkip(){if(!b.sel)return;b.acted.add(b.sel._uid);b.us.filter(u=>u.al).forEach(u=>u.cdTk());b.sel=null;b._selEnemy=0;renderBattle();if(allActed())switchTeam()}
 function devCdMinus(){
 if(!devMode)return;
 b.us.filter(u=>u.al).forEach(u=>{
@@ -1349,10 +1355,13 @@ else{
 sk=b.sel.sk.find(s=>s.tp===tp&&s.n===sn);
 if(!sk)return;
 desc=sk.d||(sk.n+'：无详细描述');
+if(b._selEnemy){_bpSelAction=null;}
+else{
 if(tp==='ba'){avail=b.sel.atk>0;}
 else if(tp==='sk'){if(sn==='毛毛虫')avail=(b.sel.mc||0)>0&&!b.sel.skDisabled;else{let cd=b.sel.gCd(sn);avail=cd<=0&&(!sk.ch||b.sel.ch>=sk.ch)&&!b.sel.skDisabled;}}
 else{avail=!sk.auto&&b.sel.ch>=b.sel.mxc&&!b.sel.skDisabled;}
 _bpSelAction=avail?{tp:tp,sn:sn,sk:sk}:null;
+}
 }
 let bd=$('bpDesc');if(!bd)return;
 let h=desc;
@@ -1398,7 +1407,7 @@ html+='<div class="'+cls+'">'+l.msg+'</div>';
 $('logContent').innerHTML=html||'暂无日志';
 }
 function hideLog(){$('logModal').classList.remove('show');}
-function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志 v1.43</div>- 2026年06月05日，充能三分法：自充(beginRound每大回合+1)/攻充(普攻目标后+1)/受充(每受击+1)严格区分；陈色→自充，周水→受充，其余→自充；所有普攻移除u.chg(1)攻充逻辑，beginRound回退排除周水（周水仅靠dmg受充）<br>- 2026年06月04日，auto大招不显示「使用」按钮（周水瞬杀时刻等充能满后自动释放），面板渲染与bpClick双重拦截；自充逻辑修复：beginRound移除周水排除，所有角色大回合开始时统一充能+1<br>- 2026年06月04日，所有技能选项点击即可查看完整描述（不可用时也能看），技能数据新增d字段存储每个技能的详细说明<br>- 2026年06月04日，战斗日志嵌入战斗界面：面板下方显示最近6条，点击展开完整日志弹窗<br>- 2026年06月04日，战斗面板操作改为两步：点击选项查看描述+「使用」按钮→点击按钮执行；被动选项可点击查看描述；选中友方切换时自动重置面板默认状态<br>- 2026年06月04日，修复开发者模式选人界面空白：startDevMode()跳过ban阶段导致pool未初始化，补pool=ROSTER.map(r=>({...r}))<br>- 2026年06月04日，修复规则/角色图鉴弹窗在首页无法显示（弹窗从battle div内移至全局#app下）<br>- 2026年06月04日，UI重做：新增首页(正常对战/开发者模式/规则/角色图鉴四个按钮)；选人界面角色格子改为正方形；战斗阶段技能栏替换为信息面板（角色名+HP+跳过回合+损伤条+被动+普攻+技能+大招，点击选项右侧显示描述，可用操作点击即进入目标选择）<br>- 2026年06月04日，陈色/周水添加被动描述字段（面板中被动行显示）<br>- 2026年06月03日，恐惧损伤实装：Ail.add()自动结算(叠满10→4伤)+所有ail.fear.add()传入目标单位；新增恐惧进度条(单位格子底部细条，<70%黄色，≥70%橙红脉冲，满条红色闪烁)<br>- 2026年06月03日，修复致死伤害不播放受击动画：dmg()致死时改设_dying=1保持al=1→renderBattle渲染濒死单位+震动+浮动伤害→动画结束后al=0+checkGO；新增死亡粒子消散动画<br>- 2026年06月03日，跳过冷却修复：bSkip（跳过回合）补调cdTk，每次跳过也触发全体冷却-1，与普攻/技能一致<br>- 2026年06月03日，冷却修复补充：红方人机跳过时补调cdTk，每跳过一个调用一次致全体冷却-1，恢复每大回合10次冷却流逝的正常节奏<br>- 2026年06月03日，冷却机制修复：cdTk从switchTeam（切换行动方时调用）移至finishAction（每个小回合完成时调用），实现每过1个任意角色小回合冷却-1而非每大回合/切换行动方时-1<br>- 2026年06月03日，showRules重写为三部分格式（全局规则/角色通用规则/角色专属规则）并同步showGuide角色图鉴<br>- 2026年06月03日，更新showRules: 公共区域"禁止进入"→"任何单位不能在上面"、攻击优先级补充嘲讽机制、冲锋描述更新、自充描述明确(每个自身小回合+1/除周水外); 陈色充能加入自充(不再排除)<br>- 2026年06月02日，先手判定改为三级(敏捷→HP上限更低→攻击力更高)；自动大招触发时机从大回合开始改为小回合结束时(按敏捷降序)；储存机制通用化(cdTk冷却归零自动存储/毛毛虫加str:4)<br>- 2026年06月02日，充能方式调整：除陈色和周水外所有角色改为自动充能(每大回合+1)；删除除陈色和周水外所有角色的被动(王土回血/手充减上限/科比牢大bns/蓝主任积怨/大树回血)；冷却改为每小回合(切换行动方时)-1<br>- 2026年06月02日，隐匿三态特效重做：获得隐匿(白雾升腾+文字)/持有隐匿(半透明+白色雾气粒子飘散+"隐匿"小字)/解除隐匿(雾气炸散+"破隐"文字)；删除隐匿特效切换按钮(统一雾隐)<br>- 2026年06月02日，冷场改为额外回合：普攻/大招击杀后finishAction完成→插入冷场额外回合(不占行动/不计算冷却充能)→冷场结束后继续正常回合<br>- 2026年06月02日，周水重做：冷场改为自选目标逐个造成ATK×1伤害+5层恐惧(全图)/大招瞬杀时刻去掉穿透/新增规则按钮+角色图鉴按钮(陈色+周水)<br>- 2026年06月02日，选中周水不破隐修复：beginRound中sth递减跳过周水(后门隐匿由攻击机制管理，不自动过期)<br>- 2026年06月02日，选中隐匿单位不破隐修复：新增.slot.unit-sth.sel规则，选中时仅金色边框标记不覆盖隐匿box-shadow<br>- 2026年06月02日，周水隐匿不显示修复：beginRound中sth递减从renderBattle之前移到之后(解决第一回合渲染时sth已被归零)/开发者模式充能上限修复：startDevBattle中rd.m→rd.mxc<br>- 2026年06月01日，充能上限修复：startBattle正常部署路径d.m→d.mxc/自动大招：chg()充能达到上限时自动触发auto:1大招/开发者模式补周水sth=1<br>- 2026年06月01日，隐匿特效根因修复：outline-color不是CSS可动画属性→改为box-shadow内外发光呼吸动画+加!important/新增测试隐匿特效按钮(内联强制渲染)<br>- 2026年06月01日，充能上限修复：deployCur缺少m字段导致mxc回退默认5→改为透传r.mxc/隐匿特效重做：overlay方案改为slot级filter+outline呼吸动画，更稳定可见<br>- 2026年06月01日，隐匿overlay加半透明背景色+inset发光/冲锋选位仅允许x距离最近目标(高亮+点击双限制)<br>- 2026年06月01日，冲锋范围动态检测(同行有敌→仅同行/同行无敌→同行+相邻行)/隐匿独立overlay层+发光模糊动画/冷场按距离排序且不伤自己/周水充能上限2<br>- 2026年05月31日，周水重做(充能改为受击+1上限2/冲锋UI自选目标/自动大招不消耗行动/隐匿雾隐虚影双特效+按钮切换)<br>- 2026年05月31日，周水重做：恐惧震慑改为冲锋自动锁定目标、瞬杀时刻伤害公式改为(已损失+ATK)*2穿透、新增被动后门(开局隐匿/攻击解除/2回合后恢复)、冷场改为对全场触发普攻<br>- 2026年05月29日，损伤全局触发（叠满10点自动结算：神经=2伤+眩晕/恐惧=4伤/燃烧=2伤+3回合流血）+ 先手平局随机 + 冲锋全局规则（同列/相邻行取最近单位，含友方）<br>- 2026年05月29日，战斗反馈优化：先震动后出伤（暂显旧HP→震动0.35s→HP更新+红色小字"-x"浮动跳出）<br>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害累加取最强+血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}function hideCL(){$('clModal').classList.remove('show');}
+function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志 v1.44</div>- 2026年06月05日，自充bug修复：移除bpClick两处全局敌方充能泄露（每次攻击后不再给敌方全队+1充能）；新增点击敌方查看描述功能（红色[敌]标记、技能全灰不可用、仅可查看描述）<br>- 2026年06月05日，充能三分法：自充(beginRound每大回合+1)/攻充(普攻目标后+1)/受充(每受击+1)严格区分；陈色→自充，周水→受充，其余→自充；所有普攻移除u.chg(1)攻充逻辑，beginRound回退排除周水（周水仅靠dmg受充）<br>- 2026年06月04日，auto大招不显示「使用」按钮（周水瞬杀时刻等充能满后自动释放），面板渲染与bpClick双重拦截；自充逻辑修复：beginRound移除周水排除，所有角色大回合开始时统一充能+1<br>- 2026年06月04日，所有技能选项点击即可查看完整描述（不可用时也能看），技能数据新增d字段存储每个技能的详细说明<br>- 2026年06月04日，战斗日志嵌入战斗界面：面板下方显示最近6条，点击展开完整日志弹窗<br>- 2026年06月04日，战斗面板操作改为两步：点击选项查看描述+「使用」按钮→点击按钮执行；被动选项可点击查看描述；选中友方切换时自动重置面板默认状态<br>- 2026年06月04日，修复开发者模式选人界面空白：startDevMode()跳过ban阶段导致pool未初始化，补pool=ROSTER.map(r=>({...r}))<br>- 2026年06月04日，修复规则/角色图鉴弹窗在首页无法显示（弹窗从battle div内移至全局#app下）<br>- 2026年06月04日，UI重做：新增首页(正常对战/开发者模式/规则/角色图鉴四个按钮)；选人界面角色格子改为正方形；战斗阶段技能栏替换为信息面板（角色名+HP+跳过回合+损伤条+被动+普攻+技能+大招，点击选项右侧显示描述，可用操作点击即进入目标选择）<br>- 2026年06月04日，陈色/周水添加被动描述字段（面板中被动行显示）<br>- 2026年06月03日，恐惧损伤实装：Ail.add()自动结算(叠满10→4伤)+所有ail.fear.add()传入目标单位；新增恐惧进度条(单位格子底部细条，<70%黄色，≥70%橙红脉冲，满条红色闪烁)<br>- 2026年06月03日，修复致死伤害不播放受击动画：dmg()致死时改设_dying=1保持al=1→renderBattle渲染濒死单位+震动+浮动伤害→动画结束后al=0+checkGO；新增死亡粒子消散动画<br>- 2026年06月03日，跳过冷却修复：bSkip（跳过回合）补调cdTk，每次跳过也触发全体冷却-1，与普攻/技能一致<br>- 2026年06月03日，冷却修复补充：红方人机跳过时补调cdTk，每跳过一个调用一次致全体冷却-1，恢复每大回合10次冷却流逝的正常节奏<br>- 2026年06月03日，冷却机制修复：cdTk从switchTeam（切换行动方时调用）移至finishAction（每个小回合完成时调用），实现每过1个任意角色小回合冷却-1而非每大回合/切换行动方时-1<br>- 2026年06月03日，showRules重写为三部分格式（全局规则/角色通用规则/角色专属规则）并同步showGuide角色图鉴<br>- 2026年06月03日，更新showRules: 公共区域"禁止进入"→"任何单位不能在上面"、攻击优先级补充嘲讽机制、冲锋描述更新、自充描述明确(每个自身小回合+1/除周水外); 陈色充能加入自充(不再排除)<br>- 2026年06月02日，先手判定改为三级(敏捷→HP上限更低→攻击力更高)；自动大招触发时机从大回合开始改为小回合结束时(按敏捷降序)；储存机制通用化(cdTk冷却归零自动存储/毛毛虫加str:4)<br>- 2026年06月02日，充能方式调整：除陈色和周水外所有角色改为自动充能(每大回合+1)；删除除陈色和周水外所有角色的被动(王土回血/手充减上限/科比牢大bns/蓝主任积怨/大树回血)；冷却改为每小回合(切换行动方时)-1<br>- 2026年06月02日，隐匿三态特效重做：获得隐匿(白雾升腾+文字)/持有隐匿(半透明+白色雾气粒子飘散+"隐匿"小字)/解除隐匿(雾气炸散+"破隐"文字)；删除隐匿特效切换按钮(统一雾隐)<br>- 2026年06月02日，冷场改为额外回合：普攻/大招击杀后finishAction完成→插入冷场额外回合(不占行动/不计算冷却充能)→冷场结束后继续正常回合<br>- 2026年06月02日，周水重做：冷场改为自选目标逐个造成ATK×1伤害+5层恐惧(全图)/大招瞬杀时刻去掉穿透/新增规则按钮+角色图鉴按钮(陈色+周水)<br>- 2026年06月02日，选中周水不破隐修复：beginRound中sth递减跳过周水(后门隐匿由攻击机制管理，不自动过期)<br>- 2026年06月02日，选中隐匿单位不破隐修复：新增.slot.unit-sth.sel规则，选中时仅金色边框标记不覆盖隐匿box-shadow<br>- 2026年06月02日，周水隐匿不显示修复：beginRound中sth递减从renderBattle之前移到之后(解决第一回合渲染时sth已被归零)/开发者模式充能上限修复：startDevBattle中rd.m→rd.mxc<br>- 2026年06月01日，充能上限修复：startBattle正常部署路径d.m→d.mxc/自动大招：chg()充能达到上限时自动触发auto:1大招/开发者模式补周水sth=1<br>- 2026年06月01日，隐匿特效根因修复：outline-color不是CSS可动画属性→改为box-shadow内外发光呼吸动画+加!important/新增测试隐匿特效按钮(内联强制渲染)<br>- 2026年06月01日，充能上限修复：deployCur缺少m字段导致mxc回退默认5→改为透传r.mxc/隐匿特效重做：overlay方案改为slot级filter+outline呼吸动画，更稳定可见<br>- 2026年06月01日，隐匿overlay加半透明背景色+inset发光/冲锋选位仅允许x距离最近目标(高亮+点击双限制)<br>- 2026年06月01日，冲锋范围动态检测(同行有敌→仅同行/同行无敌→同行+相邻行)/隐匿独立overlay层+发光模糊动画/冷场按距离排序且不伤自己/周水充能上限2<br>- 2026年05月31日，周水重做(充能改为受击+1上限2/冲锋UI自选目标/自动大招不消耗行动/隐匿雾隐虚影双特效+按钮切换)<br>- 2026年05月31日，周水重做：恐惧震慑改为冲锋自动锁定目标、瞬杀时刻伤害公式改为(已损失+ATK)*2穿透、新增被动后门(开局隐匿/攻击解除/2回合后恢复)、冷场改为对全场触发普攻<br>- 2026年05月29日，损伤全局触发（叠满10点自动结算：神经=2伤+眩晕/恐惧=4伤/燃烧=2伤+3回合流血）+ 先手平局随机 + 冲锋全局规则（同列/相邻行取最近单位，含友方）<br>- 2026年05月29日，战斗反馈优化：先震动后出伤（暂显旧HP→震动0.35s→HP更新+红色小字"-x"浮动跳出）<br>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害累加取最强+血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}function hideCL(){$('clModal').classList.remove('show');}
 function showRules(){
 var h='<div class="cl-hdr">八宝舟 总体规则</div>';
 h+='<p style="font-size:13px;color:#aaa;margin:2px 0">第一部分 全局规则</p>';
