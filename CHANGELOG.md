@@ -9,6 +9,9 @@ AIGC:
     ReservedCode2: i8f7qkpdsz5r6s2PNztGbIPoVoq/4Sh1FPE7FmC4NCM18e2z2gKhKoMJ+jBCejZMLb+ScrLjQDK2ZQV3Wk4HwERGzR1e4ghy4GRumrzmiL5+DPBSAK6aQY2T450wNW5fIp0CI3v11RJE00ctYMBsa9Apxabfn5DazPWNsB7PPWS1zdpD9wfLKWqF0jY=
 ---
 
+## v1.47 (2026-06-05)
+- 已行动队友仅查看模式：选中本大回合已行动过的我方角色时面板不显示「使用」和「跳过回合」，仅展示技能描述
+
 ## v1.46 (2026-06-05)
 - 充能初始化规则：所有角色初始无充能方式，陈色仅自充(beginRound)，周水仅受充(dmg)
 
