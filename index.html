@@ -732,6 +732,7 @@ b.us.forEach(u=>{if(u.n!=='周水'&&u.n!=='陈色')u.sth=Math.max(0,u.sth-1)});
 
 function renderBattle(){
 let g=$('battleGrid');g.innerHTML='';
+let isRepo=b.rn===1&&b._repoPlaced.size<10;
 // Render all 9x5 cells, units integrated into map cells
 for(let y=1;y<=5;y++)for(let x=0;x<9;x++){
 let c=document.createElement('div');c.className='cell';
@@ -862,7 +863,6 @@ hint.textContent='冷场:点击金色目标(ATK×1 +5恐惧) 剩余'+b.coldField
 g.appendChild(hint);
 }
 // Side bars
-let isRepo=b.rn===1&&b._repoPlaced.size<10;
 let p1u=b.us.filter(u=>u.tm==='p1'&&!u.isS);
 if(p1pick.length>0)p1u.sort((a,b)=>(p1pick.indexOf(a._pi)-p1pick.indexOf(b._pi)));
 let p2u=b.us.filter(u=>u.tm==='p2'&&!u.isS);
