@@ -150,7 +150,7 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 </style></head>
 <body>
 <div id="app">
-<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.58</div>
+<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.59</div>
 
 <div id="home" class="phase active">
 <h2 style="text-align:center;color:#fc0;font-size:22px;margin:30px 0 10px">八宝舟</h2>
@@ -492,7 +492,7 @@ if(y>5)c8.classList.add('dim');
 }
 
 function startDevBattle(){
-b.us=[];b.go=0;b.sel=null;b.acted=new Set();b.extra=null;b.skMode=null;b._selEnemy=0;b._actedView=0;
+b.us=[];b.go=0;b.sel=null;b.acted=new Set();b.extra=null;b.skMode=null;b._selEnemy=0;b._actedView=0;b._repoPlaced=new Set();b._repoSel=null;
 b.gU=function(x,y){return this.us.find(u=>u.al&&u.x===x&&u.y===y)};
 b.fE=function(x1,x2,y1,y2){for(let x=Math.max(0,x1);x<=Math.min(6,x2);x++)for(let y=Math.max(1,y1);y<=Math.min(5,y2);y++){if(!this.gU(x,y)&&x!==3)return{x,y}}return null};
 // 蓝方角色
@@ -681,7 +681,7 @@ b.ct='p1';b.rn=1;b._logs=[];b._phase=null;b.logCtx=null;
 b.lg={push:function(m){var fm=m;if(b.logCtx){var tmL=b.logCtx.u.tm==='p1'?'蓝方':'红方';var tpL=b.logCtx.tp==='ba'?'普攻':b.logCtx.tp==='sk'?'技能':b.logCtx.tp==='ult'?'大招':'';fm=tmL+b.logCtx.u.n+'使用'+tpL+'·'+b.logCtx.sn+'：'+m;}b._logs.push({r:b._phase?b._phase.r:b.rn,tp:b._phase?b._phase.tp:'act',side:b._phase?b._phase.side:null,msg:fm});},get length(){return b._logs.length;}};
 b.logSection=function(tp){b._phase={r:b.rn,tp:tp,side:b.ct};};
 b.logRepo=function(){b._phase={r:b.rn,tp:'repo',side:null};};
-b.go=0;b.sel=null;b.acted=new Set();b.extra=null;b.skMode=null;b._selEnemy=0;b._actedView=0;
+b.go=0;b.sel=null;b.acted=new Set();b.extra=null;b.skMode=null;b._selEnemy=0;b._actedView=0;b._repoPlaced=new Set();b._repoSel=null;
 b.gU=function(x,y){return this.us.find(u=>u.al&&u.x===x&&u.y===y)};
 b.fE=function(x1,x2,y1,y2){for(let x=Math.max(0,x1);x<=Math.min(6,x2);x++)for(let y=Math.max(1,y1);y<=Math.min(5,y2);y++){if(!this.gU(x,y)&&x!==3)return{x,y}}return null};
 setPhase('battle');
@@ -732,35 +732,36 @@ b.us.forEach(u=>{if(u.n!=='周水'&&u.n!=='陈色')u.sth=Math.max(0,u.sth-1)});
 
 function renderBattle(){
 let g=$('battleGrid');g.innerHTML='';
-// Background cells
+// Render all 9x5 cells, units integrated into map cells
 for(let y=1;y<=5;y++)for(let x=0;x<9;x++){
 let c=document.createElement('div');c.className='cell';
 c.dataset.gx=x;c.dataset.gy=y;c.style.gridColumn=x+1;c.style.gridRow=y;
-if(x===0||x===8)c.classList.add('side');
-if(x>=1&&x<=7){
+if(x===0||x===8){c.classList.add('side');g.appendChild(c);continue;}
 let mx=x-1;
 if(mx===3)c.classList.add('mid');
 else if(mx<3)c.classList.add('p1');
 else c.classList.add('p2');
-// highlight attack range
-if(b.sel&&!b.skMode){
+
+// Find unit on this cell
+let u=b.us.find(v=>v.al&&v.x===mx&&v.y===y)||b.us.find(v=>v._dying&&v.x===mx&&v.y===y);
+
+// attack range highlights
+if(!u&&b.sel&&!b.skMode){
 let isChg=isChargeUnit(b.sel);
 let chgRows=isChg?getChargeRows(b.sel,b.us).rows:null;
-let inR=isChg?(
-chgRows.includes(y)&&((b.sel.tm==='p1'&&mx>b.sel.x)||(b.sel.tm==='p2'&&mx<b.sel.x))
-):b.sel.inRg(mx,y);
+let inR=isChg?(chgRows.includes(y)&&((b.sel.tm==='p1'&&mx>b.sel.x)||(b.sel.tm==='p2'&&mx<b.sel.x))):b.sel.inRg(mx,y);
 if(inR){
-let isEnemy=b.us.some(u=>u.tm!==b.sel.tm&&u.al&&u.x===mx&&u.y===y&&!u.sth);
+let isEnemy=b.us.some(v=>v.tm!==b.sel.tm&&v.al&&v.x===mx&&v.y===y&&!v.sth);
 c.style.background=isEnemy?'rgba(255,80,80,0.2)':'rgba(100,180,255,0.1)';
 c.style.borderColor=isEnemy?'rgba(255,80,80,0.5)':'rgba(100,180,255,0.3)';
 }
 }
+
 // skmode highlights
-if(b.skMode){
+if(!u&&b.skMode){
 let isBA=b.skMode.isBA;
-let hasUnit=b.us.some(u=>u.al&&u.x===mx&&u.y===y);
-let u=b.us.find(v=>v.al&&v.x===mx&&v.y===y);
-if(isBA&&u&&u.tm!==b.sel.tm&&!u.sth){
+let tu=b.us.find(v=>v.al&&v.x===mx&&v.y===y);
+if(isBA&&tu&&tu.tm!==b.sel.tm&&!tu.sth){
 let chgR=isChargeUnit(b.sel)?getChargeRows(b.sel,b.us).rows:null;
 let canAtk=isChargeUnit(b.sel)?(chgR.includes(y)&&((b.sel.tm==='p1'&&mx>b.sel.x)||(b.sel.tm==='p2'&&mx<b.sel.x))):b.sel.inRg(mx,y);
 if(isChargeUnit(b.sel)&&canAtk){
@@ -768,8 +769,8 @@ let nearest=b.us.filter(v=>v.tm!==b.sel.tm&&v.al&&!v.sth&&chgR.includes(v.y)&&((
 let minD=Math.min(...nearest.map(v=>Math.abs(v.x-b.sel.x)));
 if(Math.abs(mx-b.sel.x)!==minD)canAtk=false;
 }
-if(canAtk){c.style.background='rgba(255,80,80,0.25)';c.style.borderColor='rgba(255,80,80,0.6)';c.style.cursor='pointer';c.onclick=()=>onBClick(u);}
-}else if(!isBA&&!hasUnit&&mx!==3){
+if(canAtk){c.style.background='rgba(255,80,80,0.25)';c.style.borderColor='rgba(255,80,80,0.6)';c.style.cursor='pointer';c.onclick=()=>onBClick(tu);}
+}else if(!isBA&&!tu&&mx!==3){
 if(b.skMode.tgt==='empty'&&b.skMode.placed<b.skMode.max){
 c.style.background='rgba(100,255,100,0.15)';c.style.borderColor='rgba(100,255,100,0.4)';c.style.cursor='pointer';
 c.onclick=()=>{
@@ -785,74 +786,69 @@ b.sel.mc=Math.max(0,b.sel.mc-b.skMode.placed);
 finishAction(b.sel);
 }else{renderBattle();}
 };
-}else if(!isBA&&u){
-if(b.skMode.tgt==='enemy'&&u.tm!==b.sel.tm){c.style.background='rgba(255,80,80,0.2)';c.style.borderColor='rgba(255,80,80,0.5)';c.style.cursor='pointer';c.onclick=()=>onBClick(u);}
-if(b.skMode.tgt==='ally'&&u.tm===b.sel.tm&&u!==b.sel){c.style.background='rgba(100,180,255,0.15)';c.style.borderColor='rgba(100,180,255,0.5)';c.style.cursor='pointer';c.onclick=()=>onBClick(u);}
+}else if(!isBA&&tu){
+if(b.skMode.tgt==='enemy'&&tu.tm!==b.sel.tm){c.style.background='rgba(255,80,80,0.2)';c.style.borderColor='rgba(255,80,80,0.5)';c.style.cursor='pointer';c.onclick=()=>onBClick(tu);}
+if(b.skMode.tgt==='ally'&&tu.tm===b.sel.tm&&tu!==b.sel){c.style.background='rgba(100,180,255,0.15)';c.style.borderColor='rgba(100,180,255,0.5)';c.style.cursor='pointer';c.onclick=()=>onBClick(tu);}
 }
 }
 }
+
+// Cold field gold highlight
+if(!u&&b.coldField){
+let cu=b.us.find(v=>v.al&&v.x===mx&&v.y===y);
+if(cu&&b.coldField.targets.includes(cu)){
+c.style.background='rgba(255,215,0,0.35)';c.style.border='2px solid rgba(255,215,0,0.7)';c.style.cursor='pointer';
+c.onclick=()=>{
+let cf=b.coldField;let d=cu.dmg(cf.u.atk);
+b.lg.push('冷场 '+cu.n+' '+d+'伤 +5恐惧');
+cu.ail.fear.add(5,cu);
+cf.targets.splice(cf.targets.indexOf(cu),1);
+cf.done.push(cu);
+if(!cf.targets.length){b.lg.push('冷场结束');b.coldField=null;renderBattle();setTimeout(function(){if(!b.go&&allActed())switchTeam();else if(!b.go){renderBattle();upInfo()}},500)}else renderBattle();
+};
 }
-g.appendChild(c);
 }
-// Units on map
-b.us.forEach(u=>{if(!u.al&&!u._dying)return;
-let c=document.createElement('div');c.className='cell';
-c.style.gridColumn=u.x+2;c.style.gridRow=u.y;
-c.style.position='absolute';
-if(u.x<3)c.classList.add('p1');else if(u.x>3)c.classList.add('p2');else c.classList.add('mid');
+
+// Reposition map cell click (own side, empty or own unit)
+if(isRepo&&!u&&!b.skMode&&!b.coldField&&b._repoSel){
+let ownSide=b._repoSel.tm==='p1'?mx<3:mx>3;
+let cu=b.us.find(v=>v.al&&v.x===mx&&v.y===y);
+ownSide=ownSide&&(!cu||cu===b._repoSel);
+if(ownSide){
+c.classList.add('ready');c.style.cursor='pointer';
+c.onclick=()=>{
+if(cu&&cu===b._repoSel){
+b._repoSel.x=mx;b._repoSel.y=y;
+b._repoPlaced.add(b._repoSel._uid);b._repoSel=null;
+if(b._repoPlaced.size>=10){b._repoSel=null;b._repoPlaced=new Set();}
+renderBattle();
+}};
+}
+}
+// Render unit on this cell
+if(u){
 if(b.sel===u)c.classList.add('sel');
 if(!b.acted.has(u._uid)&&u.tm===b.ct&&u.al&&!u._dying&&!b.sel&&!b.skMode&&!b.coldField&&!u.isS)c.classList.add('ready');
-c.style.zIndex='2';
-if(u._dying){c.classList.add('dying');c.style.zIndex='3';}
+if(u._dying)c.classList.add('dying');
 let dHp=u.hp;if(u._hits&&u._hits.length){let recent=u._hits.filter(h=>Date.now()-h.t<2000);if(recent.length){let mh=recent.reduce((a,b)=>a.dmg>b.dmg?a:b,recent[0]);dHp=mh.hpBefore;let intensity=Math.min(8,2+mh.dmg*.6+(1-mh.ratio)*4);c.style.setProperty('--sx',intensity+'px');c.classList.add('shake');c.setAttribute('data-dmg',mh.hpLoss||mh.dmg);c.setAttribute('data-hpA',mh.hpAfter);c.setAttribute('data-mH',u.mH)}delete u._hits;}
 let hpC=dHp/u.mH>0.5?'#4f4':(dHp/u.mH>0.25?'#fa0':'#f44');
 let cdText='';for(let k in u.cd)if(u.cd[k]>0)cdText+=k.substring(0,1)+':'+u.cd[k]+' ';
 c.innerHTML='<span class="n">'+u.n.substring(0,3)+'</span><span class="hp" style="color:'+hpC+'">'+dHp+'/'+u.mH+'</span>'+(cdText?'<span class="cd">'+cdText+'</span>':'')+(u.ch>0?'<span class="cd">⚡'+u.ch+'</span>':'');
-// fear bar
 if(u.ail.fear.s>0){
 let pct=u.ail.fear.s/10*100;
 let fb=document.createElement('div');fb.className='fear-bar-wrap';
 let ff=document.createElement('div');ff.className='fear-bar-fill';
 ff.style.width=pct+'%';
-if(pct>=100)ff.classList.add('full');
-else if(pct>=70)ff.classList.add('high');
+if(pct>=100)ff.classList.add('full');else if(pct>=70)ff.classList.add('high');
 fb.appendChild(ff);c.appendChild(fb);
 }
-// stealth
 if(!u._dying){
-if(u.sth>0){
-if(!u._prevSth)u._hadSthGain=1;
-c.classList.add('unit-sth');
-let lbl=document.createElement('span');lbl.className='sth-label';lbl.textContent='隐匿';c.appendChild(lbl);
-if(u._hadSthGain){
-let wrap=document.createElement('div');wrap.className='sth-gain-wrap';
-let fog=document.createElement('div');fog.className='sth-gain-fog';
-wrap.appendChild(fog);c.appendChild(wrap);
-let gain=document.createElement('span');gain.className='sth-gain';gain.textContent='获得隐匿';c.appendChild(gain);
-setTimeout(()=>{wrap.remove();gain.remove()},1300);
-u._hadSthGain=0;
+if(u.sth>0){if(!u._prevSth)u._hadSthGain=1;c.classList.add('unit-sth');let lbl=document.createElement('span');lbl.className='sth-label';lbl.textContent='隐匿';c.appendChild(lbl);if(u._hadSthGain){let wrap=document.createElement('div');wrap.className='sth-gain-wrap';let fog=document.createElement('div');fog.className='sth-gain-fog';wrap.appendChild(fog);c.appendChild(wrap);let gain=document.createElement('span');gain.className='sth-gain';gain.textContent='获得隐匿';c.appendChild(gain);setTimeout(()=>{wrap.remove();gain.remove()},1300);u._hadSthGain=0;}}else if(u._prevSth>0){let burst=document.createElement('div');burst.className='sth-burst';c.appendChild(burst);let lose=document.createElement('span');lose.className='sth-lose';lose.textContent='破隐';c.appendChild(lose);setTimeout(()=>{burst.remove();lose.remove()},1300);}u._prevSth=u.sth;}
+c.onclick=()=>{if(u._dying)return;onBClick(u)};
+if(u._dying){let colors=['#f44','#fa0','#fff','#f88','#ff4','#f66'];for(let i=0;i<12;i++){let p=document.createElement('div');p.className='dying-particle';let angle=(i/12)*Math.PI*2;let dist=15+Math.random()*25;let size=2+Math.random()*3;p.style.cssText='width:'+size+'px;height:'+size+'px;background:'+colors[i%6]+';left:50%;top:50%;--px:'+(Math.cos(angle)*dist)+'px;--py:'+(Math.sin(angle)*dist)+'px;animation-delay:'+(Math.random()*.15)+'s';c.appendChild(p);}}
 }
-}else if(u._prevSth>0){
-let burst=document.createElement('div');burst.className='sth-burst';c.appendChild(burst);
-let lose=document.createElement('span');lose.className='sth-lose';lose.textContent='破隐';c.appendChild(lose);
-setTimeout(()=>{burst.remove();lose.remove()},1300);
-}
-u._prevSth=u.sth;
-}
-c.onclick=()=>{if(u._dying)return;if(b.coldField&&b.coldField.targets.includes(u)){let cf=b.coldField;let d=u.dmg(cf.u.atk);b.lg.push('冷场 '+u.n+' '+d+'伤 +5恐惧');u.ail.fear.add(5,u);cf.targets.splice(cf.targets.indexOf(u),1);cf.done.push(u);if(!cf.targets.length){b.lg.push('冷场结束');b.coldField=null;renderBattle();setTimeout(function(){if(!b.go&&allActed())switchTeam();else if(!b.go){renderBattle();upInfo()}},500)}else renderBattle()}else onBClick(u)};
 g.appendChild(c);
-// dying particles
-if(u._dying){
-let colors=['#f44','#fa0','#fff','#f88','#ff4','#f66'];
-for(let i=0;i<12;i++){
-let p=document.createElement('div');p.className='dying-particle';
-let angle=(i/12)*Math.PI*2;let dist=15+Math.random()*25;
-let size=2+Math.random()*3;
-p.style.cssText='width:'+size+'px;height:'+size+'px;background:'+colors[i%6]+';left:50%;top:50%;--px:'+(Math.cos(angle)*dist)+'px;--py:'+(Math.sin(angle)*dist)+'px;animation-delay:'+(Math.random()*.15)+'s';
-c.appendChild(p);
 }
-}
-});
 // skmode hint
 if(b.skMode){
 let hint=document.createElement('div');hint.className='skmode-hint';
@@ -861,19 +857,12 @@ g.appendChild(hint);
 }
 // coldField hint
 if(b.coldField){
-for(let y=1;y<=5;y++)for(let x=1;x<=7;x++){
-let mx=x-1;let u=b.us.find(v=>v.al&&v.x===mx&&v.y===y);
-if(u&&b.coldField.targets.includes(u)){
-let c=document.createElement('div');c.className='cell';
-c.style.cssText='grid-column:'+x+';grid-row:'+y+';position:absolute;background:rgba(255,215,0,0.35);border:2px solid rgba(255,215,0,0.7);z-index:3';
-g.appendChild(c);
-}
-}
 let hint=document.createElement('div');hint.className='skmode-hint';
-hint.textContent='冷场:点击目标(ATK×1 +5恐惧) 剩余'+b.coldField.targets.length;
+hint.textContent='冷场:点击金色目标(ATK×1 +5恐惧) 剩余'+b.coldField.targets.length;
 g.appendChild(hint);
 }
 // Side bars
+let isRepo=b.rn===1&&b._repoPlaced.size<10;
 let p1u=b.us.filter(u=>u.tm==='p1'&&!u.isS);
 if(p1pick.length>0)p1u.sort((a,b)=>(p1pick.indexOf(a._pi)-p1pick.indexOf(b._pi)));
 let p2u=b.us.filter(u=>u.tm==='p2'&&!u.isS);
@@ -882,16 +871,30 @@ for(let y=1;y<=5;y++){
 let c1=g.querySelector('.cell[data-gx="0"][data-gy="'+y+'"]');
 let c8=g.querySelector('.cell[data-gx="8"][data-gy="'+y+'"]');
 let i=y-1;
-if(p1u[i]){c1.textContent=p1u[i].n.substring(0,3);c1.classList.add('p1');if(!p1u[i].al){c1.classList.add('dead');}}
-else{c1.textContent='-';c1.classList.add('dim');}
-if(p2u[i]){c8.textContent=p2u[i].n.substring(0,3);c8.classList.add('p2');if(!p2u[i].al){c8.classList.add('dead');}}
-else{c8.textContent='-';c8.classList.add('dim');}
+if(p1u[i]){
+ c1.textContent=p1u[i].n.substring(0,3);c1.classList.add('p1');
+ if(!p1u[i].al)c1.classList.add('dead');
+ if(isRepo&&!b._repoPlaced.has(p1u[i]._uid)){
+  c1.classList.add('pick');c1.style.cursor='pointer';
+  if(b._repoSel===p1u[i])c1.classList.add('current');
+  c1.onclick=()=>{b._repoSel=p1u[i];renderBattle();};
+ }
+ if(isRepo&&b._repoPlaced.has(p1u[i]._uid)){c1.classList.add('picked');}
+}else{c1.textContent='-';c1.classList.add('dim');}
+if(p2u[i]){
+ c8.textContent=p2u[i].n.substring(0,3);c8.classList.add('p2');
+ if(!p2u[i].al)c8.classList.add('dead');
+ if(isRepo&&!b._repoPlaced.has(p2u[i]._uid)){
+  c8.classList.add('pick');c8.style.cursor='pointer';
+  if(b._repoSel===p2u[i])c8.classList.add('current');
+  c8.onclick=()=>{b._repoSel=p2u[i];renderBattle();};
+ }
+ if(isRepo&&b._repoPlaced.has(p2u[i]._uid)){c8.classList.add('picked');}
+}else{c8.textContent='-';c8.classList.add('dim');}
 }
 // dev buttons
-if(b.us.some(u=>u.isDummy))$('btnDummyMove').style.display='inline-block';
-else $('btnDummyMove').style.display='none';
-if(devMode){$('btnCdMinus').style.display='inline-block';$('btnChgPlus').style.display='inline-block';$('btnAddDummy').style.display='inline-block';}
-else{$('btnCdMinus').style.display='none';$('btnChgPlus').style.display='none';$('btnAddDummy').style.display='none';}
+if(b.us.some(u=>u.isDummy))$('btnDummyMove').style.display='inline-block';else $('btnDummyMove').style.display='none';
+if(devMode){$('btnCdMinus').style.display='inline-block';$('btnChgPlus').style.display='inline-block';$('btnAddDummy').style.display='inline-block';}else{$('btnCdMinus').style.display='none';$('btnChgPlus').style.display='none';$('btnAddDummy').style.display='none';}
 // battle panel
 let bp=$('battlePanel');_bpSelAction=null;
 if(b.sel&&!b.skMode){
@@ -922,21 +925,15 @@ bp.innerHTML=h;
 let lgEl=$('bpLog');if(lgEl){
 let logs=b._logs;let recent=logs.slice(-6);
 let h='';recent.forEach(l=>{h+='<div class="l">'+(l.side?'['+l.side+'] ':'')+l.msg+'</div>';});
-if(logs.length>6)h+='<div class="tap">▲ 点击展开完整日志（共'+logs.length+'条）</div>';
-else if(!logs.length)h+='<div class="tap">暂无日志</div>';
-lgEl.innerHTML=h;
-lgEl.onclick=function(){showLog();};
+if(logs.length>6)h+='<div class="tap">▲ 点击展开完整日志（共'+logs.length+'条）</div>';else if(!logs.length)h+='<div class="tap">暂无日志</div>';
+lgEl.innerHTML=h;lgEl.onclick=function(){showLog();};
 }
 // dmg animation
 setTimeout(function(){document.querySelectorAll('#battleGrid [data-dmg]').forEach(function(s){var d=parseFloat(s.getAttribute('data-dmg')),hA=parseFloat(s.getAttribute('data-hpA')),mH=parseFloat(s.getAttribute('data-mH'));s.removeAttribute('data-dmg');s.removeAttribute('data-hpA');s.removeAttribute('data-mH');var hpEl=s.querySelector('.hp');if(hpEl){var hpC=hA/mH>0.5?'#4f4':(hA/mH>0.25?'#fa0':'#f44');hpEl.textContent=hA+'/'+mH;hpEl.style.color=hpC}var p=document.createElement('div');p.textContent='-'+Math.round(d);p.className='dmg-popup';s.appendChild(p);setTimeout(function(){p.remove()},1000)});
-setTimeout(function(){
-let dy=b.us.filter(u=>u._dying);
-dy.forEach(u=>{u.al=0;delete u._dying});
-if(dy.length){checkGO();renderBattle();upInfo()}
-},650);},350);
+setTimeout(function(){let dy=b.us.filter(u=>u._dying);dy.forEach(u=>{u.al=0;delete u._dying});if(dy.length){checkGO();renderBattle();upInfo()}},650);},350);
 }
 
-function renderBattleSides(){}
+function renderBattleSides(){}function renderBattleSides(){}
 
 function checkGO(){
 let p1=b.us.some(u=>u.tm==='p1'&&u.al);
@@ -1044,7 +1041,7 @@ html+='<div class="'+cls+'">'+l.msg+'</div>';
 $('logContent').innerHTML=html||'暂无日志';
 }
 function hideLog(){$('logModal').classList.remove('show');}
-function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志 v1.58</div>- 2026年06月06日，棋盘统一重构：三阶段（选人/布阵/战斗/选位）统一使用9×5 CSS Grid，中间7×5为主地图，左右各1×5为侧栏（已选/待部署角色），侧栏格子与地图格子大小完全相同（40px）；去掉所有棋盘颜色渐变为纯白边框，简化视觉；删除旧flex布局（board/board2/main-grid/side-col/side-cell），所有渲染函数全量重写<br>- 2026年06月05日，选位界面重构：侧栏角色改为正方格42×42（蓝红渐变背景区分阵营）；删除地图下方角色条仅保留两侧角色；修复跨阵营放置bug（选位时只能点击已方角色+棋盘双重校验_deployCur._tm）；main-grid间隙收窄4→2px控制总宽390px<br>- 2026年06月05日，选人棋盘取消公共区域限制：移除中列不可放置规则，35格全可用；所有格子初始黑色背景(#111)；角色被选后原地留空不进位<br>- 2026年06月05日，修复选人界面角色消失：slot定位从style属性子串匹配改为dataset属性(x/y)，解决浏览器style格式化空格导致的querySelector匹配失败<br>- 2026年06月05日，修复三阶段棋盘同色混淆：恢复pick/deploy/battle棋盘渐变背景(蓝-透-红)区分各阶段；之前v1.52统一纯色导致选人界面与战斗界面无法辨别<br>- 2026年06月05日，移动端适配：main-grid整体缩小(棋盘302×220+侧栏32px,格42×42,侧格28×42)使总宽374px适配375px手机；去掉user-scalable=no允许手动缩放<br>- 2026年06月05日，三阶段统一main-grid布局：选人/布阵/战斗全用7×5网格+两侧5格竖置side-cell；CSS去重deploy-wrap；部署高亮：选中角色时地图可部署位金色脉冲闪烁(.ready)<br>- 2026年06月05日，选位界面重构：已选角色放两侧（左蓝右红），地图居中缩小（格子56→42px，地图420→316px），角色名缩为2字；三处布阵页面统一适配（renderDeploy/renderDevDeploy/renderReposition）<br>- 2026年06月05日，选人界面适配手机：角色格子56→72px、待选池最大宽度360→420px、字体放大；整体更贴合手机屏幕<br>- 2026年06月05日，已行动队友仅查看：选中本大回合已行动过的我方角色时面板不显示「使用」按钮和「跳过回合」，仅展示技能描述<br>- 2026年06月05日，充能初始化规则：所有角色初始无充能方式，陈色仅自充(beginRound)，周水仅受充(dmg)<br>- 2026年06月05日，自充根因修复：beginRound充能移入_roundLogged守卫内，确保每大回合仅充能+1（此前每大回合被调用两次导致双倍充能）<br>- 2026年06月05日，自充bug修复：移除bpClick两处全局敌方充能泄露（每次攻击后不再给敌方全队+1充能）；新增点击敌方查看描述功能（红色[敌]标记、技能全灰不可用、仅可查看描述）<br>- 2026年06月05日，充能三分法：自充(beginRound每大回合+1)/攻充(普攻目标后+1)/受充(每受击+1)严格区分；陈色→自充，周水→受充，其余→自充；所有普攻移除u.chg(1)攻充逻辑，beginRound回退排除周水（周水仅靠dmg受充）<br>- 2026年06月04日，auto大招不显示「使用」按钮（周水瞬杀时刻等充能满后自动释放），面板渲染与bpClick双重拦截；自充逻辑修复：beginRound移除周水排除，所有角色大回合开始时统一充能+1<br>- 2026年06月04日，所有技能选项点击即可查看完整描述（不可用时也能看），技能数据新增d字段存储每个技能的详细说明<br>- 2026年06月04日，战斗日志嵌入战斗界面：面板下方显示最近6条，点击展开完整日志弹窗<br>- 2026年06月04日，战斗面板操作改为两步：点击选项查看描述+「使用」按钮→点击按钮执行；被动选项可点击查看描述；选中友方切换时自动重置面板默认状态<br>- 2026年06月04日，修复开发者模式选人界面空白：startDevMode()跳过ban阶段导致pool未初始化，补pool=ROSTER.map(r=>({...r}))<br>- 2026年06月04日，修复规则/角色图鉴弹窗在首页无法显示（弹窗从battle div内移至全局#app下）<br>- 2026年06月04日，UI重做：新增首页(正常对战/开发者模式/规则/角色图鉴四个按钮)；选人界面角色格子改为正方形；战斗阶段技能栏替换为信息面板（角色名+HP+跳过回合+损伤条+被动+普攻+技能+大招，点击选项右侧显示描述，可用操作点击即进入目标选择）<br>- 2026年06月04日，陈色/周水添加被动描述字段（面板中被动行显示）<br>- 2026年06月03日，恐惧损伤实装：Ail.add()自动结算(叠满10→4伤)+所有ail.fear.add()传入目标单位；新增恐惧进度条(单位格子底部细条，<70%黄色，≥70%橙红脉冲，满条红色闪烁)<br>- 2026年06月03日，修复致死伤害不播放受击动画：dmg()致死时改设_dying=1保持al=1→renderBattle渲染濒死单位+震动+浮动伤害→动画结束后al=0+checkGO；新增死亡粒子消散动画<br>- 2026年06月03日，跳过冷却修复：bSkip（跳过回合）补调cdTk，每次跳过也触发全体冷却-1，与普攻/技能一致<br>- 2026年06月03日，冷却修复补充：红方人机跳过时补调cdTk，每跳过一个调用一次致全体冷却-1，恢复每大回合10次冷却流逝的正常节奏<br>- 2026年06月03日，冷却机制修复：cdTk从switchTeam（切换行动方时调用）移至finishAction（每个小回合完成时调用），实现每过1个任意角色小回合冷却-1而非每大回合/切换行动方时-1<br>- 2026年06月03日，showRules重写为三部分格式（全局规则/角色通用规则/角色专属规则）并同步showGuide角色图鉴<br>- 2026年06月03日，更新showRules: 公共区域"禁止进入"→"任何单位不能在上面"、攻击优先级补充嘲讽机制、冲锋描述更新、自充描述明确(每个自身小回合+1/除周水外); 陈色充能加入自充(不再排除)<br>- 2026年06月02日，先手判定改为三级(敏捷→HP上限更低→攻击力更高)；自动大招触发时机从大回合开始改为小回合结束时(按敏捷降序)；储存机制通用化(cdTk冷却归零自动存储/毛毛虫加str:4)<br>- 2026年06月02日，充能方式调整：除陈色和周水外所有角色改为自动充能(每大回合+1)；删除除陈色和周水外所有角色的被动(王土回血/手充减上限/科比牢大bns/蓝主任积怨/大树回血)；冷却改为每小回合(切换行动方时)-1<br>- 2026年06月02日，隐匿三态特效重做：获得隐匿(白雾升腾+文字)/持有隐匿(半透明+白色雾气粒子飘散+"隐匿"小字)/解除隐匿(雾气炸散+"破隐"文字)；删除隐匿特效切换按钮(统一雾隐)<br>- 2026年06月02日，冷场改为额外回合：普攻/大招击杀后finishAction完成→插入冷场额外回合(不占行动/不计算冷却充能)→冷场结束后继续正常回合<br>- 2026年06月02日，周水重做：冷场改为自选目标逐个造成ATK×1伤害+5层恐惧(全图)/大招瞬杀时刻去掉穿透/新增规则按钮+角色图鉴按钮(陈色+周水)<br>- 2026年06月02日，选中周水不破隐修复：beginRound中sth递减跳过周水(后门隐匿由攻击机制管理，不自动过期)<br>- 2026年06月02日，选中隐匿单位不破隐修复：新增.slot.unit-sth.sel规则，选中时仅金色边框标记不覆盖隐匿box-shadow<br>- 2026年06月02日，周水隐匿不显示修复：beginRound中sth递减从renderBattle之前移到之后(解决第一回合渲染时sth已被归零)/开发者模式充能上限修复：startDevBattle中rd.m→rd.mxc<br>- 2026年06月01日，充能上限修复：startBattle正常部署路径d.m→d.mxc/自动大招：chg()充能达到上限时自动触发auto:1大招/开发者模式补周水sth=1<br>- 2026年06月01日，隐匿特效根因修复：outline-color不是CSS可动画属性→改为box-shadow内外发光呼吸动画+加!important/新增测试隐匿特效按钮(内联强制渲染)<br>- 2026年06月01日，充能上限修复：deployCur缺少m字段导致mxc回退默认5→改为透传r.mxc/隐匿特效重做：overlay方案改为slot级filter+outline呼吸动画，更稳定可见<br>- 2026年06月01日，隐匿overlay加半透明背景色+inset发光/冲锋选位仅允许x距离最近目标(高亮+点击双限制)<br>- 2026年06月01日，冲锋范围动态检测(同行有敌→仅同行/同行无敌→同行+相邻行)/隐匿独立overlay层+发光模糊动画/冷场按距离排序且不伤自己/周水充能上限2<br>- 2026年05月31日，周水重做(充能改为受击+1上限2/冲锋UI自选目标/自动大招不消耗行动/隐匿雾隐虚影双特效+按钮切换)<br>- 2026年05月31日，周水重做：恐惧震慑改为冲锋自动锁定目标、瞬杀时刻伤害公式改为(已损失+ATK)*2穿透、新增被动后门(开局隐匿/攻击解除/2回合后恢复)、冷场改为对全场触发普攻<br>- 2026年05月29日，损伤全局触发（叠满10点自动结算：神经=2伤+眩晕/恐惧=4伤/燃烧=2伤+3回合流血）+ 先手平局随机 + 冲锋全局规则（同列/相邻行取最近单位，含友方）<br>- 2026年05月29日，战斗反馈优化：先震动后出伤（暂显旧HP→震动0.35s→HP更新+红色小字"-x"浮动跳出）<br>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害累加取最强+血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}function hideCL(){$('clModal').classList.remove('show');}
+function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志 v1.59</div>- 2026年06月06日，修复战斗阶段无法选中角色（unit absolute定位bug，改为直接嵌入地图格子）；修复选位侧栏角色不消失（加回选位交互逻辑，放置后从侧栏移除、标记picked）<br>- 2026年06月06日，棋盘统一重构：三阶段（选人/布阵/战斗/选位）统一使用9×5 CSS Grid，中间7×5为主地图，左右各1×5为侧栏（已选/待部署角色），侧栏格子与地图格子大小完全相同（40px）；去掉所有棋盘颜色渐变为纯白边框，简化视觉；删除旧flex布局（board/board2/main-grid/side-col/side-cell），所有渲染函数全量重写<br>- 2026年06月05日，选位界面重构：侧栏角色改为正方格42×42（蓝红渐变背景区分阵营）；删除地图下方角色条仅保留两侧角色；修复跨阵营放置bug（选位时只能点击已方角色+棋盘双重校验_deployCur._tm）；main-grid间隙收窄4→2px控制总宽390px<br>- 2026年06月05日，选人棋盘取消公共区域限制：移除中列不可放置规则，35格全可用；所有格子初始黑色背景(#111)；角色被选后原地留空不进位<br>- 2026年06月05日，修复选人界面角色消失：slot定位从style属性子串匹配改为dataset属性(x/y)，解决浏览器style格式化空格导致的querySelector匹配失败<br>- 2026年06月05日，修复三阶段棋盘同色混淆：恢复pick/deploy/battle棋盘渐变背景(蓝-透-红)区分各阶段；之前v1.52统一纯色导致选人界面与战斗界面无法辨别<br>- 2026年06月05日，移动端适配：main-grid整体缩小(棋盘302×220+侧栏32px,格42×42,侧格28×42)使总宽374px适配375px手机；去掉user-scalable=no允许手动缩放<br>- 2026年06月05日，三阶段统一main-grid布局：选人/布阵/战斗全用7×5网格+两侧5格竖置side-cell；CSS去重deploy-wrap；部署高亮：选中角色时地图可部署位金色脉冲闪烁(.ready)<br>- 2026年06月05日，选位界面重构：已选角色放两侧（左蓝右红），地图居中缩小（格子56→42px，地图420→316px），角色名缩为2字；三处布阵页面统一适配（renderDeploy/renderDevDeploy/renderReposition）<br>- 2026年06月05日，选人界面适配手机：角色格子56→72px、待选池最大宽度360→420px、字体放大；整体更贴合手机屏幕<br>- 2026年06月05日，已行动队友仅查看：选中本大回合已行动过的我方角色时面板不显示「使用」按钮和「跳过回合」，仅展示技能描述<br>- 2026年06月05日，充能初始化规则：所有角色初始无充能方式，陈色仅自充(beginRound)，周水仅受充(dmg)<br>- 2026年06月05日，自充根因修复：beginRound充能移入_roundLogged守卫内，确保每大回合仅充能+1（此前每大回合被调用两次导致双倍充能）<br>- 2026年06月05日，自充bug修复：移除bpClick两处全局敌方充能泄露（每次攻击后不再给敌方全队+1充能）；新增点击敌方查看描述功能（红色[敌]标记、技能全灰不可用、仅可查看描述）<br>- 2026年06月05日，充能三分法：自充(beginRound每大回合+1)/攻充(普攻目标后+1)/受充(每受击+1)严格区分；陈色→自充，周水→受充，其余→自充；所有普攻移除u.chg(1)攻充逻辑，beginRound回退排除周水（周水仅靠dmg受充）<br>- 2026年06月04日，auto大招不显示「使用」按钮（周水瞬杀时刻等充能满后自动释放），面板渲染与bpClick双重拦截；自充逻辑修复：beginRound移除周水排除，所有角色大回合开始时统一充能+1<br>- 2026年06月04日，所有技能选项点击即可查看完整描述（不可用时也能看），技能数据新增d字段存储每个技能的详细说明<br>- 2026年06月04日，战斗日志嵌入战斗界面：面板下方显示最近6条，点击展开完整日志弹窗<br>- 2026年06月04日，战斗面板操作改为两步：点击选项查看描述+「使用」按钮→点击按钮执行；被动选项可点击查看描述；选中友方切换时自动重置面板默认状态<br>- 2026年06月04日，修复开发者模式选人界面空白：startDevMode()跳过ban阶段导致pool未初始化，补pool=ROSTER.map(r=>({...r}))<br>- 2026年06月04日，修复规则/角色图鉴弹窗在首页无法显示（弹窗从battle div内移至全局#app下）<br>- 2026年06月04日，UI重做：新增首页(正常对战/开发者模式/规则/角色图鉴四个按钮)；选人界面角色格子改为正方形；战斗阶段技能栏替换为信息面板（角色名+HP+跳过回合+损伤条+被动+普攻+技能+大招，点击选项右侧显示描述，可用操作点击即进入目标选择）<br>- 2026年06月04日，陈色/周水添加被动描述字段（面板中被动行显示）<br>- 2026年06月03日，恐惧损伤实装：Ail.add()自动结算(叠满10→4伤)+所有ail.fear.add()传入目标单位；新增恐惧进度条(单位格子底部细条，<70%黄色，≥70%橙红脉冲，满条红色闪烁)<br>- 2026年06月03日，修复致死伤害不播放受击动画：dmg()致死时改设_dying=1保持al=1→renderBattle渲染濒死单位+震动+浮动伤害→动画结束后al=0+checkGO；新增死亡粒子消散动画<br>- 2026年06月03日，跳过冷却修复：bSkip（跳过回合）补调cdTk，每次跳过也触发全体冷却-1，与普攻/技能一致<br>- 2026年06月03日，冷却修复补充：红方人机跳过时补调cdTk，每跳过一个调用一次致全体冷却-1，恢复每大回合10次冷却流逝的正常节奏<br>- 2026年06月03日，冷却机制修复：cdTk从switchTeam（切换行动方时调用）移至finishAction（每个小回合完成时调用），实现每过1个任意角色小回合冷却-1而非每大回合/切换行动方时-1<br>- 2026年06月03日，showRules重写为三部分格式（全局规则/角色通用规则/角色专属规则）并同步showGuide角色图鉴<br>- 2026年06月03日，更新showRules: 公共区域"禁止进入"→"任何单位不能在上面"、攻击优先级补充嘲讽机制、冲锋描述更新、自充描述明确(每个自身小回合+1/除周水外); 陈色充能加入自充(不再排除)<br>- 2026年06月02日，先手判定改为三级(敏捷→HP上限更低→攻击力更高)；自动大招触发时机从大回合开始改为小回合结束时(按敏捷降序)；储存机制通用化(cdTk冷却归零自动存储/毛毛虫加str:4)<br>- 2026年06月02日，充能方式调整：除陈色和周水外所有角色改为自动充能(每大回合+1)；删除除陈色和周水外所有角色的被动(王土回血/手充减上限/科比牢大bns/蓝主任积怨/大树回血)；冷却改为每小回合(切换行动方时)-1<br>- 2026年06月02日，隐匿三态特效重做：获得隐匿(白雾升腾+文字)/持有隐匿(半透明+白色雾气粒子飘散+"隐匿"小字)/解除隐匿(雾气炸散+"破隐"文字)；删除隐匿特效切换按钮(统一雾隐)<br>- 2026年06月02日，冷场改为额外回合：普攻/大招击杀后finishAction完成→插入冷场额外回合(不占行动/不计算冷却充能)→冷场结束后继续正常回合<br>- 2026年06月02日，周水重做：冷场改为自选目标逐个造成ATK×1伤害+5层恐惧(全图)/大招瞬杀时刻去掉穿透/新增规则按钮+角色图鉴按钮(陈色+周水)<br>- 2026年06月02日，选中周水不破隐修复：beginRound中sth递减跳过周水(后门隐匿由攻击机制管理，不自动过期)<br>- 2026年06月02日，选中隐匿单位不破隐修复：新增.slot.unit-sth.sel规则，选中时仅金色边框标记不覆盖隐匿box-shadow<br>- 2026年06月02日，周水隐匿不显示修复：beginRound中sth递减从renderBattle之前移到之后(解决第一回合渲染时sth已被归零)/开发者模式充能上限修复：startDevBattle中rd.m→rd.mxc<br>- 2026年06月01日，充能上限修复：startBattle正常部署路径d.m→d.mxc/自动大招：chg()充能达到上限时自动触发auto:1大招/开发者模式补周水sth=1<br>- 2026年06月01日，隐匿特效根因修复：outline-color不是CSS可动画属性→改为box-shadow内外发光呼吸动画+加!important/新增测试隐匿特效按钮(内联强制渲染)<br>- 2026年06月01日，充能上限修复：deployCur缺少m字段导致mxc回退默认5→改为透传r.mxc/隐匿特效重做：overlay方案改为slot级filter+outline呼吸动画，更稳定可见<br>- 2026年06月01日，隐匿overlay加半透明背景色+inset发光/冲锋选位仅允许x距离最近目标(高亮+点击双限制)<br>- 2026年06月01日，冲锋范围动态检测(同行有敌→仅同行/同行无敌→同行+相邻行)/隐匿独立overlay层+发光模糊动画/冷场按距离排序且不伤自己/周水充能上限2<br>- 2026年05月31日，周水重做(充能改为受击+1上限2/冲锋UI自选目标/自动大招不消耗行动/隐匿雾隐虚影双特效+按钮切换)<br>- 2026年05月31日，周水重做：恐惧震慑改为冲锋自动锁定目标、瞬杀时刻伤害公式改为(已损失+ATK)*2穿透、新增被动后门(开局隐匿/攻击解除/2回合后恢复)、冷场改为对全场触发普攻<br>- 2026年05月29日，损伤全局触发（叠满10点自动结算：神经=2伤+眩晕/恐惧=4伤/燃烧=2伤+3回合流血）+ 先手平局随机 + 冲锋全局规则（同列/相邻行取最近单位，含友方）<br>- 2026年05月29日，战斗反馈优化：先震动后出伤（暂显旧HP→震动0.35s→HP更新+红色小字"-x"浮动跳出）<br>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害累加取最强+血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}function hideCL(){$('clModal').classList.remove('show');}
 function showRules(){
 var h='<div class="cl-hdr">八宝舟 总体规则</div>';
 h+='<p style="font-size:13px;color:#aaa;margin:2px 0">第一部分 全局规则</p>';
