@@ -21,36 +21,34 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 .btn{padding:8px 14px;border-radius:6px;border:none;background:#336;color:#fff;font-size:12px;cursor:pointer;margin:3px}
 .btn:active{background:#558}
 .btn.dis{opacity:0.4;pointer-events:none}
-/* 9x5 unified grid */
-.game-grid{display:grid;grid-template-columns:repeat(9,40px);grid-template-rows:repeat(5,40px);gap:1px;justify-content:center;margin:4px auto;position:relative}
-.game-grid .cell{width:40px;height:40px;border:1px solid #444;background:#151525;border-radius:2px;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:8px;color:#ccc;position:relative;overflow:hidden;cursor:default}
-.game-grid .cell.side{border-color:#555}
-.game-grid .cell.sel{border-color:#fc0!important;box-shadow:0 0 10px #fc0}
-.game-grid .cell.ready{border-color:#fc0!important;box-shadow:0 0 8px #fc0;animation:pulse 1s infinite}
-.game-grid .cell.tgt{border-color:#f66!important;box-shadow:0 0 8px #f66}
-.game-grid .cell.dead{background:#331;color:#a33}
-.game-grid .cell.pick{cursor:pointer;border-color:#6af}
-.game-grid .cell.picked{background:#1a2e2e;border-color:#3a6}
-.game-grid .cell.current{border-color:#fc0!important;box-shadow:0 0 6px #fc0}
-.game-grid .cell.dim{opacity:0.3}
-.game-grid .cell.unit-sth{opacity:0.5}
+#board,#board2{position:relative;width:302px;height:220px;margin:0 auto;background:linear-gradient(90deg,rgba(30,40,80,0.4) 0%,rgba(30,40,80,0.4) 40%,transparent 40%,transparent 60%,rgba(80,25,25,0.4) 60%,rgba(80,25,25,0.4) 100%),#151525;border-radius:4px;box-shadow:0 3px 16px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.02);border:1px solid #2a2a44}
+.main-grid{display:flex;gap:2px;align-items:flex-start;justify-content:center;margin-top:2px}
+.main-grid #board,.main-grid #board2{width:302px;height:220px}
+.main-grid .slot{width:42px;height:42px;font-size:8px}
+.side-col{width:42px;flex-shrink:0;display:flex;flex-direction:column;gap:2px}
+.side-cell{width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:#1a1a2e;border:1px solid #2a2a44;border-radius:3px;font-size:9px;color:#ccc;text-align:center;flex-direction:column;box-sizing:border-box}
+.side-cell.p1{background:linear-gradient(180deg,#1a2e50,#162540);border-color:#2a4477}
+.side-cell.p2{background:linear-gradient(180deg,#3a1a1a,#2a1515);border-color:#552a2a}
+.side-cell.picked{background:#1a2e2e;border-color:#3a6}
+.side-cell.dead{background:#1a1a1a;border-color:#444;color:#a33;font-size:7px}
+.side-cell.current{border-color:#fc0!important;background:#332200;cursor:pointer}
 
-.cell.abs{position:absolute;width:42px;height:42px;border:1px solid #222;background:#111;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:9px;box-shadow:inset 0 1px 4px rgba(0,0,0,0.5)}
-.cell.mid{background:linear-gradient(180deg,#0c0c1a,#121225);border-color:#1a1a33;border-left-width:2px;border-right-width:2px}
-.cell.p1{background:linear-gradient(180deg,#1a2e50,#162540);border-color:#2a4477;box-shadow:inset 0 0 8px rgba(50,100,200,0.08),inset 0 1px 4px rgba(0,0,0,0.3)}
-.cell.p2{background:linear-gradient(180deg,#3a1a1a,#2a1515);border-color:#552a2a;box-shadow:inset 0 0 8px rgba(200,50,50,0.06),inset 0 1px 4px rgba(0,0,0,0.3)}
-.cell.unit{background:linear-gradient(180deg,#1e1e40,#181835);border-color:#4488ff88;box-shadow:0 2px 8px rgba(0,0,0,0.5)}
-.cell.sel{border-color:#fc0!important;box-shadow:0 0 14px #fc0,0 2px 8px rgba(0,0,0,0.5)}
-.cell.tgt{border-color:#f66!important;box-shadow:0 0 10px #f66,0 2px 6px rgba(0,0,0,0.4)}
-.cell.ready{border-color:#fc0!important;box-shadow:0 0 10px #fc0,0 2px 6px rgba(0,0,0,0.4);animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 6px #fc0}50%{box-shadow:0 0 14px #fa0}}
+.slot{position:absolute;width:42px;height:42px;border:1px solid #222;background:#111;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:9px;box-shadow:inset 0 1px 4px rgba(0,0,0,0.5)}
+.slot.mid{background:linear-gradient(180deg,#0c0c1a,#121225);border-color:#1a1a33;border-left-width:2px;border-right-width:2px}
+.slot.p1{background:linear-gradient(180deg,#1a2e50,#162540);border-color:#2a4477;box-shadow:inset 0 0 8px rgba(50,100,200,0.08),inset 0 1px 4px rgba(0,0,0,0.3)}
+.slot.p2{background:linear-gradient(180deg,#3a1a1a,#2a1515);border-color:#552a2a;box-shadow:inset 0 0 8px rgba(200,50,50,0.06),inset 0 1px 4px rgba(0,0,0,0.3)}
+.slot.unit{background:linear-gradient(180deg,#1e1e40,#181835);border-color:#4488ff88;box-shadow:0 2px 8px rgba(0,0,0,0.5)}
+.slot.sel{border-color:#fc0!important;box-shadow:0 0 14px #fc0,0 2px 8px rgba(0,0,0,0.5)}
+.slot.tgt{border-color:#f66!important;box-shadow:0 0 10px #f66,0 2px 6px rgba(0,0,0,0.4)}
+.slot.ready{border-color:#fc0!important;box-shadow:0 0 10px #fc0,0 2px 6px rgba(0,0,0,0.4);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 6px #fc0,0 2px 6px rgba(0,0,0,0.4)}50%{box-shadow:0 0 14px #fa0,0 2px 6px rgba(0,0,0,0.4)}}
 @keyframes shake{0%,100%{transform:translateX(0)}10%{transform:translateX(var(--sx,-3px))}30%{transform:translateX(calc(var(--sx,-3px)*-1))}50%{transform:translateX(var(--sx,-3px))}70%{transform:translateX(calc(var(--sx,-3px)*-1))}90%{transform:translateX(var(--sx,-3px))}}
-.cell.shake{animation:shake .35s ease}
+.slot.shake{animation:shake .35s ease}
 @keyframes dmgFloat{0%{opacity:1;transform:translate(-50%,0)}60%{opacity:1}100%{opacity:0;transform:translate(-50%,-28px)}}
 .dmg-popup{position:absolute;color:#f44;font-weight:bold;font-size:13px;z-index:10;pointer-events:none;left:50%;top:6px;transform:translateX(-50%);animation:dmgFloat 1s ease-out forwards;text-shadow:0 0 4px rgba(255,0,0,0.5)}
-.cell .n{font-size:8px;font-weight:bold}
-.cell .hp{font-size:7px;color:#4f4}
-.cell .cd{font-size:7px;color:#fc0}
+.slot .n{font-size:8px;font-weight:bold}
+.slot .hp{font-size:7px;color:#4f4}
+.slot .cd{font-size:7px;color:#fc0}
 .skill-panel{display:none}
 #skillBar{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;margin:4px 0;padding:4px}
 #skillBar .sk-item{padding:5px 8px;border-radius:5px;cursor:pointer;background:#223;border:1px solid #335;color:#ccf;font-size:11px}
@@ -86,9 +84,9 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 .cl-content .cl-hdr{color:#fc0;font-size:15px;font-weight:bold;margin-bottom:8px;text-align:center}
 .cl-close{position:absolute;top:10px;right:14px;color:#888;font-size:18px;cursor:pointer;background:none;border:none}
 /* 隐匿三态特效 */
-.cell.unit-sth{opacity:0.5;position:relative}
+.slot.unit-sth{opacity:0.5;position:relative}
 .slot.unit-sth::before{content:'';position:absolute;inset:-5px;border-radius:6px;background:radial-gradient(1px 1px at 15% 25%,rgba(255,255,255,0.7),transparent),radial-gradient(1px 1px at 55% 65%,rgba(255,255,255,0.5),transparent),radial-gradient(1.5px 1.5px at 75% 20%,rgba(255,255,255,0.6),transparent),radial-gradient(1px 1px at 35% 80%,rgba(255,255,255,0.4),transparent),radial-gradient(1px 1px at 85% 50%,rgba(255,255,255,0.55),transparent),radial-gradient(1.5px 1.5px at 65% 35%,rgba(255,255,255,0.6),transparent),radial-gradient(1px 1px at 25% 70%,rgba(255,255,255,0.45),transparent),radial-gradient(1px 1px at 45% 15%,rgba(255,255,255,0.5),transparent);animation:mistDrift 2.5s ease-in-out infinite;pointer-events:none;z-index:2}
-.cell.unit-sth.sel{border-color:#fc0!important}
+.slot.unit-sth.sel{border-color:#fc0!important}
 @keyframes mistDrift{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.03)}}
 /* 获得隐匿：白雾从脚下升腾 */
 .sth-gain-wrap{position:absolute;left:0;bottom:0;width:100%;height:120%;overflow:hidden;pointer-events:none;z-index:25}
@@ -102,7 +100,7 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 @keyframes floatUp{0%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-22px)}}
 .sth-label{position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);font-size:8px;color:#ccc;pointer-events:none;z-index:30}
 /* 死亡粒子消散 */
-.cell.dying{animation:dyingDissolve .6s ease-out forwards;pointer-events:none}
+.slot.dying{animation:dyingDissolve .6s ease-out forwards;pointer-events:none}
 @keyframes dyingDissolve{0%{opacity:1;filter:brightness(1) blur(0)}40%{opacity:.6;filter:brightness(2.5) blur(1px)}100%{opacity:0;filter:brightness(4) blur(4px)}}
 .dying-particle{position:absolute;border-radius:50%;pointer-events:none;z-index:20;animation:particleFly .7s ease-out forwards}
 @keyframes particleFly{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--px),var(--py)) scale(0)}}
@@ -150,7 +148,7 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 </style></head>
 <body>
 <div id="app">
-<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v1.62</div>
+<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v2.00</div>
 
 <div id="home" class="phase active">
 <h2 style="text-align:center;color:#fc0;font-size:22px;margin:30px 0 10px">八宝舟</h2>
@@ -171,17 +169,29 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 <div id="pick" class="phase">
 <h2 id="pickTitle"></h2>
 <div class="info" id="pickInfo"></div>
-<div class="game-grid" id="pickGrid"></div>
+<div class="main-grid">
+<div class="side-col" id="pickSideL"></div>
+<div id="pickBoard"></div>
+<div class="side-col" id="pickSideR"></div>
+</div>
 </div>
 
 <div id="deploy" class="phase">
 <h2 id="deployTitle">布阵</h2>
 <div class="info" id="deployInfo"></div>
-<div class="game-grid" id="deployGrid"></div>
+<div class="main-grid">
+<div class="side-col" id="deploySideL"></div>
+<div id="board"></div>
+<div class="side-col" id="deploySideR"></div>
+</div>
 </div>
 <div id="battle" class="phase">
 <div id="battleInfo" style="text-align:center;font-size:10px;margin:2px 0"></div>
-<div class="game-grid" id="battleGrid"></div>
+<div class="main-grid">
+<div class="side-col" id="batSideL"></div>
+<div id="board2" style="position:relative"></div>
+<div class="side-col" id="batSideR"></div>
+</div>
 <div id="battlePanel" class="battle-panel"></div>
 <div id="bpLog" class="bp-log"></div>
 <div class="row"><button class="btn" onclick="bSkip()">跳过回合</button><button class="btn" id="btnDummyMove" style="display:none;background:#552" onclick="toggleDummyMove()">📦 调整人机</button><button class="btn" id="btnAddDummy" style="display:none;background:#252" onclick="toggleAddDummy()">+人机</button><button class="btn" id="btnCdMinus" style="display:none;background:#a33" onclick="devCdMinus()">⏱ 全体冷却-1</button><button class="btn" id="btnChgPlus" style="display:none;background:#3a3" onclick="devChgPlus()">⚡ 全体充能+1</button><button class="btn" style="background:#448" onclick="showRules()">📖 规则</button><button class="btn" style="background:#484" onclick="showGuide()">📚 角色图鉴</button></div>
@@ -200,8 +210,7 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 
 <script>
 // ===== 24角色数据 =====
-const ROSTER=[
-{n:'陈色',h:16,a:0,agi:7,cls:'召唤师',pa:'虫迷：场上每存在1只虫子，虫子生命值+1',rg:[[0,0]],sk:[
+const ROSTER=[{n:'陈色',h:16,a:0,agi:7,cls:'召唤师',pa:'虫迷：场上每存在1只虫子，虫子生命值+1',rg:[[0,0]],sk:[
 {tp:'sk',n:'毛毛虫',cd:8,str:4,d:'在己方区域召唤生命值为1的毛毛虫，开局场上无毛毛虫。冷8/存4。',ex:(u,ctx)=>{
 let n=u.mc||0;if(n<=0)return ctx.b.lg.push('无可召唤的毛毛虫');
 // 进入选位模式
@@ -223,109 +232,31 @@ ctx.b.lg.push('虫群发动!下个自身回合开始时触发二次伤害');
 ]},
 {n:'周水',h:3,a:2,agi:8,cls:'处决者',pa:'后门：开局获得隐匿，攻击后解除隐匿，1回合后恢复隐匿，不可叠加；冷场：击杀敌方单位后，对全场所有单位触发一次普攻效果',mxc:2,rg:[[0,0],[1,0]],sk:[
 {tp:'ba',n:'恐惧震慑',charge:1,d:'向前冲锋，对单个单位造成1倍伤害，附加5点恐惧值，冷0/存0',ex:(u,t,ctx)=>{let d=t.dmg(u.atk);ctx.b.lg.push('恐惧震慑 '+t.n+' '+d+'伤 +5恐惧');t.ail.fear.add(5,t);t.chg(1);if(u.sth>0){u.sth=0;u.backdoorCd=2;ctx.b.lg.push('后门:隐匿解除,2回合后恢复')}if(!t.al||t._dying)triggerColdField(u,ctx.b)}},
-{tp:'ult',n:'瞬杀时刻',ch:2,auto:1,d:'选择当前血量最低的敌方单位，造成 (自身基础攻击力+已损失生命值)*1 的伤害，附加8点恐惧值，受充2/持0',ex:(u,ctx)=>{let es=ctx.b.us.filter(v=>v.tm!==u.tm&&v.al);if(!es.length)return;es.sort((a,b)=>a.hp-b.hp);let t=es[0];let dmgVal=Math.floor(((u.mH-u.hp)+u.atk)*2);t.dmg(dmgVal);ctx.b.lg.push('瞬杀 '+t.n+' '+dmgVal+'伤 +8恐惧');t.ail.fear.add(8,t);u.ch=0;if(u.sth>0){u.sth=0;u.backdoorCd=2;ctx.b.lg.push('后门:隐匿解除,2回合后恢复')}if(!t.al||t._dying)triggerColdField(u,ctx.b)}}
+{tp:'ult',n:'瞬杀时刻',ch:2,auto:1,d:'选择当前血量最低的敌方单位，造成 (自身基础攻击力+已损失生命值)*2 的伤害，附加8点恐惧值，受充2/持0',ex:(u,ctx)=>{let es=ctx.b.us.filter(v=>v.tm!==u.tm&&v.al);if(!es.length)return;es.sort((a,b)=>a.hp-b.hp);let t=es[0];let dmgVal=Math.floor(((u.mH-u.hp)+u.atk)*2);t.dmg(dmgVal);ctx.b.lg.push('瞬杀 '+t.n+' '+dmgVal+'伤 +8恐惧');t.ail.fear.add(8,t);u.ch=0;if(u.sth>0){u.sth=0;u.backdoorCd=2;ctx.b.lg.push('后门:隐匿解除,2回合后恢复')}if(!t.al||t._dying)triggerColdField(u,ctx.b)}}
 ]},
-{n:'优南',h:14,a:2,cls:'斗士',rg:[[0,0],[1,0]],sk:[
-{tp:'ba',n:'冲拳',d:'冲锋最近敌方，目标有损伤+1伤，积气2时×3倍',ex:(u,t,ctx)=>{let ct=getChargeTarget(u,ctx.b.us);if(!ct)return ctx.b.lg.push('无冲锋目标');t=ct;let has=t.ail.neuro.s>0||t.ail.fear.s>0||t.ail.burn.s>0;let mul=u.qi>=2?3:1;let d=t.dmg(u.atk*mul+(has?1:0));ctx.b.lg.push('冲拳'+(has?'重拳':'')+(mul>1?'×3':'')+' '+d+'伤');if(u.qi>=2){t.ail.fear.add(2,t);u.qi=0}t.chg(1)}},
-{tp:'sk',n:'怒发冲冠',ch:1,d:'消耗1充能积气1层',ex:(u,ctx)=>{u.qi++;u.ch=0;ctx.b.lg.push('积气('+u.qi+'/2)')}},
-{tp:'sk',n:'格挡',cd:18,d:'获得5护盾',ex:(u,ctx)=>{u.sh+=5;u.sC('格挡',18);ctx.b.lg.push('+5盾')}}
-]},
-{n:'王土',h:18,a:0,agi:1,cls:'守护者',rg:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]],sk:[
-{tp:'sk',n:'化合反应',cd:13,st:3,ex:(u,ctx)=>{ctx.b.us.filter(v=>v.tm===u.tm&&v.al&&Math.abs(v.x-u.x)<=1&&Math.abs(v.y-u.y)<=1&&v.hp<v.mH/2).forEach(v=>{let a=Math.ceil(v.mH/2);v.heal(a);ctx.b.lg.push(v.n+' +'+a)})}},
-{tp:'ult',n:'森罗万象',ch:5,d:'全体友方+2HP上限并回满',ex:(u,ctx)=>{ctx.b.us.filter(v=>v.tm===u.tm).forEach(v=>{v.mH+=2;v.heal(2)});u.ultA=1;u.ch=0;ctx.b.lg.push('森罗万象:全体+2HP上限')}}
-]},
-{n:'达不溜',h:10,a:2,agi:8,cls:'情报官',rg:[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]],sk:[
-{tp:'ba',n:'绯斩',d:'穿透伤害(无视护盾)，收集情报(上限10)',ex:(u,t,ctx)=>{let d=t.dmg(u.atk,1);u.intel+=Math.floor(u.atk/2);u.intel=Math.min(u.intel,10);ctx.b.lg.push('绯斩穿透 情报'+u.intel);t.chg(1)}},
-{tp:'ult',n:'破晓',ch:2,d:'敌方被动失效2回合，清空情报',ex:(u,ctx)=>{u.intel=0;u.ch=0;ctx.b.lg.push('破晓:敌方被动失效2回合')}}
-]},
-{n:'蓝主任',h:8,a:0,agi:3,cls:'战术家',rg:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1]],sk:[
-{tp:'ba',n:'绝对权威',ex:(u,t,ctx)=>{if(u.gru<=0)return ctx.b.lg.push('怨气不足');let p=ctx.b.fE(Math.max(0,t.x-1),Math.min(6,t.x+1),Math.max(1,t.y-1),Math.min(5,t.y+1));if(p){t.x=p.x;t.y=p.y}u.gru--;t.chg(1);ctx.b.lg.push('拖拽'+t.n)}},
-{tp:'ba',n:'左膀右臂',ex:(u,t,ctx)=>{if(u.gru<=0||t.tm!==u.tm)return ctx.b.lg.push('怨气不足或非队友');let nb=ctx.b.us.filter(v=>v.tm===u.tm&&v.al&&Math.abs(v.x-u.x)<=1&&Math.abs(v.y-u.y)<=1&&v!==t);if(!nb.length)return;let s=nb[0];let sx=s.x,sy=s.y;s.x=t.x;s.y=t.y;t.x=sx;t.y=sy;u.gru--;ctx.b.lg.push('交换'+t.n+'↔'+s.n)}},
-{tp:'ult',n:'信XX得永胜',ch:1,ex:(u,ctx)=>{if(u.gru<=0)return ctx.b.lg.push('怨气不足');u.gru--;ctx.b.extra=ctx.b.us.find(v=>v.tm===u.tm&&v.al&&v!==u);u.ch=0;ctx.b.lg.push('额外行动:下次触发')}}
-]},
-{n:'剑柄',h:5,a:2,agi:6,cls:'处决者',rg:[[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]],sk:[
-{tp:'sk',n:'剑雨滂沱',cd:2,st:2,ex:(u,ctx)=>{let ox=Math.floor(Math.random()*5),oy=Math.floor(Math.random()*3);let tg=ctx.b.us.filter(v=>v.tm!==u.tm&&v.al&&v.x>=ox&&v.x<ox+3&&v.y>=oy&&v.y<oy+3);tg.forEach(v=>v.dmg(u.atk*2));ctx.b.lg.push('剑雨 '+tg.length+'人×2伤');if(tg.some(v=>!v.al)){u.sC('剑雨滂沱',0);ctx.b.lg.push('击杀→可再释放')}}},
-{tp:'ult',n:'照耀的荣光',ch:2,auto:1,ex:(u,ctx)=>{u.atk+=1;u.ch=0;ctx.b.lg.push('攻击力永久+1')}}
-]},
-{n:'手充',h:12,a:2,agi:1,cls:'神射手',rg:[[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]],sk:[
-{tp:'ba',n:'开冲',d:'连续攻击同一目标伤害递增',ex:(u,t,ctx)=>{let bns=u.lt===t?(u.cs||0):0;u.cs=(u.lt===t)?(u.cs||0)+1:1;u.lt=t;let d=t.dmg(u.atk+bns);ctx.b.lg.push('开冲(连+'+bns+') '+d+'伤');t.chg(1)}},
-{tp:'ult',n:'到处都是',ch:1,d:'普攻溅射周围敌人4回合',ex:(u,ctx)=>{u.ultA=4;u.ch=0;ctx.b.lg.push('大招:溅射4回合')}}
-]},
-{n:'P铅',h:14,a:1,agi:5,cls:'投手',rg:[[0,0],[3,0],[3,-1],[3,1],[4,0],[4,-1],[4,1]],sk:[
-{tp:'ba',n:'实心球',d:'正面(同行远侧)×2伤害，否则×1',ex:(u,t,ctx)=>{let m=t.y===u.y&&((u.tm==='p1'&&t.x>u.x)||(u.tm==='p2'&&t.x<u.x))?2:1;let d=t.dmg(u.atk*m);ctx.b.lg.push('实心球'+(m>1?'正面×2':'')+' '+d+'伤');t.chg(1)}},
-{tp:'sk',n:'控场能力',cd:8,d:'束缚3-4格距离敌人2回合',ex:(u,ctx)=>{let tg=ctx.b.us.filter(v=>v.tm!==u.tm&&v.al&&Math.abs(v.x-u.x)>=3&&Math.abs(v.x-u.x)<=4&&Math.abs(v.y-u.y)<=1);tg.forEach(v=>v.bd=2);ctx.b.lg.push('束缚'+tg.length+'人2回合')}},
-{tp:'sk',n:'手感火热',ch:3,d:'消耗3充能，对最近3名敌人造成ATK伤害',ex:(u,ctx)=>{let es=ctx.b.us.filter(v=>v.tm!==u.tm&&v.al).slice(0,3);es.forEach(e=>e.dmg(u.atk));u.ch=0;ctx.b.lg.push('三连弹!')}}
-]},
-{n:'小二',h:8,a:0,agi:4,cls:'吟游者',rg:[[-2,-2],[-2,-1],[-2,0],[-2,1],[-2,2],[-1,-2],[-1,-1],[-1,0],[-1,1],[-1,2],[0,-2],[0,-1],[0,1],[0,2],[1,-2],[1,-1],[1,0],[1,1],[1,2],[2,-2],[2,-1],[2,0],[2,1],[2,2]],sk:[
-{tp:'ult',n:'潮汐',ch:3,auto:1,ex:(u,ctx)=>{ctx.b.us.filter(v=>v.al&&Math.abs(v.x-u.x)<=2&&Math.abs(v.y-u.y)<=2).forEach(v=>{v.imd=(v.imd||0)+1});u.ch=0;ctx.b.lg.push('潮汐:范围免伤+1')}}
-]},
-{n:'肖牢大',h:10,a:2,agi:7,cls:'扩散术师',rg:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1]],sk:[
-{tp:'ba',n:'落叶飘零',d:'目标周围1格范围伤害',ex:(u,t,ctx)=>{ctx.b.us.filter(v=>v.tm!==u.tm&&v.al&&Math.abs(v.x-t.x)<=1&&Math.abs(v.y-t.y)<=1).forEach(v=>v.dmg(u.atk));ctx.b.lg.push('落叶飘零');t.chg(1)}},
-{tp:'sk',n:'逍遥游',ch:4,d:'无敌+回复4HP，使用第2次强制阵亡',ex:(u,ctx)=>{u.xiaoy++;u.inv=1;u.heal(4);ctx.b.lg.push('逍遥游:无敌+4HP');if(u.xiaoy>=2){u.al=0;ctx.b.lg.push('强制阵亡!')}u.ch=0}}
-]},
-{n:'主播',h:12,a:1,agi:2,cls:'医师',rg:[[0,0],[1,0],[2,0],[2,-1],[2,1],[2,-2],[2,2]],sk:[
-{tp:'ba',n:'点赞',d:'对友方治疗ATK×2，对敌方ATK伤害',ex:(u,t,ctx)=>{if(t.tm===u.tm){t.heal(u.atk*2);ctx.b.lg.push('治疗'+t.n+' +'+u.atk*2)}else{let d=t.dmg(u.atk);ctx.b.lg.push('攻击 '+d+'伤')}t.chg(1)}},
-{tp:'sk',n:'收藏',cd:30,st:2,d:'记录当前状态(简化)',ex:(u,ctx)=>{ctx.b.lg.push('收藏:记录状态(简化)')}},
-{tp:'sk',n:'投币',cd:5,d:'眩晕目标1回合',ex:(u,ctx)=>{let t=ctx.b.sel||ctx.b.us.find(v=>v.tm!==u.tm&&v.al);if(t){t.st=1;ctx.b.lg.push(t.n+' 被眩晕');u.sC('投币',5)}}}
-]},
-{n:'丁衍征一',h:10,a:0,agi:8,cls:'召唤师',rg:[],sk:[
-{tp:'ba',n:'知识风暴',d:'切换形态(智识↔巡猎)',ex:(u,t,ctx)=>{u.form=u.form?0:1;ctx.b.lg.push('→'+(u.form?'巡猎':'智识'))}},
-{tp:'ba',n:'雪豹智识',d:'智识形态，召唤雪豹(4血)',ex:(u,t,ctx)=>{if(u.form!==0)return ctx.b.lg.push('非智识');let p=ctx.b.fE(4,6,1,5);if(!p)return;ctx.b.us.push(mu('雪豹',4,0,0,u.tm,p.x,p.y,0,[],1,u,'xb'))}},
-{tp:'ba',n:'雪豹巡猎',d:'巡猎形态，随机友方骑乘+4盾并清除雪豹',ex:(u,t,ctx)=>{if(u.form!==1)return ctx.b.lg.push('非巡猎');let r=ctx.b.us.filter(v=>v.tm===u.tm&&v.al&&!v.isS);if(!r.length)return;r[0].sh+=4;ctx.b.lg.push(r[0].n+' 骑乘+4盾');ctx.b.us.filter(v=>v.isS&&v.mst===u).forEach(v=>v.al=0)}},
-{tp:'sk',n:'扬雾智识',cd:17,st:2,d:'智识形态，全体友方隐匿2回合',ex:(u,ctx)=>{if(u.form!==0)return;ctx.b.us.filter(v=>v.tm===u.tm).forEach(v=>v.sth=2);ctx.b.lg.push('全体隐匿2回合')}},
-{tp:'sk',n:'扬雾巡猎',cd:17,st:2,d:'巡猎形态，布置铌钴钉(简化)',ex:(u,ctx)=>{if(u.form!==1)return;ctx.b.lg.push('布置铌钴钉(简化)')}}
-]},
-{n:'澄心',h:12,a:2,agi:3,cls:'医师',rg:[[-1,0],[0,-1],[0,0],[0,1],[1,-1],[1,0]],sk:[
-{tp:'ba',n:'分解反应',d:'自身+目标治疗ATK(友方时)',ex:(u,t,ctx)=>{u.heal(u.atk);if(t.tm===u.tm){t.heal(u.atk);ctx.b.lg.push('治疗自身+'+t.n+' +'+u.atk)}}},
-{tp:'sk',n:'硝酸',ch:3,st:2,d:'自身流血+3，攻击力+1',ex:(u,ctx)=>{u.bl+=3;u.atk+=1;u.ch=0;ctx.b.lg.push('硝酸:流血+3 攻击力+1')}},
-{tp:'sk',n:'复分解反应',cd:18,st:2,d:'周围1格友方治疗ATK',ex:(u,ctx)=>{ctx.b.us.filter(v=>v.tm===u.tm&&v.al&&Math.abs(v.x-u.x)<=1&&Math.abs(v.y-u.y)<=1).forEach(v=>{v.heal(u.atk);ctx.b.lg.push(v.n+' +'+u.atk)});u.sC('复分解反应',18)}}
-]},
-{n:'第五陈色',h:12,a:2,agi:7,cls:'冲锋手',rg:[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]],sk:[
-{tp:'ba',n:'奋力一击',d:'冲锋最近敌方，ATK伤害+5恐惧，自晕1回合',ex:(u,t,ctx)=>{let ct=getChargeTarget(u,ctx.b.us);if(!ct)return ctx.b.lg.push('无冲锋目标');t=ct;let d=t.dmg(u.atk);t.ail.fear.add(5,t);u.st=1;ctx.b.lg.push('冲锋 '+d+'伤 +5恐惧 自晕')}},
-{tp:'sk',n:'千鸟锐枪',cd:22,d:'蓄力，下回合冲锋范围×2',ex:(u,ctx)=>{u.chging=1;u.chgSk='千鸟锐枪';u.sC('千鸟锐枪',22);ctx.b.lg.push('蓄力!下回合冲锋×2范围')}}
-]},
-{n:'加州老鼠',h:14,a:0,agi:9,cls:'强攻手',rg:[[0,0],[1,0],[2,0],[3,0],[4,0]],sk:[
-{tp:'ba',n:'怒斥',d:'根据怒气值增加伤害',ex:(u,t,ctx)=>{let bns=Math.floor(u.rage/4);let d=t.dmg((u.atk||0)+bns);ctx.b.lg.push('怒斥 +'+bns+' '+d+'伤');t.chg(1)}},
-{tp:'sk',n:'降压药',cd:1,d:'根据怒气值回复HP，清空怒气',ex:(u,ctx)=>{let h=Math.floor(u.rage/4);u.heal(h);u.rage=0;ctx.b.lg.push('降压药 +'+h+'HP')}},
-{tp:'sk',n:'烂香蕉',cd:1,d:'自残5HP穿透，怒气回满',ex:(u,ctx)=>{u.dmg(5,1);u.rage=12;ctx.b.lg.push('烂香蕉 -5HP 怒气满')}},
-{tp:'sk',n:'鼠群',ch:4,d:'消耗4充能，召唤最多6只老鼠',ex:(u,ctx)=>{let cnt=0;for(let dx=-1;dx<=1;dx++)for(let dy=-1;dy<=1;dy++){let nx=u.x+dx,ny=u.y+dy;if(nx>=0&&nx<=6&&ny>=1&&ny<=5&&!ctx.b.us.find(v=>v.al&&v.x===nx&&v.y===ny)&&cnt<6){ctx.b.us.push(mu('老鼠',1,1,0,u.tm,nx,ny,0,[],1,u));cnt++}}u.ch=0;ctx.b.lg.push('召唤'+cnt+'只老鼠')}}
-]},
-{n:'路易十六',h:16,a:2,agi:4,cls:'战术家',rg:[[0,0],[2,-1],[2,0],[2,1],[3,-1],[3,0],[3,1],[4,-1],[4,0],[4,1]],sk:[
-{tp:'ba',n:'逸散',d:'对最近2名敌方造成半伤',ex:(u,t,ctx)=>{let es=ctx.b.us.filter(v=>v.tm!==u.tm&&v.al).slice(0,2);es.forEach(v=>{v.dmg(Math.floor(u.atk/2));ctx.b.lg.push(v.n+' 逸散')});t.chg(1)}},
-{tp:'sk',n:'电解',cd:10,d:'分配电荷(交替+-)',ex:(u,ctx)=>{ctx.b.us.filter(v=>v.al&&Math.abs(v.x-u.x)<=4).forEach((v,i)=>{v.elec=i%2?'-':'+'});ctx.b.lg.push('电解:分配电荷')}},
-{tp:'sk',n:'万象天引',cd:15,st:2,d:'异性电荷碰撞造成伤害',ex:(u,ctx)=>{let ps=ctx.b.us.filter(v=>v.elec==='+');let ns=ctx.b.us.filter(v=>v.elec==='-');ps.forEach(p=>{if(ns.length){let t=ns[0];ctx.b.lg.push(p.n+'→拖拽');p.dmg(u.atk)}});ctx.b.us.forEach(v=>v.elec='');ctx.b.lg.push('万象天引!')}},
-{tp:'sk',n:'量子力学',ch:3,d:'翻转全场电荷并造成ATK伤害',ex:(u,ctx)=>{ctx.b.us.filter(v=>v.al&&Math.abs(v.x-u.x)<=4).forEach(v=>{v.elec=v.elec?(v.elec==='+'?'-':'+'):'+';v.dmg(u.atk)});u.ch=0;ctx.b.lg.push('量子力学!')}}
-]},
-{n:'QC',h:14,a:1,agi:6,cls:'医师',rg:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1]],sk:[
-{tp:'ba',n:'葡萄糖',d:'友方治疗/敌方伤害',ex:(u,t,ctx)=>{if(t.tm===u.tm){t.heal(u.atk);ctx.b.lg.push('治疗'+t.n+' +'+u.atk)}else{let d=t.dmg(u.atk);ctx.b.lg.push('攻击 '+d+'伤')}}},
-{tp:'sk',n:'提纯',cd:8,st:3,d:'周围1格清除负面状态(st/bd/bl)',ex:(u,ctx)=>{ctx.b.us.filter(v=>v.al&&Math.abs(v.x-u.x)<=1&&Math.abs(v.y-u.y)<=1).forEach(v=>{v.st=0;v.bd=0;v.bl=0});ctx.b.lg.push('提纯:清除负面')}},
-{tp:'ult',n:'长夜临光',ch:4,d:'攻击力+1，全图射程',ex:(u,ctx)=>{u.atk+=1;u.ultA=1;u.ch=0;ctx.b.lg.push('长夜临光:攻击+1,全图射程')}}
-]},
-{n:'松龄',h:8,a:0,agi:1,cls:'召唤师',rg:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1]],sk:[
-{tp:'sk',n:'植树',cd:18,st:2,d:'召唤大树(99血)，束缚周围敌方',ex:(u,ctx)=>{let p=ctx.b.fE(0,6,1,5);if(!p&&!ctx.b.us.find(v=>v.isS&&v.isTree&&v.x===3&&v.y===3))p={x:3,y:3};if(!p)return;let tr=mu('大树',99,0,0,u.tm,p.x,p.y,0,[],1,u,1);tr.isTree=1;ctx.b.us.push(tr);ctx.b.us.filter(v=>v.tm!==u.tm&&v.al&&Math.abs(v.x-p.x)<=1&&Math.abs(v.y-p.y)<=1).forEach(v=>v.bd=2);ctx.b.lg.push('植树('+p.x+','+p.y+')束缚周围');u.sC('植树',18)}}
-]},
-{n:'门师傅',h:12,a:4,agi:10,cls:'处决者',rg:[[-2,-1],[-2,0],[-2,1],[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1],[2,-1],[2,0],[2,1]],sk:[
-{tp:'ba',n:'苦无',d:'ATK×3伤害',ex:(u,t,ctx)=>{let d=t.dmg(u.atk*3);ctx.b.lg.push('苦无×3='+d+'伤');t.chg(1)}},
-{tp:'sk',n:'飞雷神',cd:13,d:'周围2格标记伤害',ex:(u,ctx)=>{ctx.b.us.filter(v=>v.tm!==u.tm&&v.al&&Math.abs(v.x-u.x)<=2).forEach(v=>{v.dmg(u.atk);ctx.b.lg.push(v.n+' 飞雷神标记')});u.sC('飞雷神',2)}},
-{tp:'ult',n:'超大玉',ch:3,auto:1,d:'自动，前方纵向范围伤害',ex:(u,ctx)=>{ctx.b.us.filter(v=>v.tm!==u.tm&&v.al&&v.x===u.x+1&&Math.abs(v.y-u.y)<=2).forEach(v=>v.dmg(u.atk));u.ch=0;ctx.b.lg.push('超大玉!')}}
-]},
-{n:'风笛',h:5,a:1,agi:6,cls:'冲锋手',rg:[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]],sk:[
-{tp:'ba',n:'扶摇而上',d:'冲锋，前2次×6，之后×1',ex:(u,t,ctx)=>{let ct=getChargeTarget(u,ctx.b.us);if(!ct)return ctx.b.lg.push('无冲锋目标');t=ct;let mul=u.fd<2?6:1;let d=t.dmg(u.atk*mul);ctx.b.lg.push('扶摇×'+mul+'='+d+'伤');u.fd++;t.chg(1)}}
-]},
-{n:'纯烬艾雅法拉',h:10,a:1,agi:4,cls:'医师',rg:[[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1],[2,-1],[2,0],[2,1],[2,-2],[2,2]],sk:[
-{tp:'ba',n:'飘絮',d:'友方治疗+清损伤/敌方伤害',ex:(u,t,ctx)=>{if(t.tm===u.tm){t.heal(1);t.ail.neuro.s=Math.max(0,t.ail.neuro.s-2);t.ail.fear.s=Math.max(0,t.ail.fear.s-2);t.ail.burn.s=Math.max(0,t.ail.burn.s-2);ctx.b.lg.push('飘絮:治疗+清损伤')}else{let d=t.dmg(u.atk);ctx.b.lg.push('飘絮攻击 '+d+'伤')}}},
-{tp:'sk',n:'弄清影',cd:20,st:2,d:'目标清除全部负面+损伤',ex:(u,ctx)=>{let t=ctx.b.sel||ctx.b.us.find(v=>v.tm===u.tm&&v.al);if(t){t.st=0;t.bd=0;t.bl=0;t.ail.neuro.s=0;t.ail.fear.s=0;t.ail.burn.s=0;ctx.b.lg.push(t.n+' 弄清影:全清')}}}
-]},
-{n:'宇智波佐助',h:8,a:1,agi:8,cls:'冲锋手',rg:[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]],sk:[
-{tp:'sk',n:'千鸟刀',cd:1,d:'冲锋伤害',ex:(u,t,ctx)=>{let ct=getChargeTarget(u,ctx.b.us);if(!ct)return ctx.b.lg.push('无冲锋目标');t=ct;let d=t.dmg(u.atk);ctx.b.lg.push('千鸟刀 '+d+'伤')}},
-{tp:'sk',n:'天照',cd:1,d:'蓄力冲锋+眩晕目标2回合，每局1次',ex:(u,t,ctx)=>{if(u.tkS)return ctx.b.lg.push('天照已用');let ct=getChargeTarget(u,ctx.b.us);if(!ct)return ctx.b.lg.push('无冲锋目标');t=ct;u.chging=1;u.chgSk='天照';t.st=2;u.tkS=1;ctx.b.lg.push('天照蓄力:眩晕'+t.n+'2回合')}},
-{tp:'sk',n:'因陀罗之矢',cd:1,d:'全图范围伤害，终点周围二次爆炸，每局1次',ex:(u,t,ctx)=>{if(u.idS)return ctx.b.lg.push('已用');let all=ctx.b.us.filter(v=>v.al&&Math.abs(v.x-u.x)<=3&&Math.abs(v.y-u.y)<=1);all.forEach(v=>v.dmg(2,1));let last=all[all.length-1];if(last){ctx.b.us.filter(v=>v.al&&Math.abs(v.x-last.x)<=1&&Math.abs(v.y-last.y)<=1).forEach(v=>v.dmg(3,1))}u.idS=1;ctx.b.lg.push('因陀罗之矢!')}}
-]},
-{n:'科比牢大',h:16,a:0,agi:1,cls:'解放者',rg:[[0,0],[2,-1],[2,0],[2,1],[3,-1],[3,0],[3,1],[4,-1],[4,0],[4,1]],sk:[
-{tp:'ba',n:'肘击',d:'ATK+bns伤害，清空bns',ex:(u,t,ctx)=>{let d=t.dmg(u.atk+u.bns);ctx.b.lg.push('肘击(+'+u.bns+') '+d+'伤');t.chg(1);u.bns=0}},
-{tp:'ult',n:'What can I say',ch:6,d:'2-4格敌方每人(ATK+bns)×2伤害',ex:(u,ctx)=>{let ts=ctx.b.us.filter(v=>v.tm!==u.tm&&v.al&&Math.abs(v.x-u.x)>=2&&Math.abs(v.x-u.x)<=4&&Math.abs(v.y-u.y)<=1);ts.forEach(t=>t.dmg((u.atk+u.bns)*2));u.ch=0;u.bns=0;ctx.b.lg.push('What can I say!')}}
-]}
-];
+{n:'优南',h:14,a:2,cls:'斗士',rg:[[0,0],[1,0]]},
+{n:'王土',h:18,a:0,agi:1,cls:'守护者',rg:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]]},
+{n:'达不溜',h:10,a:2,agi:8,cls:'情报官',rg:[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]]},
+{n:'蓝主任',h:8,a:0,agi:3,cls:'战术家',rg:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1]]},
+{n:'剑柄',h:5,a:2,agi:6,cls:'处决者',rg:[[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]]},
+{n:'手充',h:12,a:2,agi:1,cls:'神射手',rg:[[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]]},
+{n:'P铅',h:14,a:1,agi:5,cls:'投手',rg:[[0,0],[3,0],[3,-1],[3,1],[4,0],[4,-1],[4,1]]},
+{n:'小二',h:8,a:0,agi:4,cls:'吟游者',rg:[[-2,-2],[-2,-1],[-2,0],[-2,1],[-2,2],[-1,-2],[-1,-1],[-1,0],[-1,1],[-1,2],[0,-2],[0,-1],[0,1],[0,2],[1,-2],[1,-1],[1,0],[1,1],[1,2],[2,-2],[2,-1],[2,0],[2,1],[2,2]]},
+{n:'肖牢大',h:10,a:2,agi:7,cls:'扩散术师',rg:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1]]},
+{n:'主播',h:12,a:1,agi:2,cls:'医师',rg:[[0,0],[1,0],[2,0],[2,-1],[2,1],[2,-2],[2,2]]},
+{n:'丁衍征一',h:10,a:0,agi:8,cls:'召唤师',rg:[]},
+{n:'澄心',h:12,a:2,agi:3,cls:'医师',rg:[[-1,0],[0,-1],[0,0],[0,1],[1,-1],[1,0]]},
+{n:'第五陈色',h:12,a:2,agi:7,cls:'冲锋手',rg:[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]]},
+{n:'加州老鼠',h:14,a:0,agi:9,cls:'强攻手',rg:[[0,0],[1,0],[2,0],[3,0],[4,0]]},
+{n:'路易十六',h:16,a:2,agi:4,cls:'战术家',rg:[[0,0],[2,-1],[2,0],[2,1],[3,-1],[3,0],[3,1],[4,-1],[4,0],[4,1]]},
+{n:'QC',h:14,a:1,agi:6,cls:'医师',rg:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1]]},
+{n:'松龄',h:8,a:0,agi:1,cls:'召唤师',rg:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1]]},
+{n:'门师傅',h:12,a:4,agi:10,cls:'处决者',rg:[[-2,-1],[-2,0],[-2,1],[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1],[2,-1],[2,0],[2,1]]},
+{n:'风笛',h:5,a:1,agi:6,cls:'冲锋手',rg:[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]]},
+{n:'纯烬艾雅法拉',h:10,a:1,agi:4,cls:'医师',rg:[[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1],[2,-1],[2,0],[2,1],[2,-2],[2,2]]},
+{n:'宇智波佐助',h:8,a:1,agi:8,cls:'冲锋手',rg:[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]]},
+{n:'科比牢大',h:16,a:0,agi:1,cls:'解放者',rg:[[0,0],[2,-1],[2,0],[2,1],[3,-1],[3,0],[3,1],[4,-1],[4,0],[4,1]]}
+]];
 
 // ===== 损伤/单位 =====
 class Ail{constructor(t){this.t=t;this.s=0}add(n,u){this.s+=n;if(this.s>=10){this.s=0;if(u&&u.al&&!u._dying){let d=u.dmg(4);b.lg.push(u.n+' 恐惧结算 4伤')}return 1}return 0}}
@@ -415,30 +346,34 @@ setPhase('pick');renderDevPick();
 function renderDevPick(){
 $('pickTitle').textContent='🔵 蓝方 选择1个角色';
 $('pickInfo').textContent='点击角色选取';
-let g=$('pickGrid');g.innerHTML='';
-for(let y=1;y<=5;y++)for(let x=0;x<9;x++){
-let c=document.createElement('div');c.className='cell';
-c.dataset.gx=x;c.dataset.gy=y;c.style.gridColumn=x+1;c.style.gridRow=y;
-if(x===0||x===8)c.classList.add('side');
-if(x>=1&&x<=7){
-let mx=x-1;let idx=(y-1)*7+mx;
-if(idx<pool.length){
+let d=$('pickBoard');
+d.style.cssText='position:relative;width:302px;height:220px;margin:0 auto;background:#151525;border-radius:4px;border:1px solid #2a2a44';
+d.innerHTML='';
+for(let x=0;x<7;x++)for(let y=1;y<6;y++){
+let g=document.createElement('div');
+g.className='slot';
+g.style.cssText='left:'+(x*42+4)+'px;top:'+((y-1)*42+4)+'px;width:42px;height:42px;font-size:8px';
+g.dataset.x=x;g.dataset.y=y;
+d.appendChild(g);
+}
+for(let y=1;y<6;y++){
+for(let x=0;x<7;x++){
+let idx=(y-1)*7+x;
+if(idx>=pool.length)continue;
 let r=pool[idx];
-c.innerHTML='<span class="n">'+r.n+'</span><small style="font-size:6px;color:#88a">敏'+(r.agi||0)+'</small>';
-c.style.cursor='pointer';c.style.borderColor='#555';
-(function(i){c.onclick=()=>{p1pick=[i];p2pick=[];for(let j=0;j<10;j++)p2pick.push(-1);startDevDeploy();}})(idx);
-}else{c.style.opacity='0.08';}
-}
-g.appendChild(c);
-}
-for(let y=1;y<=5;y++){
-let c1=g.querySelector('.cell[data-gx="0"][data-gy="'+y+'"]');
-let c8=g.querySelector('.cell[data-gx="8"][data-gy="'+y+'"]');
-c1.textContent='-';c1.classList.add('dim');
-c8.textContent='-';c8.classList.add('dim');
+let slot=d.querySelector('[data-x="'+x+'"][data-y="'+y+'"]');
+if(slot){
+slot.innerHTML='<span>'+r.n+'</span><small style="font-size:6px;color:#fc0">敏'+(r.agi||0)+'</small>';
+slot.style.cursor='pointer';
+(function(i){slot.onclick=()=>{p1pick=[i];p2pick=[];for(let j=0;j<10;j++)p2pick.push(-1);startDevDeploy();}})(idx);
 }
 }
-
+}
+let pl=$('pickSideL');pl.innerHTML='';
+for(let i=0;i<5;i++){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.3';c.textContent='-';pl.appendChild(c);}
+let pr=$('pickSideR');pr.innerHTML='';
+for(let i=0;i<5;i++){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.3';c.textContent='-';pr.appendChild(c);}
+}
 function startDevDeploy(){
 deployStep=0;deployCur=null;
 p2deploy=[];
@@ -447,50 +382,48 @@ setPhase('deploy');renderDevDeploy();
 function renderDevDeploy(){
 $('deployTitle').textContent='🔵 蓝方 布阵';
 $('deployInfo').textContent='点击角色→点击蓝方格子放置';
-let g=$('deployGrid');g.innerHTML='';
+let brd=$('board');brd.innerHTML='';
 let depAll=[...p1deploy,...p2deploy];
-for(let y=1;y<=5;y++)for(let x=0;x<9;x++){
-let c=document.createElement('div');c.className='cell';
-c.dataset.gx=x;c.dataset.gy=y;c.style.gridColumn=x+1;c.style.gridRow=y;
-if(x===0||x===8)c.classList.add('side');
-if(x>=1&&x<=7){
-let mx=x-1;
-if(mx===3)c.classList.add('mid');
-let dep=depAll.find(d=>d.x===mx&&d.y===y);
-if(dep){c.innerHTML='<span class="n">'+dep.n.substring(0,2)+'</span>';c.classList.add('unit','picked');}
-if(!dep&&mx<3){
-if(deployCur)c.classList.add('ready');
-c.onclick=()=>{
+for(let x=0;x<7;x++)for(let y=1;y<6;y++){
+let slot=document.createElement('div');slot.className='slot';
+if(x===3)slot.classList.add('mid');
+else if(x<3)slot.classList.add('p1');
+else slot.classList.add('p2');
+slot.style.left=(x*42+4)+'px';slot.style.top=((y-1)*42+4)+'px';
+slot.dataset.x=x;slot.dataset.y=y;
+let dep=depAll.find(d=>d.x===x&&d.y===y);
+if(dep){slot.innerHTML='<span class="n">'+dep.n.substring(0,2)+'</span>';slot.classList.add('unit')}
+if(!dep&&x<3){
+if(deployCur)slot.classList.add('ready');
+slot.onclick=()=>{
 if(!deployCur)return;
-if(depAll.find(d=>d.x==mx&&d.y===y))return;
-deployCur.x=mx;deployCur.y=y;
+if(depAll.find(d=>d.x==x&&d.y===y))return;
+deployCur.x=x;deployCur.y=y;
 p1deploy=[deployCur];
 deployCur=null;deployStep=10;
 startDevBattle();
-};
-c.classList.add('p1');
 }
 }
-g.appendChild(c);
+brd.appendChild(slot);
 }
-let r=pool[p1pick[0]];let placed=p1deploy.length>0;
-for(let y=1;y<=5;y++){
-let c1=g.querySelector('.cell[data-gx="0"][data-gy="'+y+'"]');
-let c8=g.querySelector('.cell[data-gx="8"][data-gy="'+y+'"]');
-if(y===1){
-c1.textContent=r.n.substring(0,2);c1.classList.add('p1');
-if(!placed){c1.onclick=()=>{
+// 侧栏
+let sl=$('deploySideL'),sr=$('deploySideR');
+sl.innerHTML='';
+sr.innerHTML='';
+let r=pool[p1pick[0]];
+let placed=p1deploy.length>0;
+let c=document.createElement('div');
+c.className='side-cell p1'+(placed?' placed':'');
+c.textContent=r.n.substring(0,2);
+if(!placed){c.onclick=()=>{
 deployCur={n:r.n,h:r.h,a:r.a,agi:r.g||0,m:r.mxc,rg:r.rg,cls:r.cls,_pi:p1pick[0],sk:r.sk||[],x:-1,y:-1,_tm:'p1'};
 renderDevDeploy();
-};c1.classList.add('pick');}
-if(deployCur)c1.classList.add('current');
-}else{c1.textContent='-';c1.classList.add('dim');}
-c8.textContent=y<=5?'机':'-';
-c8.classList.add('p2');
-if(y>5)c8.classList.add('dim');
+};c.classList.add('pick');}
+if(deployCur)c.classList.add('current');
+sl.appendChild(c);
+for(let i=0;i<4;i++){let e=document.createElement('div');e.className='side-cell';e.style.opacity='0.3';e.textContent='-';sl.appendChild(e);}
+for(let i=0;i<5;i++){let e=document.createElement('div');e.className='side-cell p2';e.style.opacity='0.3';e.textContent='机';sr.appendChild(e);}
 }
-}
-
 function startDevBattle(){
 b.us=[];b.go=0;b.sel=null;b.acted=new Set();b.extra=null;b.skMode=null;b._selEnemy=0;b._actedView=0;
 b.gU=function(x,y){return this.us.find(u=>u.al&&u.x===x&&u.y===y)};
@@ -533,46 +466,44 @@ function renderPick(){
 let pt=pickOrder[pickTurn];
 $('pickTitle').textContent=(pt==='蓝'?'🔵':'🔴')+' '+pt+'方选人 ('+(pickTurn+1)+'/10)';
 $('pickInfo').textContent='点击角色选取';
-let g=$('pickGrid');g.innerHTML='';
-// 9x5 grid: col0=P1 side, col1-7=map, col8=P2 side
-for(let y=1;y<=5;y++)for(let x=0;x<9;x++){
-let c=document.createElement('div');c.className='cell';
-c.dataset.gx=x;c.dataset.gy=y;c.style.gridColumn=x+1;c.style.gridRow=y;
-if(x===0||x===8)c.classList.add('side');
-// Map area (cols 1-7)
-if(x>=1&&x<=7){
-let mx=x-1,my=y;
-let idx=(my-1)*7+mx;
-if(idx<pool.length){
+let d=$('pickBoard');
+d.style.cssText='position:relative;width:302px;height:220px;margin:0 auto;background:linear-gradient(90deg,rgba(30,40,80,0.3) 0%,rgba(30,40,80,0.3) 40%,transparent 40%,transparent 60%,rgba(80,25,25,0.3) 60%,rgba(80,25,25,0.3) 100%),#151525;border-radius:4px;border:1px solid #2a2a44';
+d.innerHTML='';
+// Render 7×5 grid
+for(let x=0;x<7;x++)for(let y=1;y<6;y++){
+let g=document.createElement('div');
+g.className='slot';
+g.style.cssText='left:'+(x*42+4)+'px;top:'+((y-1)*42+4)+'px;width:42px;height:42px;font-size:8px';
+g.dataset.x=x;g.dataset.y=y;
+d.appendChild(g);
+}
+// Place available characters (fixed position by pool index, picked ones leave empty slots)
+for(let y=1;y<6;y++){
+for(let x=0;x<7;x++){
+let idx=(y-1)*7+x;
+if(idx>=pool.length)continue;
 let r=pool[idx];
-if(!bans.includes(idx)&&!p1pick.includes(idx)&&!p2pick.includes(idx)){
-c.innerHTML='<span class="n">'+r.n+'</span><small style="font-size:6px;color:#88a">敏'+(r.agi||0)+'</small>';
-c.style.borderColor='#555';
-c.style.cursor='pointer';
-(function(i){c.onclick=()=>doPick(i,pt)})(idx);
-}else{c.style.opacity='0.15';}
-}else{c.style.opacity='0.08';}
+if(bans.includes(idx)||p1pick.includes(idx)||p2pick.includes(idx))continue;
+let slot=d.querySelector('[data-x="'+x+'"][data-y="'+y+'"]');
+if(slot){
+slot.innerHTML='<span>'+r.n+'</span><small style="font-size:6px;color:#fc0">敏'+(r.agi||0)+'</small>';
+slot.style.cursor='pointer';
+(function(i){slot.onclick=()=>doPick(i,pt)})(idx);
 }
-g.appendChild(c);
 }
-// Side bars: P1 (col0) and P2 (col8)
-let pl=p1pick.map(pi=>pool[pi]);let p2l=p2pick.map(pi=>pool[pi]);
-for(let y=1;y<=5;y++){
-let c1=g.querySelector('.cell[data-gx="0"][data-gy="'+y+'"]');
-let c8=g.querySelector('.cell[data-gx="8"][data-gy="'+y+'"]');
-let i=y-1;
-if(pl[i]){c1.textContent=pl[i].n.substring(0,2);c1.classList.add('picked');c1.title=pl[i].n;}
-else{c1.textContent='-';c1.classList.add('dim');}
-if(p2l[i]){c8.textContent=p2l[i].n.substring(0,2);c8.classList.add('picked');c8.title=p2l[i].n;}
-else{c8.textContent='-';c8.classList.add('dim');}
 }
-// Agi totals
+// Side columns
 let p1a=p1pick.reduce((s,pi)=>{let r=pool[pi];return s+(r.agi||0)},0);
 let p2a=p2pick.reduce((s,pi)=>{let r=pool[pi];return s+(r.agi||0)},0);
-let agiL=document.createElement('div');agiL.style.cssText='grid-column:1;grid-row:6;font-size:7px;color:#88a;text-align:center';agiL.textContent='敏'+p1a;g.appendChild(agiL);
-let agiR=document.createElement('div');agiR.style.cssText='grid-column:9;grid-row:6;font-size:7px;color:#a88;text-align:center';agiR.textContent='敏'+p2a;g.appendChild(agiR);
+let pl=$('pickSideL');pl.innerHTML='';
+p1pick.forEach(pi=>{let r=pool[pi];let c=document.createElement('div');c.className='side-cell p1 picked';c.textContent=r.n.substring(0,2);c.title=r.n+' 敏'+(r.agi||0);pl.appendChild(c);});
+for(let i=p1pick.length;i<5;i++){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.3';c.textContent='-';pl.appendChild(c);}
+let sa=document.createElement('div');sa.className='side-cell';sa.style.cssText='border:none;background:none;font-size:7px;color:#88a';sa.textContent='敏'+p1a;pl.appendChild(sa);
+let pr=$('pickSideR');pr.innerHTML='';
+p2pick.forEach(pi=>{let r=pool[pi];let c=document.createElement('div');c.className='side-cell p2 picked';c.textContent=r.n.substring(0,2);c.title=r.n+' 敏'+(r.agi||0);pr.appendChild(c);});
+for(let i=p2pick.length;i<5;i++){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.3';c.textContent='-';pr.appendChild(c);}
+let sb=document.createElement('div');sb.className='side-cell';sb.style.cssText='border:none;background:none;font-size:7px;color:#a88';sb.textContent='敏'+p2a;pr.appendChild(sb);
 }
-
 function doPick(i,pt){
 if(pt==='蓝'){p1pick.push(i)}else{p2pick.push(i)}
 pickTurn++;
@@ -589,71 +520,71 @@ function renderDeploy(){
 let t=deployOrder[deployStep];
 $('deployTitle').textContent=(t==='蓝'?'🔵 蓝方':'🔴 红方')+' 布阵 ('+(deployStep+1)+'/10)';
 $('deployInfo').textContent='点击角色→点击空格放置';
-let g=$('deployGrid');g.innerHTML='';
+let brd=$('board');brd.innerHTML='';
 let depAll=[...p1deploy,...p2deploy];
-for(let y=1;y<=5;y++)for(let x=0;x<9;x++){
-let c=document.createElement('div');c.className='cell';
-c.dataset.gx=x;c.dataset.gy=y;c.dataset.gx=x;c.dataset.gy=y;c.style.gridColumn=x+1;c.style.gridRow=y;
-if(x===0||x===8)c.classList.add('side');
-// Map area
-if(x>=1&&x<=7){
-let mx=x-1;
-if(mx===3)c.classList.add('mid');
-let dep=depAll.find(d=>d.x===mx&&d.y===y);
-if(dep){c.innerHTML='<span class="n">'+dep.n.substring(0,2)+'</span>';c.classList.add('unit','picked');}
-if(!dep&&mx!==3){
-let isP1=mx<3,isP2=mx>3;
+for(let x=0;x<7;x++)for(let y=1;y<6;y++){
+let slot=document.createElement('div');slot.className='slot';
+let isMid=x===3,isP1=x<3,isP2=x>3;
+if(isMid)slot.classList.add('mid');
+else if(isP1)slot.classList.add('p1');
+else slot.classList.add('p2');
+slot.style.left=(x*42+4)+'px';slot.style.top=((y-1)*42+4)+'px';
+slot.dataset.x=x;slot.dataset.y=y;
+let dep=depAll.find(d=>d.x===x&&d.y===y);
+if(dep){slot.innerHTML='<span class="n">'+dep.n.substring(0,2)+'</span>';slot.classList.add('unit')}
+if(!dep&&!isMid){
 let valid=t==='蓝'?isP1:isP2;
 if(valid){
-if(deployCur)c.classList.add('ready');
-c.onclick=()=>{
+if(deployCur)slot.classList.add('ready');
+slot.onclick=()=>{
 if(!deployCur)return;
-if(depAll.find(d=>d.x==mx&&d.y===y))return;
+if(depAll.find(d=>d.x==x&&d.y===y))return;
 let tm=t==='蓝'?'p1':'p2';
 if(deployCur._tm&&deployCur._tm!==tm)return;
-deployCur.x=mx;deployCur.y=y;
+deployCur.x=x;deployCur.y=y;
 if(t==='蓝'&&!p1deploy.find(d=>d===deployCur))p1deploy.push(deployCur);
 if(t==='红'&&!p2deploy.find(d=>d===deployCur))p2deploy.push(deployCur);
 deployCur=null;deployStep++;
 if(deployStep<10)renderDeploy();else confirmDeploy();
-};
-}
-if(mx<3)c.classList.add('p1');else c.classList.add('p2');
 }
 }
-g.appendChild(c);
 }
-// Side bars
-let pl=p1pick.map(pi=>pool[pi]);let p2l=p2pick.map(pi=>pool[pi]);
-for(let y=1;y<=5;y++){
-let c1=g.querySelector('.cell[data-gx="0"][data-gy="'+y+'"]');
-let c8=g.querySelector('.cell[data-gx="8"][data-gy="'+y+'"]');
-let i=y-1;
-if(pl[i]){
-let pi=p1pick[i];let placed=depAll.find(d=>d._pi===pi);
-c1.textContent=pl[i].n.substring(0,2);c1.classList.add('p1');
-if(placed)c1.classList.add('picked');
-else if(t==='蓝'){c1.onclick=()=>{
+brd.appendChild(slot);
+}
+// 侧栏
+let sl=$('deploySideL'),sr=$('deploySideR');
+sl.innerHTML='';sr.innerHTML='';
+p1pick.forEach(pi=>{
+let r=pool[pi];
+let placed=depAll.find(d=>d._pi===pi);
+let c=document.createElement('div');
+c.className='side-cell p1'+(placed?' placed':'');
+c.textContent=r.n.substring(0,2);
+if(!placed&&t==='蓝'){c.onclick=()=>{
 if(deployCur&&deployCur._pi===pi){deployCur=null;renderDeploy();return}
-deployCur={n:pl[i].n,...pl[i],_pi:pi,sk:pl[i].sk||[],x:-1,y:-1,_tm:'p1'};
+deployCur={n:r.n,...r,_pi:pi,sk:r.sk||[],x:-1,y:-1,_tm:'p1'};
 renderDeploy();
-};c1.classList.add('pick');}
-if(deployCur&&deployCur._pi===pi)c1.classList.add('current');
-}else{c1.textContent='-';c1.classList.add('dim');}
-if(p2l[i]){
-let pi=p2pick[i];let placed=depAll.find(d=>d._pi===pi);
-c8.textContent=p2l[i].n.substring(0,2);c8.classList.add('p2');
-if(placed)c8.classList.add('picked');
-else if(t==='红'){c8.onclick=()=>{
+};c.classList.add('pick');}
+if(deployCur&&deployCur._pi===pi)c.classList.add('current');
+sl.appendChild(c);
+});
+for(let i=p1pick.length;i<5;i++){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.3';c.textContent='-';sl.appendChild(c);}
+p2pick.forEach(pi=>{
+let r=pool[pi];
+let placed=depAll.find(d=>d._pi===pi);
+let c=document.createElement('div');
+c.className='side-cell p2'+(placed?' placed':'');
+c.textContent=r.n.substring(0,2);
+if(!placed&&t==='红'){c.onclick=()=>{
 if(deployCur&&deployCur._pi===pi){deployCur=null;renderDeploy();return}
-deployCur={n:p2l[i].n,...p2l[i],_pi:pi,sk:p2l[i].sk||[],x:-1,y:-1,_tm:'p2'};
+deployCur={n:r.n,...r,_pi:pi,sk:r.sk||[],x:-1,y:-1,_tm:'p2'};
 renderDeploy();
-};c8.classList.add('pick');}
-if(deployCur&&deployCur._pi===pi)c8.classList.add('current');
-}else{c8.textContent='-';c8.classList.add('dim');}
+};c.classList.add('pick');}
+if(deployCur&&deployCur._pi===pi)c.classList.add('current');
+sr.appendChild(c);
+});
+for(let i=p2pick.length;i<5;i++){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.3';c.textContent='-';sr.appendChild(c);}
 }
-}
-
 function confirmDeploy(){
 if(p1deploy.length<5||p2deploy.length<5)return;
 startBattle();
@@ -690,6 +621,7 @@ let p1a=b.us.filter(u=>u.tm==='p1'&&u.al).reduce((s,u)=>s+u.agi,0);
 let p2a=b.us.filter(u=>u.tm==='p2'&&u.al).reduce((s,u)=>s+u.agi,0);
 if(p1a!==p2a)b.ct=p1a>p2a?'p1':'p2';
 beginRound();
+renderBattleSides();
 }
 
 function beginRound(){
@@ -731,51 +663,91 @@ b.us.forEach(u=>{if(u.n!=='周水'&&u.n!=='陈色')u.sth=Math.max(0,u.sth-1)});
 }
 
 function renderBattle(){
-let g=$('battleGrid');g.innerHTML='';
-// Background cells
-for(let y=1;y<=5;y++)for(let x=0;x<9;x++){
-let c=document.createElement('div');c.className='cell';
-c.dataset.gx=x;c.dataset.gy=y;c.style.gridColumn=x+1;c.style.gridRow=y;
-if(x===0||x===8)c.classList.add('side');
-if(x>=1&&x<=7){
-let mx=x-1;
-if(mx===3)c.classList.add('mid');
-else if(mx<3)c.classList.add('p1');
-else c.classList.add('p2');
-// highlight attack range
+renderBattleSides();
+let brd=$('board2');brd.innerHTML='';
+// 战斗棋盘背景格子（与部署界面保持一致）
+for(let x=0;x<7;x++)for(let y=1;y<6;y++){
+let slot=document.createElement('div');slot.className='slot';
+if(x===3)slot.classList.add('mid');
+else if(x<3)slot.classList.add('p1');
+else slot.classList.add('p2');
+slot.style.left=(x*42+4)+'px';slot.style.top=((y-1)*42+4)+'px';
+slot.style.width='42px';slot.style.height='42px';
+slot.style.fontSize='8px';
+slot.style.zIndex='0';
+brd.appendChild(slot);
+}
+brd.style.width='302px';brd.style.height='220px';brd.style.position='relative';brd.style.background='linear-gradient(90deg,rgba(30,40,80,0.4) 0%,rgba(30,40,80,0.4) 40%,transparent 40%,transparent 60%,rgba(80,25,25,0.4) 60%,rgba(80,25,25,0.4) 100%),#151525';brd.style.margin='0 auto';brd.style.borderRadius='4px';brd.style.boxShadow='0 3px 16px rgba(0,0,0,0.6)';brd.style.border='1px solid #2a2a44';
+// 开发者模式: 显示调整人机按钮
+if(b.us.some(u=>u.isDummy))$('btnDummyMove').style.display='inline-block';
+else $('btnDummyMove').style.display='none';
+// 开发者模式: 显示减冷却/加充能按钮
+if(devMode){
+$('btnCdMinus').style.display='inline-block';
+$('btnChgPlus').style.display='inline-block';
+$('btnAddDummy').style.display='inline-block';
+}else{
+$('btnCdMinus').style.display='none';
+$('btnChgPlus').style.display='none';
+$('btnAddDummy').style.display='none';
+}
+// 攻击范围
 if(b.sel&&!b.skMode){
 let isChg=isChargeUnit(b.sel);
 let chgRows=isChg?getChargeRows(b.sel,b.us).rows:null;
+for(let x=0;x<7;x++)for(let y=1;y<6;y++){
 let inR=isChg?(
-chgRows.includes(y)&&((b.sel.tm==='p1'&&mx>b.sel.x)||(b.sel.tm==='p2'&&mx<b.sel.x))
-):b.sel.inRg(mx,y);
+chgRows.includes(y)&&((b.sel.tm==='p1'&&x>b.sel.x)||(b.sel.tm==='p2'&&x<b.sel.x))
+):b.sel.inRg(x,y);
 if(inR){
-let isEnemy=b.us.some(u=>u.tm!==b.sel.tm&&u.al&&u.x===mx&&u.y===y&&!u.sth);
-c.style.background=isEnemy?'rgba(255,80,80,0.2)':'rgba(100,180,255,0.1)';
-c.style.borderColor=isEnemy?'rgba(255,80,80,0.5)':'rgba(100,180,255,0.3)';
+let hl=document.createElement('div');
+hl.style.cssText='position:absolute;left:'+(x*42+4)+'px;top:'+((y-1)*42+4)+'px;width:42px;height:42px;';
+let isEnemy=b.us.some(u=>u.tm!==b.sel.tm&&u.al&&u.x===x&&u.y===y&&!u.sth);
+hl.style.background=isEnemy?'rgba(255,80,80,0.2)':'rgba(100,180,255,0.1)';
+hl.style.border=isEnemy?'2px solid rgba(255,80,80,0.5)':'1px dashed rgba(100,180,255,0.3)';
+hl.style.borderRadius='4px';hl.style.pointerEvents='none';hl.style.zIndex='1';
+brd.appendChild(hl);
 }
 }
-// skmode highlights
+}
+// 技能/普攻选位模式高亮
 if(b.skMode){
 let isBA=b.skMode.isBA;
-let hasUnit=b.us.some(u=>u.al&&u.x===mx&&u.y===y);
-let u=b.us.find(v=>v.al&&v.x===mx&&v.y===y);
-if(isBA&&u&&u.tm!==b.sel.tm&&!u.sth){
-let chgR=isChargeUnit(b.sel)?getChargeRows(b.sel,b.us).rows:null;
-let canAtk=isChargeUnit(b.sel)?(chgR.includes(y)&&((b.sel.tm==='p1'&&mx>b.sel.x)||(b.sel.tm==='p2'&&mx<b.sel.x))):b.sel.inRg(mx,y);
-if(isChargeUnit(b.sel)&&canAtk){
+for(let x=0;x<7;x++)for(let y=1;y<6;y++){
+let hasUnit=b.us.some(u=>u.al&&u.x===x&&u.y===y);
+if(isBA){
+// 普攻模式：高亮可攻击敌方
+// 冲锋单位：预计算最小x距离
+let chgMinX=0;
+if(isChargeUnit(b.sel)){
+let chgR=getChargeRows(b.sel,b.us).rows;
 let nearest=b.us.filter(v=>v.tm!==b.sel.tm&&v.al&&!v.sth&&chgR.includes(v.y)&&((b.sel.tm==='p1'&&v.x>b.sel.x)||(b.sel.tm==='p2'&&v.x<b.sel.x)));
-let minD=Math.min(...nearest.map(v=>Math.abs(v.x-b.sel.x)));
-if(Math.abs(mx-b.sel.x)!==minD)canAtk=false;
+if(nearest.length)chgMinX=Math.min(...nearest.map(v=>Math.abs(v.x-b.sel.x)));
 }
-if(canAtk){c.style.background='rgba(255,80,80,0.25)';c.style.borderColor='rgba(255,80,80,0.6)';c.style.cursor='pointer';c.onclick=()=>onBClick(u);}
-}else if(!isBA&&!hasUnit&&mx!==3){
+let u=b.us.find(v=>v.al&&v.x===x&&v.y===y);
+if(u&&u.tm!==b.sel.tm&&!u.sth){
+let chgR=isChargeUnit(b.sel)?getChargeRows(b.sel,b.us).rows:null;let canAtk=isChargeUnit(b.sel)?(chgR.includes(y)&&((b.sel.tm==='p1'&&x>b.sel.x)||(b.sel.tm==='p2'&&x<b.sel.x))):b.sel.inRg(x,y);
+// 冲锋单位：仅高亮x距离最近的
+if(isChargeUnit(b.sel)&&canAtk&&Math.abs(x-b.sel.x)!==chgMinX)canAtk=false;
+if(canAtk){
+let hl=document.createElement('div');
+hl.style.cssText='position:absolute;left:'+(x*42+4)+'px;top:'+((y-1)*42+4)+'px;width:42px;height:42px;background:rgba(255,80,80,0.3);border:2px solid rgba(255,80,80,0.7);border-radius:4px;pointer-events:none;z-index:3';
+brd.appendChild(hl);
+}
+}
+continue;
+}
+if(!hasUnit&&x!==3){
+let hl=document.createElement('div');
+hl.style.cssText='position:absolute;left:'+(x*42+4)+'px;top:'+((y-1)*42+4)+'px;width:42px;height:42px;background:rgba(100,255,100,0.15);border:2px dashed rgba(100,255,100,0.4);border-radius:4px;pointer-events:none;z-index:3';
 if(b.skMode.tgt==='empty'&&b.skMode.placed<b.skMode.max){
-c.style.background='rgba(100,255,100,0.15)';c.style.borderColor='rgba(100,255,100,0.4)';c.style.cursor='pointer';
-c.onclick=()=>{
-let w=mu('毛毛虫',1,0,0,b.sel.tm,mx,y,0,[[0,0]]);w.isS=1;w.mst=b.sel;b.us.push(w);
-b.skMode.placed++;b.skMode.newWorms.push(w);
+hl.style.pointerEvents='auto';
+hl.onclick=()=>{
+let w=mu('毛毛虫',1,0,0,b.sel.tm,x,y,0,[[0,0]]);w.isS=1;w.mst=b.sel;b.us.push(w);
+b.skMode.placed++;
+b.skMode.newWorms.push(w);
 if(b.skMode.placed>=b.skMode.max){
+// 全部放置完成，统一同步
 let allWorms=b.us.filter(v=>v.isS&&v.mst===b.sel&&v.al);
 let wcnt=allWorms.length;
 allWorms.forEach(v=>{v.mH=1+wcnt;if(v.hp>v.mH)v.hp=v.mH;});
@@ -783,34 +755,59 @@ b.skMode.newWorms.forEach(v=>{v.hp=v.mH;});
 b.lg.push('召唤毛毛虫 ×'+b.skMode.placed);
 b.sel.mc=Math.max(0,b.sel.mc-b.skMode.placed);
 finishAction(b.sel);
-}else{renderBattle();}
+}else{
+renderBattle();
+}
 };
-}else if(!isBA&&u){
-if(b.skMode.tgt==='enemy'&&u.tm!==b.sel.tm){c.style.background='rgba(255,80,80,0.2)';c.style.borderColor='rgba(255,80,80,0.5)';c.style.cursor='pointer';c.onclick=()=>onBClick(u);}
-if(b.skMode.tgt==='ally'&&u.tm===b.sel.tm&&u!==b.sel){c.style.background='rgba(100,180,255,0.15)';c.style.borderColor='rgba(100,180,255,0.5)';c.style.cursor='pointer';c.onclick=()=>onBClick(u);}
+}
+brd.appendChild(hl);
+}else{
+let u=b.us.find(v=>v.al&&v.x===x&&v.y===y);
+if(b.skMode.tgt==='enemy'&&u.tm!==b.sel.tm){
+let hl=document.createElement('div');
+hl.style.cssText='position:absolute;left:'+(x*42+4)+'px;top:'+((y-1)*42+4)+'px;width:42px;height:42px;background:rgba(255,80,80,0.25);border:2px solid rgba(255,80,80,0.6);border-radius:4px;pointer-events:none;z-index:3';
+brd.appendChild(hl);
+}
+if(b.skMode.tgt==='ally'&&u.tm===b.sel.tm&&u!==b.sel){
+let hl=document.createElement('div');
+hl.style.cssText='position:absolute;left:'+(x*42+4)+'px;top:'+((y-1)*42+4)+'px;width:42px;height:42px;background:rgba(100,180,255,0.2);border:2px solid rgba(100,180,255,0.6);border-radius:4px;pointer-events:none;z-index:3';
+brd.appendChild(hl);
 }
 }
 }
+let hint=document.createElement('div');hint.className='skmode-hint';
+hint.textContent=b.skMode.isBA?'点击敌方普攻':(b.skMode.tgt==='empty'?'点击空格召唤('+b.skMode.placed+'/'+b.skMode.max+')':'选择'+(b.skMode.tgt==='enemy'?'敌方':'')+'目标');
+brd.appendChild(hint);
 }
-g.appendChild(c);
+// 冷场选目标高亮
+if(b.coldField){
+for(let x=0;x<7;x++)for(let y=1;y<6;y++){
+let u=b.us.find(v=>v.al&&v.x===x&&v.y===y);
+if(u&&b.coldField.targets.includes(u)){
+let hl=document.createElement('div');
+hl.style.cssText='position:absolute;left:'+(x*42+4)+'px;top:'+((y-1)*42+4)+'px;width:42px;height:42px;background:rgba(255,215,0,0.35);border:2px solid rgba(255,215,0,0.7);border-radius:4px;pointer-events:none;z-index:3';
+brd.appendChild(hl);
 }
-// Units on map
+}
+let hint=document.createElement('div');hint.className='skmode-hint';
+hint.textContent='冷场:点击目标(ATK×1 +5恐惧) 剩余'+b.coldField.targets.length;
+brd.appendChild(hint);
+}
+// 单位
 b.us.forEach(u=>{if(!u.al&&!u._dying)return;
-let c=document.createElement('div');c.className='cell';
-c.style.position='absolute';
-c.style.gridColumn=(u.x+2);c.style.gridRow=u.y;
-c.style.left='0';c.style.top='0';c.style.pointerEvents='none';
-c.style.width='40px';c.style.height='40px';
-if(u.x<3)c.classList.add('p1');else if(u.x>3)c.classList.add('p2');else c.classList.add('mid');
-if(b.sel===u)c.classList.add('sel');
-if(!b.acted.has(u._uid)&&u.tm===b.ct&&u.al&&!u._dying&&!b.sel&&!b.skMode&&!b.coldField&&!u.isS)c.classList.add('ready');
-c.style.zIndex='2';
-if(u._dying){c.classList.add('dying');c.style.zIndex='3';}
-let dHp=u.hp;if(u._hits&&u._hits.length){let recent=u._hits.filter(h=>Date.now()-h.t<2000);if(recent.length){let mh=recent.reduce((a,b)=>a.dmg>b.dmg?a:b,recent[0]);dHp=mh.hpBefore;let intensity=Math.min(8,2+mh.dmg*.6+(1-mh.ratio)*4);c.style.setProperty('--sx',intensity+'px');c.classList.add('shake');c.setAttribute('data-dmg',mh.hpLoss||mh.dmg);c.setAttribute('data-hpA',mh.hpAfter);c.setAttribute('data-mH',u.mH)}delete u._hits;}
+let slot=document.createElement('div');slot.className='slot';
+if(u.x<3)slot.classList.add('p1');else if(u.x>3)slot.classList.add('p2');else slot.classList.add('mid');
+if(b.sel===u)slot.classList.add('sel');
+// 未行动单位黄色高亮
+if(!b.acted.has(u._uid)&&u.tm===b.ct&&u.al&&!u._dying&&!b.sel&&!b.skMode&&!b.coldField&&!u.isS)slot.classList.add('ready');
+slot.style.left=(u.x*42+4)+'px';slot.style.top=((u.y-1)*42+4)+'px';
+slot.style.position='absolute';slot.style.zIndex='2';
+if(u._dying){slot.classList.add('dying');slot.style.zIndex='3';}
+let dHp=u.hp;if(u._hits&&u._hits.length){let recent=u._hits.filter(h=>Date.now()-h.t<2000);if(recent.length){let mh=recent.reduce((a,b)=>a.dmg>b.dmg?a:b,recent[0]);dHp=mh.hpBefore;let intensity=Math.min(8,2+mh.dmg*.6+(1-mh.ratio)*4);slot.style.setProperty('--sx',intensity+'px');slot.classList.add('shake');slot.setAttribute('data-dmg',mh.hpLoss||mh.dmg);slot.setAttribute('data-hpA',mh.hpAfter);slot.setAttribute('data-mH',u.mH)}delete u._hits;}
 let hpC=dHp/u.mH>0.5?'#4f4':(dHp/u.mH>0.25?'#fa0':'#f44');
 let cdText='';for(let k in u.cd)if(u.cd[k]>0)cdText+=k.substring(0,1)+':'+u.cd[k]+' ';
-c.innerHTML='<span class="n">'+u.n.substring(0,3)+'</span><span class="hp" style="color:'+hpC+'">'+dHp+'/'+u.mH+'</span>'+(cdText?'<span class="cd">'+cdText+'</span>':'')+(u.ch>0?'<span class="cd">⚡'+u.ch+'</span>':'');
-// fear bar
+slot.innerHTML='<span class="n">'+u.n.substring(0,3)+'</span><span class="hp" style="color:'+hpC+'">'+dHp+'/'+u.mH+'</span>'+(cdText?'<span class="cd">'+cdText+'</span>':'')+(u.ch>0?'<span class="cd">⚡'+u.ch+'</span>':'');
+// 恐惧进度条
 if(u.ail.fear.s>0){
 let pct=u.ail.fear.s/10*100;
 let fb=document.createElement('div');fb.className='fear-bar-wrap';
@@ -818,32 +815,34 @@ let ff=document.createElement('div');ff.className='fear-bar-fill';
 ff.style.width=pct+'%';
 if(pct>=100)ff.classList.add('full');
 else if(pct>=70)ff.classList.add('high');
-fb.appendChild(ff);c.appendChild(fb);
+fb.appendChild(ff);slot.appendChild(fb);
 }
-// stealth
+// 隐匿特效（濒死单位跳过隐匿特效）
 if(!u._dying){
 if(u.sth>0){
-if(!u._prevSth)u._hadSthGain=1;
-c.classList.add('unit-sth');
-let lbl=document.createElement('span');lbl.className='sth-label';lbl.textContent='隐匿';c.appendChild(lbl);
-if(u._hadSthGain){
-let wrap=document.createElement('div');wrap.className='sth-gain-wrap';
-let fog=document.createElement('div');fog.className='sth-gain-fog';
-wrap.appendChild(fog);c.appendChild(wrap);
-let gain=document.createElement('span');gain.className='sth-gain';gain.textContent='获得隐匿';c.appendChild(gain);
-setTimeout(()=>{wrap.remove();gain.remove()},1300);
-u._hadSthGain=0;
-}
+  if(!u._prevSth)u._hadSthGain=1;
+  slot.classList.add('unit-sth');
+  let lbl=document.createElement('span');lbl.className='sth-label';lbl.textContent='隐匿';slot.appendChild(lbl);
+  if(u._hadSthGain){
+    let wrap=document.createElement('div');wrap.className='sth-gain-wrap';
+    let fog=document.createElement('div');fog.className='sth-gain-fog';
+    wrap.appendChild(fog);slot.appendChild(wrap);
+    let gain=document.createElement('span');gain.className='sth-gain';gain.textContent='获得隐匿';slot.appendChild(gain);
+    setTimeout(()=>{wrap.remove();gain.remove()},1300);
+    u._hadSthGain=0;
+  }
 }else if(u._prevSth>0){
-let burst=document.createElement('div');burst.className='sth-burst';c.appendChild(burst);
-let lose=document.createElement('span');lose.className='sth-lose';lose.textContent='破隐';c.appendChild(lose);
-setTimeout(()=>{burst.remove();lose.remove()},1300);
+  let burst=document.createElement('div');burst.className='sth-burst';slot.appendChild(burst);
+  let lose=document.createElement('span');lose.className='sth-lose';lose.textContent='破隐';slot.appendChild(lose);
+  setTimeout(()=>{burst.remove();lose.remove()},1300);
 }
 u._prevSth=u.sth;
 }
-c.onclick=()=>{if(u._dying)return;if(b.coldField&&b.coldField.targets.includes(u)){let cf=b.coldField;let d=u.dmg(cf.u.atk);b.lg.push('冷场 '+u.n+' '+d+'伤 +5恐惧');u.ail.fear.add(5,u);cf.targets.splice(cf.targets.indexOf(u),1);cf.done.push(u);if(!cf.targets.length){b.lg.push('冷场结束');b.coldField=null;renderBattle();setTimeout(function(){if(!b.go&&allActed())switchTeam();else if(!b.go){renderBattle();upInfo()}},500)}else renderBattle()}else onBClick(u)};
-g.appendChild(c);
-// dying particles
+if(dummyMoveMode&&u.isDummy) slot.style.background='#552';
+if(dummySelected===u) slot.style.background='#a55';
+slot.onclick=()=>{if(u._dying)return;if(b.coldField&&b.coldField.targets.includes(u)){let cf=b.coldField;let d=u.dmg(cf.u.atk);b.lg.push('冷场 '+u.n+' '+d+'伤 +5恐惧');u.ail.fear.add(5,u);cf.targets.splice(cf.targets.indexOf(u),1);cf.done.push(u);if(!cf.targets.length){b.lg.push('冷场结束');b.coldField=null;renderBattle();setTimeout(function(){if(!b.go&&allActed())switchTeam();else if(!b.go){renderBattle();upInfo()}},500)}else renderBattle()}else onBClick(u)};
+brd.appendChild(slot);
+// 濒死单位生成粒子
 if(u._dying){
 let colors=['#f44','#fa0','#fff','#f88','#ff4','#f66'];
 for(let i=0;i<12;i++){
@@ -851,50 +850,55 @@ let p=document.createElement('div');p.className='dying-particle';
 let angle=(i/12)*Math.PI*2;let dist=15+Math.random()*25;
 let size=2+Math.random()*3;
 p.style.cssText='width:'+size+'px;height:'+size+'px;background:'+colors[i%6]+';left:50%;top:50%;--px:'+(Math.cos(angle)*dist)+'px;--py:'+(Math.sin(angle)*dist)+'px;animation-delay:'+(Math.random()*.15)+'s';
-c.appendChild(p);
+slot.appendChild(p);
 }
 }
 });
-// skmode hint
-if(b.skMode){
-let hint=document.createElement('div');hint.className='skmode-hint';
-hint.textContent=b.skMode.isBA?'点击敌方普攻':(b.skMode.tgt==='empty'?'点击空格召唤('+b.skMode.placed+'/'+b.skMode.max+')':'选择'+(b.skMode.tgt==='enemy'?'敌方':'')+'目标');
-g.appendChild(hint);
+// 开发者模式: 空格点击移动人机
+if(dummyMoveMode&&dummySelected){
+for(let x=0;x<7;x++)for(let y=1;y<6;y++){
+let hasUnit=b.us.some(v=>v.al&&v.x===x&&v.y===y);
+if(!hasUnit&&x!==3){
+let ds=document.createElement('div');
+ds.style.cssText='position:absolute;left:'+(x*42+4)+'px;top:'+((y-1)*42+4)+'px;width:42px;height:42px;background:rgba(100,255,100,0.15);border:2px dashed rgba(100,255,100,0.4);border-radius:4px;z-index:5';
+ds.onclick=(()=>{
+let ox=x,oy=y;
+return()=>{
+dummySelected.x=ox;dummySelected.y=oy;
+b.lg.push(dummySelected.n+' → ('+ox+','+oy+')');
+dummySelected=null;renderBattle();
+};
+})();
+brd.appendChild(ds);
 }
-// coldField hint
-if(b.coldField){
-for(let y=1;y<=5;y++)for(let x=1;x<=7;x++){
-let mx=x-1;let u=b.us.find(v=>v.al&&v.x===mx&&v.y===y);
-if(u&&b.coldField.targets.includes(u)){
-let c=document.createElement('div');c.className='cell';
-c.style.cssText='grid-column:'+x+';grid-row:'+y+';position:absolute;background:rgba(255,215,0,0.35);border:2px solid rgba(255,215,0,0.7);z-index:3';
-g.appendChild(c);
 }
 }
-let hint=document.createElement('div');hint.className='skmode-hint';
-hint.textContent='冷场:点击目标(ATK×1 +5恐惧) 剩余'+b.coldField.targets.length;
-g.appendChild(hint);
+// 添加人机模式: 空格点击放人机
+if(addDummyMode){
+for(let x=0;x<7;x++)for(let y=1;y<6;y++){
+let hasUnit=b.us.some(v=>v.al&&v.x===x&&v.y===y);
+if(!hasUnit&&x!==3){
+let ds=document.createElement('div');
+ds.style.cssText='position:absolute;left:'+(x*42+4)+'px;top:'+((y-1)*42+4)+'px;width:42px;height:42px;background:rgba(100,255,200,0.2);border:2px dashed rgba(100,255,200,0.5);border-radius:4px;z-index:5';
+ds.onclick=(()=>{
+let ox=x,oy=y;
+return()=>{
+let dc=b.us.filter(v=>v.isDummy).length;
+let du=mu('人机'+(dc+1),10,1,0,'p2',ox,oy,0,[[0,0],[1,0]]);
+du.sk=[];du.ch=0;du.isDummy=1;
+b.us.push(du);
+b.lg.push('新增人机 → ('+ox+','+oy+')');
+addDummyMode=false;
+$('btnAddDummy').style.background='#252';
+$('btnAddDummy').textContent='+人机';
+renderBattle();
+};
+})();
+brd.appendChild(ds);
 }
-// Side bars
-let p1u=b.us.filter(u=>u.tm==='p1'&&!u.isS);
-if(p1pick.length>0)p1u.sort((a,b)=>(p1pick.indexOf(a._pi)-p1pick.indexOf(b._pi)));
-let p2u=b.us.filter(u=>u.tm==='p2'&&!u.isS);
-if(p2pick.length>0)p2u.sort((a,b)=>(p2pick.indexOf(a._pi)-p2pick.indexOf(b._pi)));
-for(let y=1;y<=5;y++){
-let c1=g.querySelector('.cell[data-gx="0"][data-gy="'+y+'"]');
-let c8=g.querySelector('.cell[data-gx="8"][data-gy="'+y+'"]');
-let i=y-1;
-if(p1u[i]){c1.textContent=p1u[i].n.substring(0,3);c1.classList.add('p1');if(!p1u[i].al){c1.classList.add('dead');}}
-else{c1.textContent='-';c1.classList.add('dim');}
-if(p2u[i]){c8.textContent=p2u[i].n.substring(0,3);c8.classList.add('p2');if(!p2u[i].al){c8.classList.add('dead');}}
-else{c8.textContent='-';c8.classList.add('dim');}
 }
-// dev buttons
-if(b.us.some(u=>u.isDummy))$('btnDummyMove').style.display='inline-block';
-else $('btnDummyMove').style.display='none';
-if(devMode){$('btnCdMinus').style.display='inline-block';$('btnChgPlus').style.display='inline-block';$('btnAddDummy').style.display='inline-block';}
-else{$('btnCdMinus').style.display='none';$('btnChgPlus').style.display='none';$('btnAddDummy').style.display='none';}
-// battle panel
+}
+// 战斗操作面板
 let bp=$('battlePanel');_bpSelAction=null;
 if(b.sel&&!b.skMode){
 let u=b.sel;let isEn=b._selEnemy;let isAView=b._actedView;bp.classList.add('show');
@@ -920,17 +924,18 @@ h+='<div class="bp-opt ult'+(avail?'':' dim')+'" onclick="bpClick(\'ult\',\''+s.
 h+='</div><div class="bp-right" id="bpDesc">点击选项查看描述</div>';
 bp.innerHTML=h;
 }else{bp.classList.remove('show');bp.innerHTML='';}
-// inline log
+// 内联日志
 let lgEl=$('bpLog');if(lgEl){
 let logs=b._logs;let recent=logs.slice(-6);
 let h='';recent.forEach(l=>{h+='<div class="l">'+(l.side?'['+l.side+'] ':'')+l.msg+'</div>';});
 if(logs.length>6)h+='<div class="tap">▲ 点击展开完整日志（共'+logs.length+'条）</div>';
-else if(!logs.length)h+='<div class="tap">暂无日志</div>';
+else if(!logs.length)h='<div class="tap">暂无日志</div>';
 lgEl.innerHTML=h;
 lgEl.onclick=function(){showLog();};
 }
-// dmg animation
-setTimeout(function(){document.querySelectorAll('#battleGrid [data-dmg]').forEach(function(s){var d=parseFloat(s.getAttribute('data-dmg')),hA=parseFloat(s.getAttribute('data-hpA')),mH=parseFloat(s.getAttribute('data-mH'));s.removeAttribute('data-dmg');s.removeAttribute('data-hpA');s.removeAttribute('data-mH');var hpEl=s.querySelector('.hp');if(hpEl){var hpC=hA/mH>0.5?'#4f4':(hA/mH>0.25?'#fa0':'#f44');hpEl.textContent=hA+'/'+mH;hpEl.style.color=hpC}var p=document.createElement('div');p.textContent='-'+Math.round(d);p.className='dmg-popup';s.appendChild(p);setTimeout(function(){p.remove()},1000)});
+/* log displayed via modal */
+setTimeout(function(){document.querySelectorAll('#board2 [data-dmg]').forEach(function(s){var d=parseFloat(s.getAttribute('data-dmg')),hA=parseFloat(s.getAttribute('data-hpA')),mH=parseFloat(s.getAttribute('data-mH'));s.removeAttribute('data-dmg');s.removeAttribute('data-hpA');s.removeAttribute('data-mH');var hpEl=s.querySelector('.hp');if(hpEl){var hpC=hA/mH>0.5?'#4f4':(hA/mH>0.25?'#fa0':'#f44');hpEl.textContent=hA+'/'+mH;hpEl.style.color=hpC}var p=document.createElement('div');p.textContent='-'+Math.round(d);p.className='dmg-popup';s.appendChild(p);setTimeout(function(){p.remove()},1000)});
+// 处理濒死单位：动画结束后正式移除
 setTimeout(function(){
 let dy=b.us.filter(u=>u._dying);
 dy.forEach(u=>{u.al=0;delete u._dying});
@@ -938,7 +943,408 @@ if(dy.length){checkGO();renderBattle();upInfo()}
 },650);},350);
 }
 
-function renderBattleSides(){}
+// 开发者模式: 人机拖动
+let dummyMoveMode=false,dummySelected=null,addDummyMode=false;
+function toggleDummyMove(){
+dummyMoveMode=!dummyMoveMode;
+$('btnDummyMove').style.background=dummyMoveMode?'#a55':'#552';
+$('btnDummyMove').textContent=dummyMoveMode?'📦 调整中':'📦 调整人机';
+if(dummyMoveMode) b.lg.push('人机调整模式:点击人机→点击空格移动');
+else b.lg.push('人机调整模式关闭');
+renderBattle();
+}
+
+function toggleAddDummy(){
+addDummyMode=!addDummyMode;
+$('btnAddDummy').style.background=addDummyMode?'#2a2':'#252';
+$('btnAddDummy').textContent=addDummyMode?'点空格放置':'+人机';
+if(addDummyMode) b.lg.push('添加人机模式:点击一个空格放置人机(中列不可放)');
+else b.lg.push('添加人机模式取消');
+renderBattle();
+}
+
+function onBClick(u){
+// 开发者模式: 人机拖动
+if(dummyMoveMode){
+if(u.isDummy){
+if(dummySelected===u){dummySelected=null;renderBattle();return}
+dummySelected=u;b.lg.push('选中 '+u.n);renderBattle();return;
+}
+return;
+}
+// 添加人机模式
+if(addDummyMode) return;
+if(b.skMode){
+// 技能/普攻选位模式
+if(b.skMode.isBA){
+b.logCtx={u:b.sel,tp:'ba',sn:b.skMode.sk.n};
+// 普攻选目标：检查是否可攻击
+let chgR=isChargeUnit(b.sel)?getChargeRows(b.sel,b.us).rows:null;let canAtk=isChargeUnit(b.sel)?(chgR.includes(u.y)&&((b.sel.tm==='p1'&&u.x>b.sel.x)||(b.sel.tm==='p2'&&u.x<b.sel.x))):b.sel.inRg(u.x,u.y);
+// 冲锋单位：仅允许x距离最近的目标
+if(isChargeUnit(b.sel)&&canAtk){
+let nearest=b.us.filter(v=>v.tm!==b.sel.tm&&v.al&&!v.sth&&chgR.includes(v.y)&&((b.sel.tm==='p1'&&v.x>b.sel.x)||(b.sel.tm==='p2'&&v.x<b.sel.x)));
+let minD=Math.min(...nearest.map(v=>Math.abs(v.x-b.sel.x)));
+if(Math.abs(u.x-b.sel.x)!==minD)canAtk=false;
+}
+if(u.tm!==b.sel.tm&&canAtk&&!u.sth){
+let ba=b.skMode.sk;
+let ctx={b,sel:u};
+b.logCtx={u:b.sel,tp:'ba',sn:ba.n};
+ba.ex(b.sel,u,ctx);b.logCtx=null;
+if(b.sel.n==='手充'&&b.sel.ultA>0){b.us.filter(v=>v.tm!==b.sel.tm&&v.al&&Math.abs(v.x-u.x)<=1&&Math.abs(v.y-u.y)<=1&&v!==u).forEach(v=>dmg(v,b.sel.atk));b.sel.ultA--}
+if(b.sel.chging){b.sel.chging=0;b.lg.push(b.sel.n+' 蓄力释放!')}
+finishAction(b.sel);
+}
+return;
+}
+let ctx={b,sel:u};
+b.logCtx={u:b.sel,tp:'sk',sn:b.skMode.sk.n};
+b.skMode.sk.ex(b.sel,u,ctx);
+finishAction(b.sel);
+return;
+}
+if(!b.sel){
+// 无选中：可查看己方或敌方（队友选为操作，敌方仅查看）
+if(u.al&&!u.isS){
+if(u.tm===b.ct&&!b.acted.has(u._uid)){b.sel=u;b._selEnemy=0;b._actedView=0;renderBattle();upInfo();return;}
+if(u.tm!==b.ct){b.sel=u;b._selEnemy=1;renderBattle();upInfo();return;}
+if(u.tm===b.ct&&b.acted.has(u._uid)){b.sel=u;b._selEnemy=0;b._actedView=1;renderBattle();upInfo();return;}
+}
+return;
+}
+if(u===b.sel){
+// 点自己取消
+b.sel=null;b.logCtx=null;b._selEnemy=0;b._actedView=0;renderBattle();upInfo();return;
+}
+// 查看敌方时点击其他敌方→切换查看
+if(b._selEnemy&&u.tm!==b.ct){b.sel=u;renderBattle();upInfo();return;}
+// 查看敌方时点击己方可行动单位→切换到己方
+if(b._selEnemy&&u.tm===b.ct&&!b.acted.has(u._uid)){b.sel=u;b._selEnemy=0;b._actedView=0;renderBattle();upInfo();return;}
+if(b._selEnemy)return;
+// 查看已行动队友时切换
+if(b._actedView&&u.tm===b.ct&&b.acted.has(u._uid)){b.sel=u;renderBattle();upInfo();return;}
+if(b._actedView&&u.tm!==b.ct){b.sel=u;b._selEnemy=1;b._actedView=0;renderBattle();upInfo();return;}
+if(b._actedView&&u.tm===b.ct&&!b.acted.has(u._uid)){b.sel=u;b._actedView=0;renderBattle();upInfo();return;}
+if(b._actedView)return;
+// 己方选中→点击敌方→普攻
+let cr=b.sel.chging?2:1;let canAtk=isChargeUnit(b.sel)?(
+Math.abs(b.sel.y-u.y)<cr&&((b.sel.tm==='p1'&&u.x>b.sel.x)||(b.sel.tm==='p2'&&u.x<b.sel.x))
+):b.sel.inRg(u.x,u.y);
+if(u.tm!==b.sel.tm&&canAtk&&!u.sth){
+let ba=b.sel.sk.find(s=>s.tp==='ba');
+if(ba){
+let ctx={b,sel:u};
+b.logCtx={u:b.sel,tp:'ba',sn:ba.n};
+ba.ex(b.sel,u,ctx);b.logCtx=null;
+if(b.sel.n==='手充'&&b.sel.ultA>0){b.us.filter(v=>v.tm!==b.sel.tm&&v.al&&Math.abs(v.x-u.x)<=1&&Math.abs(v.y-u.y)<=1&&v!==u).forEach(v=>dmg(v,b.sel.atk));b.sel.ultA--}
+if(b.sel.chging){b.sel.chging=0;b.lg.push(b.sel.n+' 蓄力释放!')}
+finishAction(b.sel);
+}
+}
+if(u.tm===b.sel.tm){
+// 切换选中队友
+b.sel=u;renderBattle();upInfo();b.logCtx=null;
+}
+}
+
+function doAction(unit,tp,sk){
+b.logCtx={u:unit,tp:tp,sn:sk.n};
+if(tp==='ba'){
+// 检查是否有可攻击的目标（排除隐匿单位）
+let cR=isChargeUnit(unit)?getChargeRows(unit,b.us).rows:null;let hasTarget=b.us.some(v=>v.tm!==unit.tm&&v.al&&!v.sth&&(isChargeUnit(unit)?(cR.includes(v.y)&&((unit.tm==='p1'&&v.x>unit.x)||(unit.tm==='p2'&&v.x<unit.x))):unit.inRg(v.x,v.y)));
+if(!hasTarget){
+// 无有效目标，直接执行（如丁衍征一的自身技能）
+try{
+let ctx={b,sel:null};
+sk.ex(unit,null,ctx);
+}catch(e){
+b.lg.push(unit.n+' 范围内无目标');
+b.sel=null;b._selEnemy=0;b._actedView=0;renderBattle();return;
+}
+finishAction(unit);
+return;
+}
+// 进入普攻选目标模式
+b.skMode={sk:sk,tgt:'enemy',isBA:1};
+renderBattle();upInfo();
+return;
+}
+// 判断是否需要选目标 (ex有3个参数=需要t，或技能名是毛毛虫)
+let needsTarget=sk.ex.length===3||sk.n==='毛毛虫';
+if(needsTarget){
+if(sk.n==='毛毛虫'){
+let n=unit.mc||0;
+b.skMode={sk:sk,tgt:'empty',max:n,placed:0,newWorms:[]};
+}else{
+b.skMode={sk:sk,tgt:sk.tp==='ba'||(sk.n==='点赞'||sk.n==='葡萄糖'||sk.n==='飘絮')?'any':'enemy'};
+}
+renderBattle();upInfo();
+return;
+}
+// 不需要目标，直接执行
+let ctx={b,sel:null};
+sk.ex(unit,ctx);
+finishAction(unit);
+}
+
+function allActed(){
+return b.us.filter(u=>u.al&&u.tm===b.ct&&!u.isS&&!u.isDummy).every(u=>b.acted.has(u._uid));
+}
+
+// 冷场：周水击杀后标记待触发
+function triggerColdField(u,b){
+let targets=b.us.filter(v=>v.al&&v._uid!==u._uid);
+if(!targets.length){b.lg.push('冷场:无可选目标');return;}
+b.lg.push('冷场:对全场触发!请逐个选择目标');
+b.coldFieldPending=u;
+}
+
+// 动作后摇：1秒延迟后继续
+function finishAction(unit){
+b._actionDelay=1;b.acted.add(unit._uid);b.sel=null;b.skMode=null;b.logCtx=null;b._selEnemy=0;b._actedView=0;
+b.us.filter(u=>u.al).forEach(u=>u.cdTk());
+renderBattle();checkGO();
+setTimeout(function(){
+b._actionDelay=0;
+// 冷场额外回合：不占行动，不触发回合切换
+if(b.coldFieldPending){
+let cfU=b.coldFieldPending;
+b.coldFieldPending=null;
+let targets=b.us.filter(v=>v.al&&v._uid!==cfU._uid);
+if(targets.length){
+b.coldField={u:cfU,targets:targets,done:[]};
+renderBattle();
+}else{
+b.lg.push('冷场:无可选目标');
+if(!b.go&&allActed())switchTeam();
+else if(!b.go){renderBattle();upInfo();}
+}
+return;
+}
+if(!b.go&&allActed())switchTeam();
+else if(!b.go){renderBattle();upInfo();}
+},1000);
+}
+
+
+// ===== 冲锋目标选择 =====
+function getChargeTarget(u, bus){
+let dir=u.tm==='p1'?1:-1;
+// 同列：身前一整行内离自身最近的单位（我方和敌方）
+let sameRow=bus.filter(v=>v.al&&v.y===u.y&&((dir===1&&v.x>u.x)||(dir===-1&&v.x<u.x)));
+sameRow.sort((a,b)=>dir===1?(a.x-b.x):(b.x-a.x));
+if(sameRow.length>0)return sameRow[0];
+// 相邻行(y-1, y+1)：身前行内离自身最近的单位
+let adjRows=bus.filter(v=>v.al&&(v.y===u.y-1||v.y===u.y+1)&&((dir===1&&v.x>u.x)||(dir===-1&&v.x<u.x)));
+adjRows.sort((a,b)=>{let da=Math.abs(a.x-u.x),db=Math.abs(b.x-u.x);return da!==db?da-db:Math.abs(a.y-u.y)-Math.abs(b.y-u.y)});
+if(adjRows.length>0)return adjRows[0];
+return null;
+}
+function isChargeUnit(u){
+let e=ROSTER.find(r=>r.n===u.n);
+if(e&&e.cls==='冲锋手')return true;
+// 检查是否有冲锋相关技能或BA带charge标记
+let hasChargeSkill=u.sk.some(s=>(s.tp==='ba'&&s.charge)||s.n.includes('冲锋')||s.n.includes('千鸟')||s.n.includes('扶摇'));
+if(hasChargeSkill)return true;
+// 检查 chging 状态
+if(u.chging)return true;
+return false;
+}
+
+function getChargeRows(unit, bus){
+// 返回冲锋可选的行号数组 + 是否仅同行
+let dir=unit.tm==='p1'?1:-1;
+let sameHas=bus.some(v=>v.tm!==unit.tm&&v.al&&!v.sth&&v.y===unit.y&&((dir===1&&v.x>unit.x)||(dir===-1&&v.x<unit.x)));
+if(sameHas)return {rows:[unit.y],sameOnly:1};
+let adj=[unit.y];
+if(unit.y-1>=1)adj.push(unit.y-1);
+if(unit.y+1<=5)adj.push(unit.y+1);
+return {rows:adj,sameOnly:0};
+}
+
+function switchTeam(){
+if(!b.us.some(u=>u.tm==='p1'&&u.al)||!b.us.some(u=>u.tm==='p2'&&u.al)){checkGO();return}
+if(b.extra){
+let eu=b.extra;b.extra=null;
+if(eu.al&&eu.tm===b.ct){b.acted.delete(eu._uid);b.lg.push(eu.n+' 额外行动!');b.sel=null;b.skMode=null;b._selEnemy=0;b._actedView=0;renderBattle();upInfo();return}
+}
+// 小回合结束：自动大招（按敏捷降序）
+let autoUnits=b.us.filter(u=>u.al&&u.ch>=u.mxc).sort((a,b)=>b.agi-a.agi);
+for(let u of autoUnits){
+let au=u.sk.find(s=>s.tp==='ult'&&s.auto);
+if(au){
+b.lg.push(u.n+' 充能满自动释放·'+au.n);
+b.logCtx={u:u,tp:'ult',sn:au.n};
+au.ex(u,{b:b,us:b.us});
+b.logCtx=null;
+}
+}
+b.ct=b.ct==='p1'?'p2':'p1';
+b.logSection('side');b.lg.push((b.ct==='p1'?'蓝方':'红方')+'行动');
+if(b.ct==='p1'){b.lg.push('第'+(b.rn-1)+'大回合结束');b._roundLogged=0;
+b.rn++;
+// 进入选位阶段
+startReposition();
+return;
+}
+// 切换到p2: 如果dev mode且红方是dummy，自动全跳过
+if(b.ct==='p2'&&b.us.some(u=>u.isDummy)){
+let dummies=b.us.filter(u=>u.al&&u.tm===b.ct&&u.isDummy&&!b.acted.has(u._uid));
+dummies.forEach(u=>{b.acted.add(u._uid);b.us.filter(v=>v.al).forEach(v=>v.cdTk());});
+b.lg.push('人机自动跳过');
+switchTeam();
+return;
+}
+b.sel=null;b.skMode=null;b._selEnemy=0;b._actedView=0;
+beginRound();
+if(!b.go){renderBattle();upInfo()}
+}
+
+// ===== 选位阶段 =====
+let repoStep=0,repoCur=null,repoOrder=[],repoFirst='',repoPool=[];
+
+function startReposition(){
+b.sel=null;b.skMode=null;b.acted=new Set();b._selEnemy=0;b._actedView=0;
+let p1u=b.us.filter(u=>u.al&&u.tm==='p1');let p2u=b.us.filter(u=>u.al&&u.tm==='p2');
+let p1a=p1u.reduce((s,u)=>s+u.agi,0);let p2a=p2u.reduce((s,u)=>s+u.agi,0);
+let reason='敏捷';
+if(p1a!==p2a){repoFirst=p1a>p2a?'p1':'p2';}else{
+let p1hp=p1u.reduce((s,u)=>s+u.mH,0);let p2hp=p2u.reduce((s,u)=>s+u.mH,0);
+if(p1hp!==p2hp){repoFirst=p1hp<p2hp?'p1':'p2';reason='HP上限更低';}else{
+let p1atk=p1u.reduce((s,u)=>s+u.atk,0);let p2atk=p2u.reduce((s,u)=>s+u.atk,0);
+repoFirst=p1atk>=p2atk?'p1':'p2';reason='攻击力更高';
+}}
+b.logRepo();b.lg.push('第'+b.rn+'大回合选位');
+let label=repoFirst==='p1'?'🔵蓝方':'🔴红方';
+b.lg.push(label+' 先选位 ('+reason+':'+(repoFirst==='p1'?p1a:p2a)+')');
+let sc=repoFirst==='p1'?'p2':'p1';
+repoOrder=[repoFirst,sc,sc,repoFirst,repoFirst,sc,sc,repoFirst,repoFirst,sc];
+repoPool=b.us.filter(u=>u.al&&!u.isS&&!u.isDummy);
+repoPool.forEach(u=>{u.x=-1;u.y=-1});
+repoStep=0;repoCur=null;
+setPhase('deploy');
+renderReposition();
+}
+
+function renderReposition(){
+while(repoStep<10){
+let cur=repoOrder[repoStep];
+let avail=repoPool.filter(u=>u.al&&u.tm===cur&&u.x<0);
+if(avail.length>0)break;
+repoStep++;
+}
+if(repoStep>=10){confirmReposition();return}
+
+let cur=repoOrder[repoStep];
+let label=cur==='p1'?'🔵蓝方':'🔴红方';
+let isDummy=b.us.some(u=>u.isDummy);
+$('deployTitle').textContent=label+' 布阵 ('+(repoStep+1)+'/10)';
+$('deployInfo').textContent='第'+b.rn+'回合选位 - 点击角色→点击空格放置';
+let brd=$('board');brd.innerHTML='';
+let allOcc=b.us.filter(u=>u.al&&u.x>=0);
+let placed=repoPool.filter(u=>u.x>=0);
+for(let x=0;x<7;x++)for(let y=1;y<6;y++){
+let slot=document.createElement('div');slot.className='slot';
+if(x===3)slot.classList.add('mid');
+else if(x<3)slot.classList.add('p1');
+else slot.classList.add('p2');
+slot.style.left=(x*42+4)+'px';slot.style.top=((y-1)*42+4)+'px';
+slot.dataset.x=x;slot.dataset.y=y;
+let u=allOcc.find(v=>v.x===x&&v.y===y)||placed.find(v=>v.x===x&&v.y===y);
+if(u){slot.innerHTML='<span class="n">'+u.n.substring(0,2)+'</span><span class="hp">'+u.hp+'/'+u.mH+'</span>';slot.classList.add('unit')}
+let valid=x<3?cur==='p1':(x>3?cur==='p2':false);
+if(!u&&valid){
+if(repoCur)slot.classList.add('ready');
+slot.onclick=()=>{
+if(!repoCur)return;
+if(allOcc.find(v=>v.x===x&&v.y===y))return;
+repoCur.x=x;repoCur.y=y;
+repoCur=null;repoStep++;
+renderReposition();
+};
+}
+brd.appendChild(slot);
+}
+// 侧栏：双方已选+未选角色
+let sl=$('deploySideL'),sr=$('deploySideR');
+sl.innerHTML='';sr.innerHTML='';
+repoPool.filter(u=>u.tm==='p1').forEach(u=>{
+let el=document.createElement('div');
+let isPl=u.x>=0;
+el.className='side-cell p1'+(isPl?' placed':'');
+el.textContent=u.n.substring(0,2);
+el.title=u.n+' HP:'+u.hp;
+if(!isPl&&cur==='p1'){
+el.onclick=()=>{
+if(repoCur===u){repoCur=null;renderReposition();return}
+repoCur=u;renderReposition();
+};el.classList.add('pick');
+}
+if(repoCur===u)el.classList.add('current');
+sl.appendChild(el);
+});
+while(sl.children.length<5){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.3';c.textContent='-';sl.appendChild(c);}
+repoPool.filter(u=>u.tm==='p2').forEach(u=>{
+let el=document.createElement('div');
+let isPl=u.x>=0;
+el.className='side-cell p2'+(isPl?' placed':'');
+el.textContent=u.n.substring(0,2);
+el.title=u.n+' HP:'+u.hp;
+if(!isPl&&cur==='p2'){
+el.onclick=()=>{
+if(repoCur===u){repoCur=null;renderReposition();return}
+repoCur=u;renderReposition();
+};el.classList.add('pick');
+}
+if(repoCur===u)el.classList.add('current');
+sr.appendChild(el);
+});
+while(sr.children.length<5){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.3';c.textContent='-';sr.appendChild(c);}
+// 可选角色（仅侧栏，无下方角色条）
+let avail=repoPool.filter(u=>u.al&&u.tm===cur&&u.x<0);
+let humanU=avail.filter(u=>!u.isDummy);
+let dummyU=avail.filter(u=>u.isDummy);
+if(isDummy&&humanU.length===0&&dummyU.length>0){
+let d=dummyU[0];
+let sx=cur==='p1'?0:4,ex=cur==='p1'?2:6;
+for(let x=sx;x<=ex;x++)for(let y=1;y<=5;y++){
+if(!allOcc.some(v=>v.x===x&&v.y===y)&&!placed.some(v=>v.x===x&&v.y===y)){d.x=x;d.y=y;break}
+}
+repoStep++;renderReposition();return;
+}
+}
+
+function confirmReposition(){
+setPhase('battle');
+beginRound();
+renderBattleSides();
+if(!b.go){renderBattle();upInfo()}
+}
+
+function renderBattleSides(){
+let sl=$('batSideL'),sr=$('batSideR');
+sl.innerHTML='';sr.innerHTML='';
+let p1u=b.us.filter(u=>u.tm==='p1'&&!u.isS);
+if(p1pick.length>0)p1u.sort((a,b)=>(p1pick.indexOf(a._pi)-p1pick.indexOf(b._pi)));
+let p2u=b.us.filter(u=>u.tm==='p2'&&!u.isS);
+if(p2pick.length>0)p2u.sort((a,b)=>(p2pick.indexOf(a._pi)-p2pick.indexOf(b._pi)));
+p1u.forEach(u=>{
+let c=document.createElement('div');
+c.className='side-cell p1'+(u.al?'':' dead');
+if(!u.al){c.style.background='#331';c.style.color='#a33';c.textContent='死';}
+else c.textContent=u.n.substring(0,2);
+sl.appendChild(c);
+});
+while(sl.children.length<5){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.2';c.textContent='-';sl.appendChild(c);}
+p2u.forEach(u=>{
+let c=document.createElement('div');
+c.className='side-cell p2'+(u.al?'':' dead');
+if(!u.al){c.style.background='#331';c.style.color='#a33';c.textContent='死';}
+else c.textContent=u.n.substring(0,2);
+sr.appendChild(c);
+});
+while(sr.children.length<5){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.2';c.textContent='-';sr.appendChild(c);}
+}
 
 function checkGO(){
 let p1=b.us.some(u=>u.tm==='p1'&&u.al);
@@ -1046,7 +1452,9 @@ html+='<div class="'+cls+'">'+l.msg+'</div>';
 $('logContent').innerHTML=html||'暂无日志';
 }
 function hideLog(){$('logModal').classList.remove('show');}
-function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志 v1.62</div>- 2026年06月06日，修复战斗阶段无法选中角色：单位absolute层拦截点击事件，添加 pointer-events:none 让点击穿透到背景格<br>- 2026年06月06日，战斗单位定位从手动 left/top 像素计算改为 grid-column/grid-row 网格自动对齐，彻底解决偏移问题<br>- 2026年06月06日，修复棋盘居中偏移导致单位与格子未对齐：去掉 game-grid 的 justify-content:center（造成网格居中偏移与absolute定位原点不一致），改 width:368px + margin:4px auto；恢复单位定位公式为 (u.x+1)*41<br>- 2026年06月06日，修复战斗单位与地图格子未对齐：去掉 game-grid 的 justify-content:center（导致网格居中偏移约3.5px与absolute定位不一致），改用 width:368px + margin:4px auto 固定宽度居中；单位定位公式保持 (u.x+1)*41<br>- 2026年06月06日，棋盘统一重构：三阶段（选人/布阵/战斗/选位）统一使用9×5 CSS Grid，中间7×5为主地图，左右各1×5为侧栏（已选/待部署角色），侧栏格子与地图格子大小完全相同（40px）；去掉所有棋盘颜色渐变为纯白边框，简化视觉；删除旧flex布局（board/board2/main-grid/side-col/side-cell），所有渲染函数全量重写<br>- 2026年06月05日，选位界面重构：侧栏角色改为正方格42×42（蓝红渐变背景区分阵营）；删除地图下方角色条仅保留两侧角色；修复跨阵营放置bug（选位时只能点击已方角色+棋盘双重校验_deployCur._tm）；main-grid间隙收窄4→2px控制总宽390px<br>- 2026年06月05日，选人棋盘取消公共区域限制：移除中列不可放置规则，35格全可用；所有格子初始黑色背景(#111)；角色被选后原地留空不进位<br>- 2026年06月05日，修复选人界面角色消失：slot定位从style属性子串匹配改为dataset属性(x/y)，解决浏览器style格式化空格导致的querySelector匹配失败<br>- 2026年06月05日，修复三阶段棋盘同色混淆：恢复pick/deploy/battle棋盘渐变背景(蓝-透-红)区分各阶段；之前v1.52统一纯色导致选人界面与战斗界面无法辨别<br>- 2026年06月05日，移动端适配：main-grid整体缩小(棋盘302×220+侧栏32px,格42×42,侧格28×42)使总宽374px适配375px手机；去掉user-scalable=no允许手动缩放<br>- 2026年06月05日，三阶段统一main-grid布局：选人/布阵/战斗全用7×5网格+两侧5格竖置side-cell；CSS去重deploy-wrap；部署高亮：选中角色时地图可部署位金色脉冲闪烁(.ready)<br>- 2026年06月05日，选位界面重构：已选角色放两侧（左蓝右红），地图居中缩小（格子56→42px，地图420→316px），角色名缩为2字；三处布阵页面统一适配（renderDeploy/renderDevDeploy/renderReposition）<br>- 2026年06月05日，选人界面适配手机：角色格子56→72px、待选池最大宽度360→420px、字体放大；整体更贴合手机屏幕<br>- 2026年06月05日，已行动队友仅查看：选中本大回合已行动过的我方角色时面板不显示「使用」按钮和「跳过回合」，仅展示技能描述<br>- 2026年06月05日，充能初始化规则：所有角色初始无充能方式，陈色仅自充(beginRound)，周水仅受充(dmg)<br>- 2026年06月05日，自充根因修复：beginRound充能移入_roundLogged守卫内，确保每大回合仅充能+1（此前每大回合被调用两次导致双倍充能）<br>- 2026年06月05日，自充bug修复：移除bpClick两处全局敌方充能泄露（每次攻击后不再给敌方全队+1充能）；新增点击敌方查看描述功能（红色[敌]标记、技能全灰不可用、仅可查看描述）<br>- 2026年06月05日，充能三分法：自充(beginRound每大回合+1)/攻充(普攻目标后+1)/受充(每受击+1)严格区分；陈色→自充，周水→受充，其余→自充；所有普攻移除u.chg(1)攻充逻辑，beginRound回退排除周水（周水仅靠dmg受充）<br>- 2026年06月04日，auto大招不显示「使用」按钮（周水瞬杀时刻等充能满后自动释放），面板渲染与bpClick双重拦截；自充逻辑修复：beginRound移除周水排除，所有角色大回合开始时统一充能+1<br>- 2026年06月04日，所有技能选项点击即可查看完整描述（不可用时也能看），技能数据新增d字段存储每个技能的详细说明<br>- 2026年06月04日，战斗日志嵌入战斗界面：面板下方显示最近6条，点击展开完整日志弹窗<br>- 2026年06月04日，战斗面板操作改为两步：点击选项查看描述+「使用」按钮→点击按钮执行；被动选项可点击查看描述；选中友方切换时自动重置面板默认状态<br>- 2026年06月04日，修复开发者模式选人界面空白：startDevMode()跳过ban阶段导致pool未初始化，补pool=ROSTER.map(r=>({...r}))<br>- 2026年06月04日，修复规则/角色图鉴弹窗在首页无法显示（弹窗从battle div内移至全局#app下）<br>- 2026年06月04日，UI重做：新增首页(正常对战/开发者模式/规则/角色图鉴四个按钮)；选人界面角色格子改为正方形；战斗阶段技能栏替换为信息面板（角色名+HP+跳过回合+损伤条+被动+普攻+技能+大招，点击选项右侧显示描述，可用操作点击即进入目标选择）<br>- 2026年06月04日，陈色/周水添加被动描述字段（面板中被动行显示）<br>- 2026年06月03日，恐惧损伤实装：Ail.add()自动结算(叠满10→4伤)+所有ail.fear.add()传入目标单位；新增恐惧进度条(单位格子底部细条，<70%黄色，≥70%橙红脉冲，满条红色闪烁)<br>- 2026年06月03日，修复致死伤害不播放受击动画：dmg()致死时改设_dying=1保持al=1→renderBattle渲染濒死单位+震动+浮动伤害→动画结束后al=0+checkGO；新增死亡粒子消散动画<br>- 2026年06月03日，跳过冷却修复：bSkip（跳过回合）补调cdTk，每次跳过也触发全体冷却-1，与普攻/技能一致<br>- 2026年06月03日，冷却修复补充：红方人机跳过时补调cdTk，每跳过一个调用一次致全体冷却-1，恢复每大回合10次冷却流逝的正常节奏<br>- 2026年06月03日，冷却机制修复：cdTk从switchTeam（切换行动方时调用）移至finishAction（每个小回合完成时调用），实现每过1个任意角色小回合冷却-1而非每大回合/切换行动方时-1<br>- 2026年06月03日，showRules重写为三部分格式（全局规则/角色通用规则/角色专属规则）并同步showGuide角色图鉴<br>- 2026年06月03日，更新showRules: 公共区域"禁止进入"→"任何单位不能在上面"、攻击优先级补充嘲讽机制、冲锋描述更新、自充描述明确(每个自身小回合+1/除周水外); 陈色充能加入自充(不再排除)<br>- 2026年06月02日，先手判定改为三级(敏捷→HP上限更低→攻击力更高)；自动大招触发时机从大回合开始改为小回合结束时(按敏捷降序)；储存机制通用化(cdTk冷却归零自动存储/毛毛虫加str:4)<br>- 2026年06月02日，充能方式调整：除陈色和周水外所有角色改为自动充能(每大回合+1)；删除除陈色和周水外所有角色的被动(王土回血/手充减上限/科比牢大bns/蓝主任积怨/大树回血)；冷却改为每小回合(切换行动方时)-1<br>- 2026年06月02日，隐匿三态特效重做：获得隐匿(白雾升腾+文字)/持有隐匿(半透明+白色雾气粒子飘散+"隐匿"小字)/解除隐匿(雾气炸散+"破隐"文字)；删除隐匿特效切换按钮(统一雾隐)<br>- 2026年06月02日，冷场改为额外回合：普攻/大招击杀后finishAction完成→插入冷场额外回合(不占行动/不计算冷却充能)→冷场结束后继续正常回合<br>- 2026年06月02日，周水重做：冷场改为自选目标逐个造成ATK×1伤害+5层恐惧(全图)/大招瞬杀时刻去掉穿透/新增规则按钮+角色图鉴按钮(陈色+周水)<br>- 2026年06月02日，选中周水不破隐修复：beginRound中sth递减跳过周水(后门隐匿由攻击机制管理，不自动过期)<br>- 2026年06月02日，选中隐匿单位不破隐修复：新增.slot.unit-sth.sel规则，选中时仅金色边框标记不覆盖隐匿box-shadow<br>- 2026年06月02日，周水隐匿不显示修复：beginRound中sth递减从renderBattle之前移到之后(解决第一回合渲染时sth已被归零)/开发者模式充能上限修复：startDevBattle中rd.m→rd.mxc<br>- 2026年06月01日，充能上限修复：startBattle正常部署路径d.m→d.mxc/自动大招：chg()充能达到上限时自动触发auto:1大招/开发者模式补周水sth=1<br>- 2026年06月01日，隐匿特效根因修复：outline-color不是CSS可动画属性→改为box-shadow内外发光呼吸动画+加!important/新增测试隐匿特效按钮(内联强制渲染)<br>- 2026年06月01日，充能上限修复：deployCur缺少m字段导致mxc回退默认5→改为透传r.mxc/隐匿特效重做：overlay方案改为slot级filter+outline呼吸动画，更稳定可见<br>- 2026年06月01日，隐匿overlay加半透明背景色+inset发光/冲锋选位仅允许x距离最近目标(高亮+点击双限制)<br>- 2026年06月01日，冲锋范围动态检测(同行有敌→仅同行/同行无敌→同行+相邻行)/隐匿独立overlay层+发光模糊动画/冷场按距离排序且不伤自己/周水充能上限2<br>- 2026年05月31日，周水重做(充能改为受击+1上限2/冲锋UI自选目标/自动大招不消耗行动/隐匿雾隐虚影双特效+按钮切换)<br>- 2026年05月31日，周水重做：恐惧震慑改为冲锋自动锁定目标、瞬杀时刻伤害公式改为(已损失+ATK)*2穿透、新增被动后门(开局隐匿/攻击解除/2回合后恢复)、冷场改为对全场触发普攻<br>- 2026年05月29日，损伤全局触发（叠满10点自动结算：神经=2伤+眩晕/恐惧=4伤/燃烧=2伤+3回合流血）+ 先手平局随机 + 冲锋全局规则（同列/相邻行取最近单位，含友方）<br>- 2026年05月29日，战斗反馈优化：先震动后出伤（暂显旧HP→震动0.35s→HP更新+红色小字"-x"浮动跳出）<br>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害累加取最强+血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}function hideCL(){$('clModal').classList.remove('show');}
+function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志 v1.20</div>- 2026年06月07日，v1.20：回退至v1.56恢复完整24角色；新建1.20八宝舟知识库.txt(整合原版规则+角色+应用详解)；新建项目介绍.txt；仅陈色周水保留完整描述，其余角色精简为数值；修复瞬杀时刻描述×1→×2；统一版本号至v1.20
+- - 2026年06月05日，选位界面重构：侧栏角色改为正方格42×42（蓝红渐变背景区分阵营）；删除地图下方角色条仅保留两侧角色；修复跨阵营放置bug（选位时只能点击已方角色+棋盘双重校验_deployCur._tm）；main-grid间隙收窄4→2px控制总宽390px<br>- 2026年06月05日，选人棋盘取消公共区域限制：移除中列不可放置规则，35格全可用；所有格子初始黑色背景(#111)；角色被选后原地留空不进位<br>- 2026年06月05日，修复选人界面角色消失：slot定位从style属性子串匹配改为dataset属性(x/y)，解决浏览器style格式化空格导致的querySelector匹配失败<br>- 2026年06月05日，修复三阶段棋盘同色混淆：恢复pick/deploy/battle棋盘渐变背景(蓝-透-红)区分各阶段；之前v1.52统一纯色导致选人界面与战斗界面无法辨别<br>- 2026年06月05日，移动端适配：main-grid整体缩小(棋盘302×220+侧栏32px,格42×42,侧格28×42)使总宽374px适配375px手机；去掉user-scalable=no允许手动缩放<br>- 2026年06月05日，三阶段统一main-grid布局：选人/布阵/战斗全用7×5网格+两侧5格竖置side-cell；CSS去重deploy-wrap；部署高亮：选中角色时地图可部署位金色脉冲闪烁(.ready)<br>- 2026年06月07日，v1.20：回退至v1.56恢复完整24角色；新建1.20八宝舟知识库.txt(整合原版规则+角色+应用详解)；新建项目介绍.txt；仅陈色周水保留完整描述，其余角色精简为数值；修复瞬杀时刻描述×1→×2；统一版本号至v1.20
+- - 2026年06月05日，选位界面重构：已选角色放两侧（左蓝右红），地图居中缩小（格子56→42px，地图420→316px），角色名缩为2字；三处布阵页面统一适配（renderDeploy/renderDevDeploy/renderReposition）<br>- 2026年06月05日，选人界面适配手机：角色格子56→72px、待选池最大宽度360→420px、字体放大；整体更贴合手机屏幕<br>- 2026年06月05日，已行动队友仅查看：选中本大回合已行动过的我方角色时面板不显示「使用」按钮和「跳过回合」，仅展示技能描述<br>- 2026年06月05日，充能初始化规则：所有角色初始无充能方式，陈色仅自充(beginRound)，周水仅受充(dmg)<br>- 2026年06月05日，自充根因修复：beginRound充能移入_roundLogged守卫内，确保每大回合仅充能+1（此前每大回合被调用两次导致双倍充能）<br>- 2026年06月05日，自充bug修复：移除bpClick两处全局敌方充能泄露（每次攻击后不再给敌方全队+1充能）；新增点击敌方查看描述功能（红色[敌]标记、技能全灰不可用、仅可查看描述）<br>- 2026年06月05日，充能三分法：自充(beginRound每大回合+1)/攻充(普攻目标后+1)/受充(每受击+1)严格区分；陈色→自充，周水→受充，其余→自充；所有普攻移除u.chg(1)攻充逻辑，beginRound回退排除周水（周水仅靠dmg受充）<br>- 2026年06月04日，auto大招不显示「使用」按钮（周水瞬杀时刻等充能满后自动释放），面板渲染与bpClick双重拦截；自充逻辑修复：beginRound移除周水排除，所有角色大回合开始时统一充能+1<br>- 2026年06月04日，所有技能选项点击即可查看完整描述（不可用时也能看），技能数据新增d字段存储每个技能的详细说明<br>- 2026年06月04日，战斗日志嵌入战斗界面：面板下方显示最近6条，点击展开完整日志弹窗<br>- 2026年06月04日，战斗面板操作改为两步：点击选项查看描述+「使用」按钮→点击按钮执行；被动选项可点击查看描述；选中友方切换时自动重置面板默认状态<br>- 2026年06月04日，修复开发者模式选人界面空白：startDevMode()跳过ban阶段导致pool未初始化，补pool=ROSTER.map(r=>({...r}))<br>- 2026年06月04日，修复规则/角色图鉴弹窗在首页无法显示（弹窗从battle div内移至全局#app下）<br>- 2026年06月04日，UI重做：新增首页(正常对战/开发者模式/规则/角色图鉴四个按钮)；选人界面角色格子改为正方形；战斗阶段技能栏替换为信息面板（角色名+HP+跳过回合+损伤条+被动+普攻+技能+大招，点击选项右侧显示描述，可用操作点击即进入目标选择）<br>- 2026年06月04日，陈色/周水添加被动描述字段（面板中被动行显示）<br>- 2026年06月03日，恐惧损伤实装：Ail.add()自动结算(叠满10→4伤)+所有ail.fear.add()传入目标单位；新增恐惧进度条(单位格子底部细条，<70%黄色，≥70%橙红脉冲，满条红色闪烁)<br>- 2026年06月03日，修复致死伤害不播放受击动画：dmg()致死时改设_dying=1保持al=1→renderBattle渲染濒死单位+震动+浮动伤害→动画结束后al=0+checkGO；新增死亡粒子消散动画<br>- 2026年06月03日，跳过冷却修复：bSkip（跳过回合）补调cdTk，每次跳过也触发全体冷却-1，与普攻/技能一致<br>- 2026年06月03日，冷却修复补充：红方人机跳过时补调cdTk，每跳过一个调用一次致全体冷却-1，恢复每大回合10次冷却流逝的正常节奏<br>- 2026年06月03日，冷却机制修复：cdTk从switchTeam（切换行动方时调用）移至finishAction（每个小回合完成时调用），实现每过1个任意角色小回合冷却-1而非每大回合/切换行动方时-1<br>- 2026年06月03日，showRules重写为三部分格式（全局规则/角色通用规则/角色专属规则）并同步showGuide角色图鉴<br>- 2026年06月03日，更新showRules: 公共区域"禁止进入"→"任何单位不能在上面"、攻击优先级补充嘲讽机制、冲锋描述更新、自充描述明确(每个自身小回合+1/除周水外); 陈色充能加入自充(不再排除)<br>- 2026年06月02日，先手判定改为三级(敏捷→HP上限更低→攻击力更高)；自动大招触发时机从大回合开始改为小回合结束时(按敏捷降序)；储存机制通用化(cdTk冷却归零自动存储/毛毛虫加str:4)<br>- 2026年06月02日，充能方式调整：除陈色和周水外所有角色改为自动充能(每大回合+1)；删除除陈色和周水外所有角色的被动(王土回血/手充减上限/科比牢大bns/蓝主任积怨/大树回血)；冷却改为每小回合(切换行动方时)-1<br>- 2026年06月02日，隐匿三态特效重做：获得隐匿(白雾升腾+文字)/持有隐匿(半透明+白色雾气粒子飘散+"隐匿"小字)/解除隐匿(雾气炸散+"破隐"文字)；删除隐匿特效切换按钮(统一雾隐)<br>- 2026年06月02日，冷场改为额外回合：普攻/大招击杀后finishAction完成→插入冷场额外回合(不占行动/不计算冷却充能)→冷场结束后继续正常回合<br>- 2026年06月02日，周水重做：冷场改为自选目标逐个造成ATK×1伤害+5层恐惧(全图)/大招瞬杀时刻去掉穿透/新增规则按钮+角色图鉴按钮(陈色+周水)<br>- 2026年06月02日，选中周水不破隐修复：beginRound中sth递减跳过周水(后门隐匿由攻击机制管理，不自动过期)<br>- 2026年06月02日，选中隐匿单位不破隐修复：新增.slot.unit-sth.sel规则，选中时仅金色边框标记不覆盖隐匿box-shadow<br>- 2026年06月02日，周水隐匿不显示修复：beginRound中sth递减从renderBattle之前移到之后(解决第一回合渲染时sth已被归零)/开发者模式充能上限修复：startDevBattle中rd.m→rd.mxc<br>- 2026年06月01日，充能上限修复：startBattle正常部署路径d.m→d.mxc/自动大招：chg()充能达到上限时自动触发auto:1大招/开发者模式补周水sth=1<br>- 2026年06月01日，隐匿特效根因修复：outline-color不是CSS可动画属性→改为box-shadow内外发光呼吸动画+加!important/新增测试隐匿特效按钮(内联强制渲染)<br>- 2026年06月01日，充能上限修复：deployCur缺少m字段导致mxc回退默认5→改为透传r.mxc/隐匿特效重做：overlay方案改为slot级filter+outline呼吸动画，更稳定可见<br>- 2026年06月01日，隐匿overlay加半透明背景色+inset发光/冲锋选位仅允许x距离最近目标(高亮+点击双限制)<br>- 2026年06月01日，冲锋范围动态检测(同行有敌→仅同行/同行无敌→同行+相邻行)/隐匿独立overlay层+发光模糊动画/冷场按距离排序且不伤自己/周水充能上限2<br>- 2026年05月31日，周水重做(充能改为受击+1上限2/冲锋UI自选目标/自动大招不消耗行动/隐匿雾隐虚影双特效+按钮切换)<br>- 2026年05月31日，周水重做：恐惧震慑改为冲锋自动锁定目标、瞬杀时刻伤害公式改为(已损失+ATK)*2穿透、新增被动后门(开局隐匿/攻击解除/2回合后恢复)、冷场改为对全场触发普攻<br>- 2026年05月29日，损伤全局触发（叠满10点自动结算：神经=2伤+眩晕/恐惧=4伤/燃烧=2伤+3回合流血）+ 先手平局随机 + 冲锋全局规则（同列/相邻行取最近单位，含友方）<br>- 2026年05月29日，战斗反馈优化：先震动后出伤（暂显旧HP→震动0.35s→HP更新+红色小字"-x"浮动跳出）<br>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害累加取最强+血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}function hideCL(){$('clModal').classList.remove('show');}
 function showRules(){
 var h='<div class="cl-hdr">八宝舟 总体规则</div>';
 h+='<p style="font-size:13px;color:#aaa;margin:2px 0">第一部分 全局规则</p>';
