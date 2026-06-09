@@ -1,7 +1,7 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>八宝舟</title>
+<title>鍏疂鑸?/title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#111;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;font-family:sans-serif}
@@ -83,41 +83,41 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 .cl-content{background:#1a1a2e;border:1px solid #555;border-radius:8px;padding:16px;max-width:380px;width:90%;max-height:70vh;overflow-y:auto;color:#aaa;font-size:13px;line-height:1.8}
 .cl-content .cl-hdr{color:#fc0;font-size:15px;font-weight:bold;margin-bottom:8px;text-align:center}
 .cl-close{position:absolute;top:10px;right:14px;color:#888;font-size:18px;cursor:pointer;background:none;border:none}
-/* 隐匿三态特效 */
+/* 闅愬尶涓夋€佺壒鏁?*/
 .slot.unit-sth{opacity:0.5;position:relative}
 .slot.unit-sth::before{content:'';position:absolute;inset:-5px;border-radius:6px;background:radial-gradient(1px 1px at 15% 25%,rgba(255,255,255,0.7),transparent),radial-gradient(1px 1px at 55% 65%,rgba(255,255,255,0.5),transparent),radial-gradient(1.5px 1.5px at 75% 20%,rgba(255,255,255,0.6),transparent),radial-gradient(1px 1px at 35% 80%,rgba(255,255,255,0.4),transparent),radial-gradient(1px 1px at 85% 50%,rgba(255,255,255,0.55),transparent),radial-gradient(1.5px 1.5px at 65% 35%,rgba(255,255,255,0.6),transparent),radial-gradient(1px 1px at 25% 70%,rgba(255,255,255,0.45),transparent),radial-gradient(1px 1px at 45% 15%,rgba(255,255,255,0.5),transparent);animation:mistDrift 2.5s ease-in-out infinite;pointer-events:none;z-index:2}
 .slot.unit-sth.sel{border-color:#fc0!important}
 @keyframes mistDrift{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.03)}}
-/* 获得隐匿：白雾从脚下升腾 */
+/* 鑾峰緱闅愬尶锛氱櫧闆句粠鑴氫笅鍗囪吘 */
 .sth-gain-wrap{position:absolute;left:0;bottom:0;width:100%;height:120%;overflow:hidden;pointer-events:none;z-index:25}
 .sth-gain-fog{position:absolute;left:0;bottom:0;width:100%;height:60px;background:linear-gradient(to top,rgba(255,255,255,0.05),rgba(255,255,255,0.5) 40%,rgba(255,255,255,0.1));animation:fogRise 0.9s ease-out forwards}
 @keyframes fogRise{0%{opacity:1;transform:translateY(0) scaleX(0.6)}100%{opacity:0;transform:translateY(-55px) scaleX(1.2)}}
 .sth-gain{position:absolute;top:-16px;left:50%;transform:translateX(-50%);color:#fff;font-size:10px;font-weight:bold;pointer-events:none;z-index:30;animation:floatUp 1.2s ease-out forwards;text-shadow:0 0 8px rgba(255,255,255,0.7)}
-/* 解除隐匿：雾气瞬间炸散 */
+/* 瑙ｉ櫎闅愬尶锛氶浘姘旂灛闂寸偢鏁?*/
 .sth-burst{position:absolute;inset:-6px;border-radius:6px;background:radial-gradient(circle,rgba(255,255,255,0.35) 10%,transparent 70%);animation:burstDisperse .4s ease-out forwards;pointer-events:none;z-index:25}
 @keyframes burstDisperse{0%{transform:scale(0.6);opacity:1}100%{transform:scale(2.2);opacity:0}}
 .sth-lose{position:absolute;top:-16px;left:50%;transform:translateX(-50%);color:#faa;font-size:10px;font-weight:bold;pointer-events:none;z-index:30;animation:floatUp 1.2s ease-out forwards;text-shadow:0 0 8px rgba(255,100,100,0.7)}
 @keyframes floatUp{0%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-22px)}}
 .sth-label{position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);font-size:8px;color:#ccc;pointer-events:none;z-index:30}
-/* 死亡粒子消散 */
+/* 姝讳骸绮掑瓙娑堟暎 */
 .slot.dying{animation:dyingDissolve .6s ease-out forwards;pointer-events:none}
 @keyframes dyingDissolve{0%{opacity:1;filter:brightness(1) blur(0)}40%{opacity:.6;filter:brightness(2.5) blur(1px)}100%{opacity:0;filter:brightness(4) blur(4px)}}
 .dying-particle{position:absolute;border-radius:50%;pointer-events:none;z-index:20;animation:particleFly .7s ease-out forwards}
 @keyframes particleFly{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--px),var(--py)) scale(0)}}
-/* 恐惧进度条 */
+/* 鎭愭儳杩涘害鏉?*/
 .fear-bar-wrap{position:absolute;left:4px;right:4px;bottom:2px;height:3px;background:rgba(255,255,255,.08);border-radius:2px;z-index:5;overflow:hidden}
 .fear-bar-fill{height:100%;background:linear-gradient(90deg,#c80,#fa0);border-radius:2px;transition:width .3s}
 .fear-bar-fill.high{background:linear-gradient(90deg,#f60,#f33);animation:fearPulse .6s ease-in-out infinite}
 @keyframes fearPulse{0%,100%{opacity:.7}50%{opacity:1}}
 .fear-bar-fill.full{background:#f33;animation:fearFlash .3s ease-in-out infinite}
 @keyframes fearFlash{0%,100%{opacity:.6}50%{opacity:1}}
-/* 首页 */
+/* 棣栭〉 */
 .home-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:40px}
 .home-btn{width:220px;padding:14px;border-radius:10px;border:2px solid #444;background:#1a1a33;color:#ddd;font-size:15px;cursor:pointer;transition:all .2s}
 .home-btn:hover{background:#2a2a44;border-color:#fc0}
 .home-btn.dev{background:#1a2a1a;border-color:#3a3}
 .home-btn.dev:hover{background:#2a3a2a;border-color:#4f4}
-/* 战斗操作面板 */
+/* 鎴樻枟鎿嶄綔闈㈡澘 */
 .battle-panel{display:none;margin:6px auto;max-width:420px;background:#151525;border-radius:6px;border:1px solid #2a2a44;overflow:hidden}
 .battle-panel.show{display:flex}
 .bp-left{flex:1;padding:6px 8px;min-width:0}
@@ -151,18 +151,18 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 <div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v2.00</div>
 
 <div id="home" class="phase active">
-<h2 style="text-align:center;color:#fc0;font-size:22px;margin:30px 0 10px">八宝舟</h2>
+<h2 style="text-align:center;color:#fc0;font-size:22px;margin:30px 0 10px">鍏疂鑸?/h2>
 <div class="home-wrap">
-<button class="home-btn" onclick="startNormalGame()">正常对战 (5v5)</button>
-<button class="home-btn dev" onclick="startDevGame()">开发者模式 (1v5)</button>
-<button class="home-btn" onclick="showRules()">📖 规则</button>
-<button class="home-btn" onclick="showGuide()">📚 角色图鉴</button>
+<button class="home-btn" onclick="startNormalGame()">姝ｅ父瀵规垬 (5v5)</button>
+<button class="home-btn dev" onclick="startDevGame()">寮€鍙戣€呮ā寮?(1v5)</button>
+<button class="home-btn" onclick="showRules()">馃摉 瑙勫垯</button>
+<button class="home-btn" onclick="showGuide()">馃摎 瑙掕壊鍥鹃壌</button>
 </div>
 </div>
 
 <div id="ban" class="phase">
-<h2>🔵 蓝方 BAN（1/4）</h2>
-<div class="info">点击角色禁用（共4个）</div>
+<h2>馃數 钃濇柟 BAN锛?/4锛?/h2>
+<div class="info">鐐瑰嚮瑙掕壊绂佺敤锛堝叡4涓級</div>
 <div id="banPool" class="grid6"></div>
 </div>
 
@@ -177,7 +177,7 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 </div>
 
 <div id="deploy" class="phase">
-<h2 id="deployTitle">布阵</h2>
+<h2 id="deployTitle">甯冮樀</h2>
 <div class="info" id="deployInfo"></div>
 <div class="main-grid">
 <div class="side-col" id="deploySideL"></div>
@@ -194,72 +194,72 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 </div>
 <div id="battlePanel" class="battle-panel"></div>
 <div id="bpLog" class="bp-log"></div>
-<div class="row"><button class="btn" onclick="bSkip()">跳过回合</button><button class="btn" id="btnDummyMove" style="display:none;background:#552" onclick="toggleDummyMove()">📦 调整人机</button><button class="btn" id="btnAddDummy" style="display:none;background:#252" onclick="toggleAddDummy()">+人机</button><button class="btn" id="btnCdMinus" style="display:none;background:#a33" onclick="devCdMinus()">⏱ 全体冷却-1</button><button class="btn" id="btnChgPlus" style="display:none;background:#3a3" onclick="devChgPlus()">⚡ 全体充能+1</button><button class="btn" style="background:#448" onclick="showRules()">📖 规则</button><button class="btn" style="background:#484" onclick="showGuide()">📚 角色图鉴</button></div>
-<button class="log-icon" id="logBtn" onclick="showLog()" title="战斗日志">📋</button>
-<div class="log-modal" id="logModal"><button class="log-close" onclick="hideLog()">✕</button><div class="log-content" id="logContent"></div></div>
+<div class="row"><button class="btn" onclick="bSkip()">璺宠繃鍥炲悎</button><button class="btn" id="btnDummyMove" style="display:none;background:#552" onclick="toggleDummyMove()">馃摝 璋冩暣浜烘満</button><button class="btn" id="btnAddDummy" style="display:none;background:#252" onclick="toggleAddDummy()">+浜烘満</button><button class="btn" id="btnCdMinus" style="display:none;background:#a33" onclick="devCdMinus()">鈴?鍏ㄤ綋鍐峰嵈-1</button><button class="btn" id="btnChgPlus" style="display:none;background:#3a3" onclick="devChgPlus()">鈿?鍏ㄤ綋鍏呰兘+1</button><button class="btn" style="background:#448" onclick="showRules()">馃摉 瑙勫垯</button><button class="btn" style="background:#484" onclick="showGuide()">馃摎 瑙掕壊鍥鹃壌</button></div>
+<button class="log-icon" id="logBtn" onclick="showLog()" title="鎴樻枟鏃ュ織">馃搵</button>
+<div class="log-modal" id="logModal"><button class="log-close" onclick="hideLog()">鉁?/button><div class="log-content" id="logContent"></div></div>
 </div>
-<div class="log-modal" id="rulesModal"><button class="log-close" onclick="$('rulesModal').style.display='none'">✕</button><div class="log-content" id="rulesContent"></div></div>
-<div class="log-modal" id="guideModal"><button class="log-close" onclick="$('guideModal').style.display='none'">✕</button><div class="log-content" id="guideContent"></div></div>
+<div class="log-modal" id="rulesModal"><button class="log-close" onclick="$('rulesModal').style.display='none'">鉁?/button><div class="log-content" id="rulesContent"></div></div>
+<div class="log-modal" id="guideModal"><button class="log-close" onclick="$('guideModal').style.display='none'">鉁?/button><div class="log-content" id="guideContent"></div></div>
 
 <div id="gameover" class="phase">
 <h2 id="winnerText"></h2>
-<div class="row"><button class="btn" onclick="location.reload()">重新开始</button></div>
+<div class="row"><button class="btn" onclick="location.reload()">閲嶆柊寮€濮?/button></div>
 </div>
 
 </div>
 
 <script>
-// ===== 24角色数据 =====
-const ROSTER=[{n:'陈色',h:16,a:0,agi:7,cls:'召唤师',pa:'虫迷：场上每存在1只虫子，虫子生命值+1',rg:[[0,0]],sk:[
-{tp:'sk',n:'毛毛虫',cd:8,str:4,d:'在己方区域召唤生命值为1的毛毛虫，开局场上无毛毛虫。冷8/存4。',ex:(u,ctx)=>{
-let n=u.mc||0;if(n<=0)return ctx.b.lg.push('无可召唤的毛毛虫');
-// 进入选位模式
-ctx.b.skMode={sk:{tp:'sk',n:'毛毛虫'},tgt:'empty',max:n,placed:0};
-ctx.b.lg.push('选择1~'+n+'个空格召唤毛毛虫');
+// ===== 24瑙掕壊鏁版嵁 =====
+const ROSTER=[{n:'闄堣壊',h:16,a:0,agi:7,cls:'鍙敜甯?,pa:'铏糠锛氬満涓婃瘡瀛樺湪1鍙櫕瀛愶紝铏瓙鐢熷懡鍊?1',rg:[[0,0]],sk:[
+{tp:'sk',n:'姣涙瘺铏?,cd:8,str:4,d:'鍦ㄥ繁鏂瑰尯鍩熷彫鍞ょ敓鍛藉€间负1鐨勬瘺姣涜櫕锛屽紑灞€鍦轰笂鏃犳瘺姣涜櫕銆傚喎8/瀛?銆?,ex:(u,ctx)=>{
+let n=u.mc||0;if(n<=0)return ctx.b.lg.push('鏃犲彲鍙敜鐨勬瘺姣涜櫕');
+// 杩涘叆閫変綅妯″紡
+ctx.b.skMode={sk:{tp:'sk',n:'姣涙瘺铏?},tgt:'empty',max:n,placed:0};
+ctx.b.lg.push('閫夋嫨1~'+n+'涓┖鏍煎彫鍞ゆ瘺姣涜櫕');
 }},
-{tp:'ult',n:'虫群',ch:3,d:'对敌方所有单位造成 虫子总血量/敌方单位数量*2 的伤害，己方全体基础攻击力+1，大招开始清空所有毛毛虫，自充3/持1，持续期间无法使用技能。',ex:(u,ctx)=>{
+{tp:'ult',n:'铏兢',ch:3,d:'瀵规晫鏂规墍鏈夊崟浣嶉€犳垚 铏瓙鎬昏閲?鏁屾柟鍗曚綅鏁伴噺*2 鐨勪激瀹筹紝宸辨柟鍏ㄤ綋鍩虹鏀诲嚮鍔?1锛屽ぇ鎷涘紑濮嬫竻绌烘墍鏈夋瘺姣涜櫕锛岃嚜鍏?/鎸?锛屾寔缁湡闂存棤娉曚娇鐢ㄦ妧鑳姐€?,ex:(u,ctx)=>{
 let ws=ctx.b.us.filter(v=>v.isS&&v.mst===u);
 let th=ws.reduce((s,w)=>s+w.hp,0);
 let x=th*2;
 u._ultX=x;
 let es=ctx.b.us.filter(v=>v.tm!==u.tm&&v.al);
-if(es.length){let d=Math.floor(x/es.length);es.forEach(e=>e.dmg(d));ctx.b.lg.push('虫群:每人'+d+'伤害')}
+if(es.length){let d=Math.floor(x/es.length);es.forEach(e=>e.dmg(d));ctx.b.lg.push('铏兢:姣忎汉'+d+'浼ゅ')}
 ctx.b.us.filter(v=>v.tm===u.tm).forEach(v=>v.atk+=1);
 ws.forEach(w=>w.al=0);
 u.ch=0;u.ultDur=1;u.skDisabled=1;
-ctx.b.lg.push('虫群发动!下个自身回合开始时触发二次伤害');
+ctx.b.lg.push('铏兢鍙戝姩!涓嬩釜鑷韩鍥炲悎寮€濮嬫椂瑙﹀彂浜屾浼ゅ');
 }}
 ]},
-{n:'周水',h:3,a:2,agi:8,cls:'处决者',pa:'后门：开局获得隐匿，攻击后解除隐匿，1回合后恢复隐匿，不可叠加；冷场：击杀敌方单位后，对全场所有单位触发一次普攻效果',mxc:2,rg:[[0,0],[1,0]],sk:[
-{tp:'ba',n:'恐惧震慑',charge:1,d:'向前冲锋，对单个单位造成1倍伤害，附加5点恐惧值，冷0/存0',ex:(u,t,ctx)=>{let d=t.dmg(u.atk);ctx.b.lg.push('恐惧震慑 '+t.n+' '+d+'伤 +5恐惧');t.ail.fear.add(5,t);t.chg(1);if(u.sth>0){u.sth=0;u.backdoorCd=2;ctx.b.lg.push('后门:隐匿解除,2回合后恢复')}if(!t.al||t._dying)triggerColdField(u,ctx.b)}},
-{tp:'ult',n:'瞬杀时刻',ch:2,auto:1,d:'选择当前血量最低的敌方单位，造成 (自身基础攻击力+已损失生命值)*2 的伤害，附加8点恐惧值，受充2/持0',ex:(u,ctx)=>{let es=ctx.b.us.filter(v=>v.tm!==u.tm&&v.al);if(!es.length)return;es.sort((a,b)=>a.hp-b.hp);let t=es[0];let dmgVal=Math.floor(((u.mH-u.hp)+u.atk)*2);t.dmg(dmgVal);ctx.b.lg.push('瞬杀 '+t.n+' '+dmgVal+'伤 +8恐惧');t.ail.fear.add(8,t);u.ch=0;if(u.sth>0){u.sth=0;u.backdoorCd=2;ctx.b.lg.push('后门:隐匿解除,2回合后恢复')}if(!t.al||t._dying)triggerColdField(u,ctx.b)}}
+{n:'鍛ㄦ按',h:3,a:2,agi:8,cls:'澶勫喅鑰?,pa:'鍚庨棬锛氬紑灞€鑾峰緱闅愬尶锛屾敾鍑诲悗瑙ｉ櫎闅愬尶锛?鍥炲悎鍚庢仮澶嶉殣鍖匡紝涓嶅彲鍙犲姞锛涘喎鍦猴細鍑绘潃鏁屾柟鍗曚綅鍚庯紝瀵瑰叏鍦烘墍鏈夊崟浣嶈Е鍙戜竴娆℃櫘鏀绘晥鏋?,mxc:2,rg:[[0,0],[1,0]],sk:[
+{tp:'ba',n:'鎭愭儳闇囨厬',charge:1,d:'鍚戝墠鍐查攱锛屽鍗曚釜鍗曚綅閫犳垚1鍊嶄激瀹筹紝闄勫姞5鐐规亹鎯у€硷紝鍐?/瀛?',ex:(u,t,ctx)=>{let d=t.dmg(u.atk);ctx.b.lg.push('鎭愭儳闇囨厬 '+t.n+' '+d+'浼?+5鎭愭儳');t.ail.fear.add(5,t);t.chg(1);if(u.sth>0){u.sth=0;u.backdoorCd=2;ctx.b.lg.push('鍚庨棬:闅愬尶瑙ｉ櫎,2鍥炲悎鍚庢仮澶?)}if(!t.al||t._dying)triggerColdField(u,ctx.b)}},
+{tp:'ult',n:'鐬潃鏃跺埢',ch:2,auto:1,d:'閫夋嫨褰撳墠琛€閲忔渶浣庣殑鏁屾柟鍗曚綅锛岄€犳垚 (鑷韩鍩虹鏀诲嚮鍔?宸叉崯澶辩敓鍛藉€?*2 鐨勪激瀹筹紝闄勫姞8鐐规亹鎯у€硷紝鍙楀厖2/鎸?',ex:(u,ctx)=>{let es=ctx.b.us.filter(v=>v.tm!==u.tm&&v.al);if(!es.length)return;es.sort((a,b)=>a.hp-b.hp);let t=es[0];let dmgVal=Math.floor(((u.mH-u.hp)+u.atk)*2);t.dmg(dmgVal);ctx.b.lg.push('鐬潃 '+t.n+' '+dmgVal+'浼?+8鎭愭儳');t.ail.fear.add(8,t);u.ch=0;if(u.sth>0){u.sth=0;u.backdoorCd=2;ctx.b.lg.push('鍚庨棬:闅愬尶瑙ｉ櫎,2鍥炲悎鍚庢仮澶?)}if(!t.al||t._dying)triggerColdField(u,ctx.b)}}
 ]},
-{n:'优南',h:14,a:2,cls:'斗士',rg:[[0,0],[1,0]]},
-{n:'王土',h:18,a:0,agi:1,cls:'守护者',rg:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]]},
-{n:'达不溜',h:10,a:2,agi:8,cls:'情报官',rg:[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]]},
-{n:'蓝主任',h:8,a:0,agi:3,cls:'战术家',rg:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1]]},
-{n:'剑柄',h:5,a:2,agi:6,cls:'处决者',rg:[[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]]},
-{n:'手充',h:12,a:2,agi:1,cls:'神射手',rg:[[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]]},
-{n:'P铅',h:14,a:1,agi:5,cls:'投手',rg:[[0,0],[3,0],[3,-1],[3,1],[4,0],[4,-1],[4,1]]},
-{n:'小二',h:8,a:0,agi:4,cls:'吟游者',rg:[[-2,-2],[-2,-1],[-2,0],[-2,1],[-2,2],[-1,-2],[-1,-1],[-1,0],[-1,1],[-1,2],[0,-2],[0,-1],[0,1],[0,2],[1,-2],[1,-1],[1,0],[1,1],[1,2],[2,-2],[2,-1],[2,0],[2,1],[2,2]]},
-{n:'肖牢大',h:10,a:2,agi:7,cls:'扩散术师',rg:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1]]},
-{n:'主播',h:12,a:1,agi:2,cls:'医师',rg:[[0,0],[1,0],[2,0],[2,-1],[2,1],[2,-2],[2,2]]},
-{n:'丁衍征一',h:10,a:0,agi:8,cls:'召唤师',rg:[]},
-{n:'澄心',h:12,a:2,agi:3,cls:'医师',rg:[[-1,0],[0,-1],[0,0],[0,1],[1,-1],[1,0]]},
-{n:'第五陈色',h:12,a:2,agi:7,cls:'冲锋手',rg:[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]]},
-{n:'加州老鼠',h:14,a:0,agi:9,cls:'强攻手',rg:[[0,0],[1,0],[2,0],[3,0],[4,0]]},
-{n:'路易十六',h:16,a:2,agi:4,cls:'战术家',rg:[[0,0],[2,-1],[2,0],[2,1],[3,-1],[3,0],[3,1],[4,-1],[4,0],[4,1]]},
-{n:'QC',h:14,a:1,agi:6,cls:'医师',rg:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1]]},
-{n:'松龄',h:8,a:0,agi:1,cls:'召唤师',rg:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1]]},
-{n:'门师傅',h:12,a:4,agi:10,cls:'处决者',rg:[[-2,-1],[-2,0],[-2,1],[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1],[2,-1],[2,0],[2,1]]},
-{n:'风笛',h:5,a:1,agi:6,cls:'冲锋手',rg:[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]]},
-{n:'纯烬艾雅法拉',h:10,a:1,agi:4,cls:'医师',rg:[[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1],[2,-1],[2,0],[2,1],[2,-2],[2,2]]},
-{n:'宇智波佐助',h:8,a:1,agi:8,cls:'冲锋手',rg:[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]]},
-{n:'科比牢大',h:16,a:0,agi:1,cls:'解放者',rg:[[0,0],[2,-1],[2,0],[2,1],[3,-1],[3,0],[3,1],[4,-1],[4,0],[4,1]]}
+{n:'浼樺崡',h:14,a:2,cls:'鏂楀＋',rg:[[0,0],[1,0]]},
+{n:'鐜嬪湡',h:18,a:0,agi:1,cls:'瀹堟姢鑰?,rg:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]]},
+{n:'杈句笉婧?,h:10,a:2,agi:8,cls:'鎯呮姤瀹?,rg:[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]]},
+{n:'钃濅富浠?,h:8,a:0,agi:3,cls:'鎴樻湳瀹?,rg:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1]]},
+{n:'鍓戞焺',h:5,a:2,agi:6,cls:'澶勫喅鑰?,rg:[[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]]},
+{n:'鎵嬪厖',h:12,a:2,agi:1,cls:'绁炲皠鎵?,rg:[[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]]},
+{n:'P閾?,h:14,a:1,agi:5,cls:'鎶曟墜',rg:[[0,0],[3,0],[3,-1],[3,1],[4,0],[4,-1],[4,1]]},
+{n:'灏忎簩',h:8,a:0,agi:4,cls:'鍚熸父鑰?,rg:[[-2,-2],[-2,-1],[-2,0],[-2,1],[-2,2],[-1,-2],[-1,-1],[-1,0],[-1,1],[-1,2],[0,-2],[0,-1],[0,1],[0,2],[1,-2],[1,-1],[1,0],[1,1],[1,2],[2,-2],[2,-1],[2,0],[2,1],[2,2]]},
+{n:'鑲栫墷澶?,h:10,a:2,agi:7,cls:'鎵╂暎鏈笀',rg:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1]]},
+{n:'涓绘挱',h:12,a:1,agi:2,cls:'鍖诲笀',rg:[[0,0],[1,0],[2,0],[2,-1],[2,1],[2,-2],[2,2]]},
+{n:'涓佽寰佷竴',h:10,a:0,agi:8,cls:'鍙敜甯?,rg:[]},
+{n:'婢勫績',h:12,a:2,agi:3,cls:'鍖诲笀',rg:[[-1,0],[0,-1],[0,0],[0,1],[1,-1],[1,0]]},
+{n:'绗簲闄堣壊',h:12,a:2,agi:7,cls:'鍐查攱鎵?,rg:[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]]},
+{n:'鍔犲窞鑰侀紶',h:14,a:0,agi:9,cls:'寮烘敾鎵?,rg:[[0,0],[1,0],[2,0],[3,0],[4,0]]},
+{n:'璺槗鍗佸叚',h:16,a:2,agi:4,cls:'鎴樻湳瀹?,rg:[[0,0],[2,-1],[2,0],[2,1],[3,-1],[3,0],[3,1],[4,-1],[4,0],[4,1]]},
+{n:'QC',h:14,a:1,agi:6,cls:'鍖诲笀',rg:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1]]},
+{n:'鏉鹃緞',h:8,a:0,agi:1,cls:'鍙敜甯?,rg:[[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1]]},
+{n:'闂ㄥ笀鍌?,h:12,a:4,agi:10,cls:'澶勫喅鑰?,rg:[[-2,-1],[-2,0],[-2,1],[-1,-1],[-1,0],[-1,1],[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1],[2,-1],[2,0],[2,1]]},
+{n:'椋庣瑳',h:5,a:1,agi:6,cls:'鍐查攱鎵?,rg:[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]]},
+{n:'绾儸鑹鹃泤娉曟媺',h:10,a:1,agi:4,cls:'鍖诲笀',rg:[[0,-1],[0,0],[0,1],[1,-1],[1,0],[1,1],[2,-1],[2,0],[2,1],[2,-2],[2,2]]},
+{n:'瀹囨櫤娉綈鍔?,h:8,a:1,agi:8,cls:'鍐查攱鎵?,rg:[[0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0]]},
+{n:'绉戞瘮鐗㈠ぇ',h:16,a:0,agi:1,cls:'瑙ｆ斁鑰?,rg:[[0,0],[2,-1],[2,0],[2,1],[3,-1],[3,0],[3,1],[4,-1],[4,0],[4,1]]}
 ];
 
-// ===== 损伤/单位 =====
-class Ail{constructor(t){this.t=t;this.s=0}add(n,u){this.s+=n;if(this.s>=10){this.s=0;if(u&&u.al&&!u._dying){let d=u.dmg(4);b.lg.push(u.n+' 恐惧结算 4伤')}return 1}return 0}}
+// ===== 鎹熶激/鍗曚綅 =====
+class Ail{constructor(t){this.t=t;this.s=0}add(n,u){this.s+=n;if(this.s>=10){this.s=0;if(u&&u.al&&!u._dying){let d=u.dmg(4);b.lg.push(u.n+' 鎭愭儳缁撶畻 4浼?)}return 1}return 0}}
 function mu(n,h,a,g,t,x,y,m,r,isS,mst,isTree){
 let o={n,h,hp:h,mH:h,atk:a,agi:g,tm:t,x,y,mxc:m||5,rg:r||[[0,0]],ch:0,sh:0,al:1,
 st:0,bd:0,bl:0,sth:0,tt:0,inv:0,
@@ -275,32 +275,32 @@ o.inRg=function(tx,ty){return inRg(this,tx,ty)};
 o.sk=ROSTER.find(r=>r.n===n)?.sk||[];
 return o;
 }
-function dmg(u,v,p){if(!u.al)return 0;if(u.inv)return 0;if(u._dying)return 0;let a=v;if(!p&&u.sh>0){let sb=Math.min(u.sh,a);u.sh-=sb;a-=sb}let hpB=u.hp;u.hp-=a;let r=Math.max(0,u.hp/u.mH);if(!u._hits)u._hits=[];u._hits.push({dmg:v,hpLoss:a,hpBefore:hpB,ratio:r,t:Date.now()});if(u.hp<=0){u.hp=0;u._dying=1}if(u.n==='周水'&&u.al&&!u._dying){u.chg(1);b.lg.push('周水 受击充能+1')}return v}
+function dmg(u,v,p){if(!u.al)return 0;if(u.inv)return 0;if(u._dying)return 0;let a=v;if(!p&&u.sh>0){let sb=Math.min(u.sh,a);u.sh-=sb;a-=sb}let hpB=u.hp;u.hp-=a;let r=Math.max(0,u.hp/u.mH);if(!u._hits)u._hits=[];u._hits.push({dmg:v,hpLoss:a,hpBefore:hpB,ratio:r,t:Date.now()});if(u.hp<=0){u.hp=0;u._dying=1}if(u.n==='鍛ㄦ按'&&u.al&&!u._dying){u.chg(1);b.lg.push('鍛ㄦ按 鍙楀嚮鍏呰兘+1')}return v}
 function heal(u,v){if(u.al)u.hp=Math.min(u.mH,u.hp+v)}
 function chg(u,n){if(u.ultDur>0)return;u.ch=Math.min(u.ch+n,u.mxc);}
 function sCd(u,k,v){u.cd[k]=v}
 function gCd(u,k){return u.cd[k]||0}
-function cdTk(u){for(let k in u.cd)if(u.cd[k]>0){u.cd[k]--;if(u.cd[k]===0){let sk=u.sk.find(s=>s.n===k);if(sk&&sk.str){u.mc=Math.min((u.mc||0)+1,sk.str);u.cd[k]=sk.cd;b.lg.push(u.n+' '+k+' 存储+1 ('+u.mc+'/'+sk.str+')')}}}}
+function cdTk(u){for(let k in u.cd)if(u.cd[k]>0){u.cd[k]--;if(u.cd[k]===0){let sk=u.sk.find(s=>s.n===k);if(sk&&sk.str){u.mc=Math.min((u.mc||0)+1,sk.str);u.cd[k]=sk.cd;b.lg.push(u.n+' '+k+' 瀛樺偍+1 ('+u.mc+'/'+sk.str+')')}}}}
 function inRg(u,tx,ty){let dx=tx-u.x,dy=ty-u.y;let flip=u.tm==='p2'?-1:1;return u.rg.some(r=>dx===r[0]*flip&&dy===r[1])}
 function logF(u,tp,sn,msg){
-  let tmL=u.tm==='p1'?'蓝方':'红方';
-  let tpL=tp==='ba'?'普攻':tp==='sk'?'技能':tp==='ult'?'大招':'';
-  return tmL+u.n+'使用'+tpL+'·'+sn+'：'+msg;}
-function lgFmt(){if(!b.logCtx)return'';let u=b.logCtx.u;let tpL=b.logCtx.tp==='ba'?'普攻':b.logCtx.tp==='sk'?'技能':b.logCtx.tp==='ult'?'大招':'';return(b.logCtx.u.tm==='p1'?'蓝方':'红方')+u.n+'使用'+tpL+'·'+b.logCtx.sn;
+  let tmL=u.tm==='p1'?'钃濇柟':'绾㈡柟';
+  let tpL=tp==='ba'?'鏅敾':tp==='sk'?'鎶€鑳?:tp==='ult'?'澶ф嫑':'';
+  return tmL+u.n+'浣跨敤'+tpL+'路'+sn+'锛?+msg;}
+function lgFmt(){if(!b.logCtx)return'';let u=b.logCtx.u;let tpL=b.logCtx.tp==='ba'?'鏅敾':b.logCtx.tp==='sk'?'鎶€鑳?:b.logCtx.tp==='ult'?'澶ф嫑':'';return(b.logCtx.u.tm==='p1'?'钃濇柟':'绾㈡柟')+u.n+'浣跨敤'+tpL+'路'+b.logCtx.sn;
 }
 
-// ===== 全局状态 =====
+// ===== 鍏ㄥ眬鐘舵€?=====
 let pool=[],p1pick=[],p2pick=[],bans=[];
-let banTurn=0,banOrder=['蓝','红','红','蓝'];
-let pickTurn=0,pickOrder=['蓝','红','红','蓝','蓝','红','红','蓝','蓝','红'];
-let deployOrder=['蓝','红','红','蓝','蓝','红','红','蓝','蓝','红'];
+let banTurn=0,banOrder=['钃?,'绾?,'绾?,'钃?];
+let pickTurn=0,pickOrder=['钃?,'绾?,'绾?,'钃?,'钃?,'绾?,'绾?,'钃?,'钃?,'绾?];
+let deployOrder=['钃?,'绾?,'绾?,'钃?,'钃?,'绾?,'绾?,'钃?,'钃?,'绾?];
 let deployStep=0,deployCur=null;
 let p1deploy=[],p2deploy=[];
 let devMode=false;
 
-// ===== 战斗引擎 =====
+// ===== 鎴樻枟寮曟搸 =====
 let b={us:[],sel:null,ct:'p1',rn:1,_logs:[],go:0,acted:new Set(),extra:null,skMode:null,_phase:null,_actedView:0};
-b.lg={push:function(m){var fm=m;if(b.logCtx){var tmL=b.logCtx.u.tm==='p1'?'蓝方':'红方';var tpL=b.logCtx.tp==='ba'?'普攻':b.logCtx.tp==='sk'?'技能':b.logCtx.tp==='ult'?'大招':'';fm=tmL+b.logCtx.u.n+'使用'+tpL+'·'+b.logCtx.sn+'：'+m;}b._logs.push({r:b._phase?b._phase.r:b.rn,tp:b._phase?b._phase.tp:'act',side:b._phase?b._phase.side:null,msg:fm});},get length(){return b._logs.length;}};
+b.lg={push:function(m){var fm=m;if(b.logCtx){var tmL=b.logCtx.u.tm==='p1'?'钃濇柟':'绾㈡柟';var tpL=b.logCtx.tp==='ba'?'鏅敾':b.logCtx.tp==='sk'?'鎶€鑳?:b.logCtx.tp==='ult'?'澶ф嫑':'';fm=tmL+b.logCtx.u.n+'浣跨敤'+tpL+'路'+b.logCtx.sn+'锛?+m;}b._logs.push({r:b._phase?b._phase.r:b.rn,tp:b._phase?b._phase.tp:'act',side:b._phase?b._phase.side:null,msg:fm});},get length(){return b._logs.length;}};
 b.logSection=function(tp){b._phase={r:b.rn,tp:tp,side:b.ct};};
 b.logRepo=function(){b._phase={r:b.rn,tp:'repo',side:null};};b._roundLogged=0;
 
@@ -311,7 +311,7 @@ document.getElementById(p).classList.add('active');
 }
 function $(id){return document.getElementById(id)}
 
-// ===== BAN阶段 =====
+// ===== BAN闃舵 =====
 function startBan(){
 pool=ROSTER.map(r=>({...r}));
 bans=[];banTurn=0;
@@ -319,12 +319,12 @@ setPhase('ban');renderBan();
 }
 function renderBan(){
 let h=$('ban').querySelector('h2');let bt=banOrder[banTurn];
-h.innerHTML=(bt==='蓝'?'🔵':'🔴')+' '+bt+'方 BAN ('+(banTurn+1)+'/4)';
+h.innerHTML=(bt==='钃??'馃數':'馃敶')+' '+bt+'鏂?BAN ('+(banTurn+1)+'/4)';
 let d=$('banPool');d.innerHTML='';
 pool.forEach((r,i)=>{
 let g=document.createElement('div');g.className='gcell'+(bans.includes(i)?' banned':'');
-g.innerHTML='<span>'+r.n+'</span><small style="font-size:9px;color:#fc0">敏捷:'+(r.agi||0)+'</small>';
-if(bans.includes(i)){let x=document.createElement('span');x.className='xmark';x.textContent='❌';g.appendChild(x);}
+g.innerHTML='<span>'+r.n+'</span><small style="font-size:9px;color:#fc0">鏁忔嵎:'+(r.agi||0)+'</small>';
+if(bans.includes(i)){let x=document.createElement('span');x.className='xmark';x.textContent='鉂?;g.appendChild(x);}
 else g.onclick=()=>{bans.push(i);banTurn++;if(banTurn<4)renderBan();else startPick();};
 d.appendChild(g);
 });
@@ -334,7 +334,7 @@ for(let i=pool.length;i<36;i++){let g=document.createElement('div');g.className=
 function toggleDevMode(){
 devMode=!devMode;
 $('btnDevMode').style.background=devMode?'#395':'#333';
-$('btnDevMode').textContent=devMode?'🛠 开发者模式 已开启 ✅':'🛠 开发者模式';
+$('btnDevMode').textContent=devMode?'馃洜 寮€鍙戣€呮ā寮?宸插紑鍚?鉁?:'馃洜 寮€鍙戣€呮ā寮?;
 if(devMode){startDevMode()}else{startBan()}
 }
 function startDevMode(){
@@ -344,8 +344,8 @@ pool=ROSTER.map(r=>({...r}));
 setPhase('pick');renderDevPick();
 }
 function renderDevPick(){
-$('pickTitle').textContent='🔵 蓝方 选择1个角色';
-$('pickInfo').textContent='点击角色选取';
+$('pickTitle').textContent='馃數 钃濇柟 閫夋嫨1涓鑹?;
+$('pickInfo').textContent='鐐瑰嚮瑙掕壊閫夊彇';
 let d=$('pickBoard');
 d.style.cssText='position:relative;width:302px;height:220px;margin:0 auto;background:#151525;border-radius:4px;border:1px solid #2a2a44';
 d.innerHTML='';
@@ -363,7 +363,7 @@ if(idx>=pool.length)continue;
 let r=pool[idx];
 let slot=d.querySelector('[data-x="'+x+'"][data-y="'+y+'"]');
 if(slot){
-slot.innerHTML='<span>'+r.n+'</span><small style="font-size:6px;color:#fc0">敏'+(r.agi||0)+'</small>';
+slot.innerHTML='<span>'+r.n+'</span><small style="font-size:6px;color:#fc0">鏁?+(r.agi||0)+'</small>';
 slot.style.cursor='pointer';
 (function(i){slot.onclick=()=>{p1pick=[i];p2pick=[];for(let j=0;j<10;j++)p2pick.push(-1);startDevDeploy();}})(idx);
 }
@@ -380,8 +380,8 @@ p2deploy=[];
 setPhase('deploy');renderDevDeploy();
 }
 function renderDevDeploy(){
-$('deployTitle').textContent='🔵 蓝方 布阵';
-$('deployInfo').textContent='点击角色→点击蓝方格子放置';
+$('deployTitle').textContent='馃數 钃濇柟 甯冮樀';
+$('deployInfo').textContent='鐐瑰嚮瑙掕壊鈫掔偣鍑昏摑鏂规牸瀛愭斁缃?;
 let brd=$('board');brd.innerHTML='';
 let depAll=[...p1deploy,...p2deploy];
 for(let x=0;x<7;x++)for(let y=1;y<6;y++){
@@ -406,7 +406,7 @@ startDevBattle();
 }
 brd.appendChild(slot);
 }
-// 侧栏
+// 渚ф爮
 let sl=$('deploySideL'),sr=$('deploySideR');
 sl.innerHTML='';
 sr.innerHTML='';
@@ -422,24 +422,24 @@ renderDevDeploy();
 if(deployCur)c.classList.add('current');
 sl.appendChild(c);
 for(let i=0;i<4;i++){let e=document.createElement('div');e.className='side-cell';e.style.opacity='0.3';e.textContent='-';sl.appendChild(e);}
-for(let i=0;i<5;i++){let e=document.createElement('div');e.className='side-cell p2';e.style.opacity='0.3';e.textContent='机';sr.appendChild(e);}
+for(let i=0;i<5;i++){let e=document.createElement('div');e.className='side-cell p2';e.style.opacity='0.3';e.textContent='鏈?;sr.appendChild(e);}
 }
 function startDevBattle(){
 b.us=[];b.go=0;b.sel=null;b.acted=new Set();b.extra=null;b.skMode=null;b._selEnemy=0;b._actedView=0;
 b.gU=function(x,y){return this.us.find(u=>u.al&&u.x===x&&u.y===y)};
 b.fE=function(x1,x2,y1,y2){for(let x=Math.max(0,x1);x<=Math.min(6,x2);x++)for(let y=Math.max(1,y1);y<=Math.min(5,y2);y++){if(!this.gU(x,y)&&x!==3)return{x,y}}return null};
-// 蓝方角色
+// 钃濇柟瑙掕壊
 let rd=pool[p1pick[0]];
 let u=mu(rd.n,rd.h,rd.a,rd.agi||0,'p1',p1deploy[0].x,p1deploy[0].y,rd.mxc||5,rd.rg||[[0,0]]);
 u.sk=rd.sk||[];u.ch=0;
-if(u.n==='陈色'){u.mc=0;u.sC('毛毛虫',8);u.mxc=3;}
-if(u.n==='周水'){u.sth=1;u.backdoorCd=0}
-if(u.n==='手充')u.sth=999;
-if(u.n==='丁衍征一')u.form=0;
-if(u.n==='科比牢大')u.bns=0;
+if(u.n==='闄堣壊'){u.mc=0;u.sC('姣涙瘺铏?,8);u.mxc=3;}
+if(u.n==='鍛ㄦ按'){u.sth=1;u.backdoorCd=0}
+if(u.n==='鎵嬪厖')u.sth=999;
+if(u.n==='涓佽寰佷竴')u.form=0;
+if(u.n==='绉戞瘮鐗㈠ぇ')u.bns=0;
 b.us.push(u);
-// 红方人机
-let dummies=['人机A','人机B','人机C','人机D','人机E','人机F','人机G','人机H','人机I','人机J'];
+// 绾㈡柟浜烘満
+let dummies=['浜烘満A','浜烘満B','浜烘満C','浜烘満D','浜烘満E','浜烘満F','浜烘満G','浜烘満H','浜烘満I','浜烘満J'];
 for(let i=0;i<5;i++){
 let dx=4+(i%3),dy=1+Math.floor(i/3);
 let du=mu(dummies[i],10,1,0,'p2',dx,dy,0,[[0,0],[1,0]]);
@@ -448,28 +448,28 @@ b.us.push(du);
 }
 b.ct='p1';b.rn=1;
 b._logs=[];b._phase=null;b.logCtx=null;
-b.lg={push:function(m){var fm=m;if(b.logCtx){var tmL=b.logCtx.u.tm==='p1'?'蓝方':'红方';var tpL=b.logCtx.tp==='ba'?'普攻':b.logCtx.tp==='sk'?'技能':b.logCtx.tp==='ult'?'大招':'';fm=tmL+b.logCtx.u.n+'使用'+tpL+'·'+b.logCtx.sn+'：'+m;}b._logs.push({r:b._phase?b._phase.r:b.rn,tp:b._phase?b._phase.tp:'act',side:b._phase?b._phase.side:null,msg:fm});},get length(){return b._logs.length;}};
+b.lg={push:function(m){var fm=m;if(b.logCtx){var tmL=b.logCtx.u.tm==='p1'?'钃濇柟':'绾㈡柟';var tpL=b.logCtx.tp==='ba'?'鏅敾':b.logCtx.tp==='sk'?'鎶€鑳?:b.logCtx.tp==='ult'?'澶ф嫑':'';fm=tmL+b.logCtx.u.n+'浣跨敤'+tpL+'路'+b.logCtx.sn+'锛?+m;}b._logs.push({r:b._phase?b._phase.r:b.rn,tp:b._phase?b._phase.tp:'act',side:b._phase?b._phase.side:null,msg:fm});},get length(){return b._logs.length;}};
 b.logSection=function(tp){b._phase={r:b.rn,tp:tp,side:b.ct};};
 b.logRepo=function(){b._phase={r:b.rn,tp:'repo',side:null};};
-b.lgCtxP=function(m){if(b.logCtx){let tmL=b.logCtx.u.tm==='p1'?'蓝方':'红方';let tpL=b.logCtx.tp==='ba'?'普攻':b.logCtx.tp==='sk'?'技能':b.logCtx.tp==='ult'?'大招':'';return tmL+b.logCtx.u.n+'使用'+tpL+'·'+b.logCtx.sn+'：'+m}else{return m}};
+b.lgCtxP=function(m){if(b.logCtx){let tmL=b.logCtx.u.tm==='p1'?'钃濇柟':'绾㈡柟';let tpL=b.logCtx.tp==='ba'?'鏅敾':b.logCtx.tp==='sk'?'鎶€鑳?:b.logCtx.tp==='ult'?'澶ф嫑':'';return tmL+b.logCtx.u.n+'浣跨敤'+tpL+'路'+b.logCtx.sn+'锛?+m}else{return m}};
 setPhase('battle');
-b.logRepo();b.lg.push('第1大回合选位');
+b.logRepo();b.lg.push('绗?澶у洖鍚堥€変綅');
 beginRound();
 }
 
-// ===== PICK阶段 =====
+// ===== PICK闃舵 =====
 function startPick(){
 p1pick=[];p2pick=[];pickTurn=0;
 setPhase('pick');renderPick();
 }
 function renderPick(){
 let pt=pickOrder[pickTurn];
-$('pickTitle').textContent=(pt==='蓝'?'🔵':'🔴')+' '+pt+'方选人 ('+(pickTurn+1)+'/10)';
-$('pickInfo').textContent='点击角色选取';
+$('pickTitle').textContent=(pt==='钃??'馃數':'馃敶')+' '+pt+'鏂归€変汉 ('+(pickTurn+1)+'/10)';
+$('pickInfo').textContent='鐐瑰嚮瑙掕壊閫夊彇';
 let d=$('pickBoard');
 d.style.cssText='position:relative;width:302px;height:220px;margin:0 auto;background:linear-gradient(90deg,rgba(30,40,80,0.3) 0%,rgba(30,40,80,0.3) 40%,transparent 40%,transparent 60%,rgba(80,25,25,0.3) 60%,rgba(80,25,25,0.3) 100%),#151525;border-radius:4px;border:1px solid #2a2a44';
 d.innerHTML='';
-// Render 7×5 grid
+// Render 7脳5 grid
 for(let x=0;x<7;x++)for(let y=1;y<6;y++){
 let g=document.createElement('div');
 g.className='slot';
@@ -486,7 +486,7 @@ let r=pool[idx];
 if(bans.includes(idx)||p1pick.includes(idx)||p2pick.includes(idx))continue;
 let slot=d.querySelector('[data-x="'+x+'"][data-y="'+y+'"]');
 if(slot){
-slot.innerHTML='<span>'+r.n+'</span><small style="font-size:6px;color:#fc0">敏'+(r.agi||0)+'</small>';
+slot.innerHTML='<span>'+r.n+'</span><small style="font-size:6px;color:#fc0">鏁?+(r.agi||0)+'</small>';
 slot.style.cursor='pointer';
 (function(i){slot.onclick=()=>doPick(i,pt)})(idx);
 }
@@ -496,21 +496,21 @@ slot.style.cursor='pointer';
 let p1a=p1pick.reduce((s,pi)=>{let r=pool[pi];return s+(r.agi||0)},0);
 let p2a=p2pick.reduce((s,pi)=>{let r=pool[pi];return s+(r.agi||0)},0);
 let pl=$('pickSideL');pl.innerHTML='';
-p1pick.forEach(pi=>{let r=pool[pi];let c=document.createElement('div');c.className='side-cell p1 picked';c.textContent=r.n.substring(0,2);c.title=r.n+' 敏'+(r.agi||0);pl.appendChild(c);});
+p1pick.forEach(pi=>{let r=pool[pi];let c=document.createElement('div');c.className='side-cell p1 picked';c.textContent=r.n.substring(0,2);c.title=r.n+' 鏁?+(r.agi||0);pl.appendChild(c);});
 for(let i=p1pick.length;i<5;i++){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.3';c.textContent='-';pl.appendChild(c);}
-let sa=document.createElement('div');sa.className='side-cell';sa.style.cssText='border:none;background:none;font-size:7px;color:#88a';sa.textContent='敏'+p1a;pl.appendChild(sa);
+let sa=document.createElement('div');sa.className='side-cell';sa.style.cssText='border:none;background:none;font-size:7px;color:#88a';sa.textContent='鏁?+p1a;pl.appendChild(sa);
 let pr=$('pickSideR');pr.innerHTML='';
-p2pick.forEach(pi=>{let r=pool[pi];let c=document.createElement('div');c.className='side-cell p2 picked';c.textContent=r.n.substring(0,2);c.title=r.n+' 敏'+(r.agi||0);pr.appendChild(c);});
+p2pick.forEach(pi=>{let r=pool[pi];let c=document.createElement('div');c.className='side-cell p2 picked';c.textContent=r.n.substring(0,2);c.title=r.n+' 鏁?+(r.agi||0);pr.appendChild(c);});
 for(let i=p2pick.length;i<5;i++){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.3';c.textContent='-';pr.appendChild(c);}
-let sb=document.createElement('div');sb.className='side-cell';sb.style.cssText='border:none;background:none;font-size:7px;color:#a88';sb.textContent='敏'+p2a;pr.appendChild(sb);
+let sb=document.createElement('div');sb.className='side-cell';sb.style.cssText='border:none;background:none;font-size:7px;color:#a88';sb.textContent='鏁?+p2a;pr.appendChild(sb);
 }
 function doPick(i,pt){
-if(pt==='蓝'){p1pick.push(i)}else{p2pick.push(i)}
+if(pt==='钃?){p1pick.push(i)}else{p2pick.push(i)}
 pickTurn++;
 if(pickTurn<10){renderPick()}else{startDeploy()}
 }
 
-// ===== 布阵阶段 ===== (交替)
+// ===== 甯冮樀闃舵 ===== (浜ゆ浛)
 function startDeploy(){
 deployStep=0;deployCur=null;
 p1deploy=[];p2deploy=[];
@@ -518,8 +518,8 @@ setPhase('deploy');renderDeploy();
 }
 function renderDeploy(){
 let t=deployOrder[deployStep];
-$('deployTitle').textContent=(t==='蓝'?'🔵 蓝方':'🔴 红方')+' 布阵 ('+(deployStep+1)+'/10)';
-$('deployInfo').textContent='点击角色→点击空格放置';
+$('deployTitle').textContent=(t==='钃??'馃數 钃濇柟':'馃敶 绾㈡柟')+' 甯冮樀 ('+(deployStep+1)+'/10)';
+$('deployInfo').textContent='鐐瑰嚮瑙掕壊鈫掔偣鍑荤┖鏍兼斁缃?;
 let brd=$('board');brd.innerHTML='';
 let depAll=[...p1deploy,...p2deploy];
 for(let x=0;x<7;x++)for(let y=1;y<6;y++){
@@ -533,17 +533,17 @@ slot.dataset.x=x;slot.dataset.y=y;
 let dep=depAll.find(d=>d.x===x&&d.y===y);
 if(dep){slot.innerHTML='<span class="n">'+dep.n.substring(0,2)+'</span>';slot.classList.add('unit')}
 if(!dep&&!isMid){
-let valid=t==='蓝'?isP1:isP2;
+let valid=t==='钃??isP1:isP2;
 if(valid){
 if(deployCur)slot.classList.add('ready');
 slot.onclick=()=>{
 if(!deployCur)return;
 if(depAll.find(d=>d.x==x&&d.y===y))return;
-let tm=t==='蓝'?'p1':'p2';
+let tm=t==='钃??'p1':'p2';
 if(deployCur._tm&&deployCur._tm!==tm)return;
 deployCur.x=x;deployCur.y=y;
-if(t==='蓝'&&!p1deploy.find(d=>d===deployCur))p1deploy.push(deployCur);
-if(t==='红'&&!p2deploy.find(d=>d===deployCur))p2deploy.push(deployCur);
+if(t==='钃?&&!p1deploy.find(d=>d===deployCur))p1deploy.push(deployCur);
+if(t==='绾?&&!p2deploy.find(d=>d===deployCur))p2deploy.push(deployCur);
 deployCur=null;deployStep++;
 if(deployStep<10)renderDeploy();else confirmDeploy();
 }
@@ -551,7 +551,7 @@ if(deployStep<10)renderDeploy();else confirmDeploy();
 }
 brd.appendChild(slot);
 }
-// 侧栏
+// 渚ф爮
 let sl=$('deploySideL'),sr=$('deploySideR');
 sl.innerHTML='';sr.innerHTML='';
 p1pick.forEach(pi=>{
@@ -560,7 +560,7 @@ let placed=depAll.find(d=>d._pi===pi);
 let c=document.createElement('div');
 c.className='side-cell p1'+(placed?' placed':'');
 c.textContent=r.n.substring(0,2);
-if(!placed&&t==='蓝'){c.onclick=()=>{
+if(!placed&&t==='钃?){c.onclick=()=>{
 if(deployCur&&deployCur._pi===pi){deployCur=null;renderDeploy();return}
 deployCur={n:r.n,...r,_pi:pi,sk:r.sk||[],x:-1,y:-1,_tm:'p1'};
 renderDeploy();
@@ -575,7 +575,7 @@ let placed=depAll.find(d=>d._pi===pi);
 let c=document.createElement('div');
 c.className='side-cell p2'+(placed?' placed':'');
 c.textContent=r.n.substring(0,2);
-if(!placed&&t==='红'){c.onclick=()=>{
+if(!placed&&t==='绾?){c.onclick=()=>{
 if(deployCur&&deployCur._pi===pi){deployCur=null;renderDeploy();return}
 deployCur={n:r.n,...r,_pi:pi,sk:r.sk||[],x:-1,y:-1,_tm:'p2'};
 renderDeploy();
@@ -590,7 +590,7 @@ if(p1deploy.length<5||p2deploy.length<5)return;
 startBattle();
 }
 
-// ===== 战斗阶段 =====
+// ===== 鎴樻枟闃舵 =====
 function startBattle(){
 b.us=[];let allD=[...p1deploy.map(d=>({...d,tm:'p1'})),...p2deploy.map(d=>({...d,tm:'p2'}))];
 allD.forEach(d=>{
@@ -598,25 +598,25 @@ let u=mu(d.n,d.h,d.a,d.agi||0,d.tm,d.x,d.y,d.mxc||5,d.rg||[[0,0]]);
 u.sk=d.sk||[];
 u.ch=0;
 u.sk.filter(s=>s.st&&s.tp==='sk').forEach(s=>u.sC(s.n,s.st));
-if(u.n==='第五陈色'&&allD.some(v=>v.n==='陈色'&&v.tm===u.tm))u.atk+=1;
-if(u.n==='加州老鼠')u.rage=4;
-if(u.n==='周水'){u.sth=1;u.backdoorCd=0;if(allD.some(v=>v.n==='加州老鼠'&&v.tm===u.tm)){u.mH+=1;u.hp+=1}}
-if(u.n==='蓝主任'){u.gru=1;u.gTur=0}
-if(u.n==='陈色'){u.mc=0;u.sC('毛毛虫',8);u.mxc=3;}
-if(u.n==='手充')u.sth=999;
-if(u.n==='丁衍征一')u.form=0;
-if(u.n==='科比牢大')u.bns=0;
+if(u.n==='绗簲闄堣壊'&&allD.some(v=>v.n==='闄堣壊'&&v.tm===u.tm))u.atk+=1;
+if(u.n==='鍔犲窞鑰侀紶')u.rage=4;
+if(u.n==='鍛ㄦ按'){u.sth=1;u.backdoorCd=0;if(allD.some(v=>v.n==='鍔犲窞鑰侀紶'&&v.tm===u.tm)){u.mH+=1;u.hp+=1}}
+if(u.n==='钃濅富浠?){u.gru=1;u.gTur=0}
+if(u.n==='闄堣壊'){u.mc=0;u.sC('姣涙瘺铏?,8);u.mxc=3;}
+if(u.n==='鎵嬪厖')u.sth=999;
+if(u.n==='涓佽寰佷竴')u.form=0;
+if(u.n==='绉戞瘮鐗㈠ぇ')u.bns=0;
 b.us.push(u);
 });
 b.ct='p1';b.rn=1;b._logs=[];b._phase=null;b.logCtx=null;
-b.lg={push:function(m){var fm=m;if(b.logCtx){var tmL=b.logCtx.u.tm==='p1'?'蓝方':'红方';var tpL=b.logCtx.tp==='ba'?'普攻':b.logCtx.tp==='sk'?'技能':b.logCtx.tp==='ult'?'大招':'';fm=tmL+b.logCtx.u.n+'使用'+tpL+'·'+b.logCtx.sn+'：'+m;}b._logs.push({r:b._phase?b._phase.r:b.rn,tp:b._phase?b._phase.tp:'act',side:b._phase?b._phase.side:null,msg:fm});},get length(){return b._logs.length;}};
+b.lg={push:function(m){var fm=m;if(b.logCtx){var tmL=b.logCtx.u.tm==='p1'?'钃濇柟':'绾㈡柟';var tpL=b.logCtx.tp==='ba'?'鏅敾':b.logCtx.tp==='sk'?'鎶€鑳?:b.logCtx.tp==='ult'?'澶ф嫑':'';fm=tmL+b.logCtx.u.n+'浣跨敤'+tpL+'路'+b.logCtx.sn+'锛?+m;}b._logs.push({r:b._phase?b._phase.r:b.rn,tp:b._phase?b._phase.tp:'act',side:b._phase?b._phase.side:null,msg:fm});},get length(){return b._logs.length;}};
 b.logSection=function(tp){b._phase={r:b.rn,tp:tp,side:b.ct};};
 b.logRepo=function(){b._phase={r:b.rn,tp:'repo',side:null};};
 b.go=0;b.sel=null;b.acted=new Set();b.extra=null;b.skMode=null;b._selEnemy=0;b._actedView=0;
 b.gU=function(x,y){return this.us.find(u=>u.al&&u.x===x&&u.y===y)};
 b.fE=function(x1,x2,y1,y2){for(let x=Math.max(0,x1);x<=Math.min(6,x2);x++)for(let y=Math.max(1,y1);y<=Math.min(5,y2);y++){if(!this.gU(x,y)&&x!==3)return{x,y}}return null};
 setPhase('battle');
-b.logRepo();b.lg.push('第1大回合选位');
+b.logRepo();b.lg.push('绗?澶у洖鍚堥€変綅');
 let p1a=b.us.filter(u=>u.tm==='p1'&&u.al).reduce((s,u)=>s+u.agi,0);
 let p2a=b.us.filter(u=>u.tm==='p2'&&u.al).reduce((s,u)=>s+u.agi,0);
 if(p1a!==p2a)b.ct=p1a>p2a?'p1':'p2';
@@ -625,47 +625,47 @@ renderBattleSides();
 }
 
 function beginRound(){
-if(!b._roundLogged){b.logSection('round');b.lg.push('第'+b.rn+'大回合开始');b._roundLogged=1;b.logSection('side');b.lg.push((b.ct==='p1'?'蓝方':'红方')+'行动');
-b.us.filter(u=>u.al&&u.n==='陈色').forEach(u=>u.chg(1));}
-// 陈色被动：毛毛虫血量上限=当前存活毛毛虫数+1
-b.us.filter(u=>u.al&&u.n==='陈色').forEach(cs=>{
+if(!b._roundLogged){b.logSection('round');b.lg.push('绗?+b.rn+'澶у洖鍚堝紑濮?);b._roundLogged=1;b.logSection('side');b.lg.push((b.ct==='p1'?'钃濇柟':'绾㈡柟')+'琛屽姩');
+b.us.filter(u=>u.al&&u.n==='闄堣壊').forEach(u=>u.chg(1));}
+// 闄堣壊琚姩锛氭瘺姣涜櫕琛€閲忎笂闄?褰撳墠瀛樻椿姣涙瘺铏暟+1
+b.us.filter(u=>u.al&&u.n==='闄堣壊').forEach(cs=>{
 let ws=b.us.filter(v=>v.isS&&v.mst===cs&&v.al);
 let cnt=ws.length;
 ws.forEach(w=>{w.mH=1+cnt;if(w.hp>w.mH)w.hp=w.mH;});
 });
-// 周水 后门:隐匿恢复计时
-b.us.filter(u=>u.al&&u.n==='周水').forEach(u=>{
-if(u.backdoorCd>0){u.backdoorCd--;if(u.backdoorCd===0){u.sth=1;b.lg.push('周水 后门:隐匿恢复');}}
+// 鍛ㄦ按 鍚庨棬:闅愬尶鎭㈠璁℃椂
+b.us.filter(u=>u.al&&u.n==='鍛ㄦ按').forEach(u=>{
+if(u.backdoorCd>0){u.backdoorCd--;if(u.backdoorCd===0){u.sth=1;b.lg.push('鍛ㄦ按 鍚庨棬:闅愬尶鎭㈠');}}
 });
 
-// 陈色大招持续
+// 闄堣壊澶ф嫑鎸佺画
 b.us.filter(u=>u.al&&u.ultDur>0).forEach(u=>{
 if(b.ct===u.tm){
 if(u.ultDur===1){
 let es=b.us.filter(v=>v.tm!==u.tm&&v.al);
 let x=u._ultX||0;
-if(es.length){let d=Math.floor(x/es.length);es.forEach(e=>e.dmg(d));b.lg.push('虫群次级伤害:每人'+d+'伤害')}
-b.lg.push(u.n+' 虫群触发');
+if(es.length){let d=Math.floor(x/es.length);es.forEach(e=>e.dmg(d));b.lg.push('铏兢娆＄骇浼ゅ:姣忎汉'+d+'浼ゅ')}
+b.lg.push(u.n+' 铏兢瑙﹀彂');
 }
 u.ultDur--;
 if(u.ultDur===0){
 u.skDisabled=0;u.ch=0;
-b.lg.push(u.n+' 虫群结束');
+b.lg.push(u.n+' 铏兢缁撴潫');
 }
 }
 });
-b.us.filter(u=>u.al&&u.bl>0).forEach(u=>{dmg(u,2,1);b.lg.push(u.n+' 流血-2');u.bl--});
+b.us.filter(u=>u.al&&u.bl>0).forEach(u=>{dmg(u,2,1);b.lg.push(u.n+' 娴佽-2');u.bl--});
 b.us.forEach(u=>{u.tt=0;u.bd=Math.max(0,u.bd-1)});
 b.acted=new Set();b.sel=null;b.skMode=null;b._selEnemy=0;b._actedView=0;
 if(!b.go)checkGO();
 if(!b.go){renderBattle();upInfo()}
-b.us.forEach(u=>{if(u.n!=='周水'&&u.n!=='陈色')u.sth=Math.max(0,u.sth-1)});
+b.us.forEach(u=>{if(u.n!=='鍛ㄦ按'&&u.n!=='闄堣壊')u.sth=Math.max(0,u.sth-1)});
 }
 
 function renderBattle(){
 renderBattleSides();
 let brd=$('board2');brd.innerHTML='';
-// 战斗棋盘背景格子（与部署界面保持一致）
+// 鎴樻枟妫嬬洏鑳屾櫙鏍煎瓙锛堜笌閮ㄧ讲鐣岄潰淇濇寔涓€鑷达級
 for(let x=0;x<7;x++)for(let y=1;y<6;y++){
 let slot=document.createElement('div');slot.className='slot';
 if(x===3)slot.classList.add('mid');
@@ -678,10 +678,10 @@ slot.style.zIndex='0';
 brd.appendChild(slot);
 }
 brd.style.width='302px';brd.style.height='220px';brd.style.position='relative';brd.style.background='linear-gradient(90deg,rgba(30,40,80,0.4) 0%,rgba(30,40,80,0.4) 40%,transparent 40%,transparent 60%,rgba(80,25,25,0.4) 60%,rgba(80,25,25,0.4) 100%),#151525';brd.style.margin='0 auto';brd.style.borderRadius='4px';brd.style.boxShadow='0 3px 16px rgba(0,0,0,0.6)';brd.style.border='1px solid #2a2a44';
-// 开发者模式: 显示调整人机按钮
+// 寮€鍙戣€呮ā寮? 鏄剧ず璋冩暣浜烘満鎸夐挳
 if(b.us.some(u=>u.isDummy))$('btnDummyMove').style.display='inline-block';
 else $('btnDummyMove').style.display='none';
-// 开发者模式: 显示减冷却/加充能按钮
+// 寮€鍙戣€呮ā寮? 鏄剧ず鍑忓喎鍗?鍔犲厖鑳芥寜閽?
 if(devMode){
 $('btnCdMinus').style.display='inline-block';
 $('btnChgPlus').style.display='inline-block';
@@ -691,7 +691,7 @@ $('btnCdMinus').style.display='none';
 $('btnChgPlus').style.display='none';
 $('btnAddDummy').style.display='none';
 }
-// 攻击范围
+// 鏀诲嚮鑼冨洿
 if(b.sel&&!b.skMode){
 let isChg=isChargeUnit(b.sel);
 let chgRows=isChg?getChargeRows(b.sel,b.us).rows:null;
@@ -706,14 +706,14 @@ brd.appendChild(hl);
 }
 }
 }
-// 技能/普攻选位模式高亮
+// 鎶€鑳?鏅敾閫変綅妯″紡楂樹寒
 if(b.skMode){
 let isBA=b.skMode.isBA;
 for(let x=0;x<7;x++)for(let y=1;y<6;y++){
 let hasUnit=b.us.some(u=>u.al&&u.x===x&&u.y===y);
 if(isBA){
-// 普攻模式：高亮可攻击敌方
-// 冲锋单位：预计算最小x距离
+// 鏅敾妯″紡锛氶珮浜彲鏀诲嚮鏁屾柟
+// 鍐查攱鍗曚綅锛氶璁＄畻鏈€灏弜璺濈
 let chgMinX=0;
 if(isChargeUnit(b.sel)){
 let chgR=getChargeRows(b.sel,b.us).rows;
@@ -723,7 +723,7 @@ if(nearest.length)chgMinX=Math.min(...nearest.map(v=>Math.abs(v.x-b.sel.x)));
 let u=b.us.find(v=>v.al&&v.x===x&&v.y===y);
 if(u&&u.tm!==b.sel.tm&&!u.sth){
 let chgR=isChargeUnit(b.sel)?getChargeRows(b.sel,b.us).rows:null;let canAtk=isChargeUnit(b.sel)?(chgR.includes(y)&&((b.sel.tm==='p1'&&x>b.sel.x)||(b.sel.tm==='p2'&&x<b.sel.x))):b.sel.inRg(x,y);
-// 冲锋单位：仅高亮x距离最近的
+// 鍐查攱鍗曚綅锛氫粎楂樹寒x璺濈鏈€杩戠殑
 if(isChargeUnit(b.sel)&&canAtk&&Math.abs(x-b.sel.x)!==chgMinX)canAtk=false;
 if(canAtk){
 let hl=document.createElement('div');
@@ -739,16 +739,16 @@ hl.style.cssText='position:absolute;left:'+(x*42+4)+'px;top:'+((y-1)*42+4)+'px;w
 if(b.skMode.tgt==='empty'&&b.skMode.placed<b.skMode.max){
 hl.style.pointerEvents='auto';
 hl.onclick=()=>{
-let w=mu('毛毛虫',1,0,0,b.sel.tm,x,y,0,[[0,0]]);w.isS=1;w.mst=b.sel;b.us.push(w);
+let w=mu('姣涙瘺铏?,1,0,0,b.sel.tm,x,y,0,[[0,0]]);w.isS=1;w.mst=b.sel;b.us.push(w);
 b.skMode.placed++;
 b.skMode.newWorms.push(w);
 if(b.skMode.placed>=b.skMode.max){
-// 全部放置完成，统一同步
+// 鍏ㄩ儴鏀剧疆瀹屾垚锛岀粺涓€鍚屾
 let allWorms=b.us.filter(v=>v.isS&&v.mst===b.sel&&v.al);
 let wcnt=allWorms.length;
 allWorms.forEach(v=>{v.mH=1+wcnt;if(v.hp>v.mH)v.hp=v.mH;});
 b.skMode.newWorms.forEach(v=>{v.hp=v.mH;});
-b.lg.push('召唤毛毛虫 ×'+b.skMode.placed);
+b.lg.push('鍙敜姣涙瘺铏?脳'+b.skMode.placed);
 b.sel.mc=Math.max(0,b.sel.mc-b.skMode.placed);
 finishAction(b.sel);
 }else{
@@ -772,10 +772,10 @@ brd.appendChild(hl);
 }
 }
 let hint=document.createElement('div');hint.className='skmode-hint';
-hint.textContent=b.skMode.isBA?'点击敌方普攻':(b.skMode.tgt==='empty'?'点击空格召唤('+b.skMode.placed+'/'+b.skMode.max+')':'选择'+(b.skMode.tgt==='enemy'?'敌方':'')+'目标');
+hint.textContent=b.skMode.isBA?'鐐瑰嚮鏁屾柟鏅敾':(b.skMode.tgt==='empty'?'鐐瑰嚮绌烘牸鍙敜('+b.skMode.placed+'/'+b.skMode.max+')':'閫夋嫨'+(b.skMode.tgt==='enemy'?'鏁屾柟':'')+'鐩爣');
 brd.appendChild(hint);
 }
-// 冷场选目标高亮
+// 鍐峰満閫夌洰鏍囬珮浜?
 if(b.coldField){
 for(let x=0;x<7;x++)for(let y=1;y<6;y++){
 let u=b.us.find(v=>v.al&&v.x===x&&v.y===y);
@@ -786,15 +786,15 @@ brd.appendChild(hl);
 }
 }
 let hint=document.createElement('div');hint.className='skmode-hint';
-hint.textContent='冷场:点击目标(ATK×1 +5恐惧) 剩余'+b.coldField.targets.length;
+hint.textContent='鍐峰満:鐐瑰嚮鐩爣(ATK脳1 +5鎭愭儳) 鍓╀綑'+b.coldField.targets.length;
 brd.appendChild(hint);
 }
-// 单位
+// 鍗曚綅
 b.us.forEach(u=>{if(!u.al&&!u._dying)return;
 let slot=document.createElement('div');slot.className='slot';
 if(u.x<3)slot.classList.add('p1');else if(u.x>3)slot.classList.add('p2');else slot.classList.add('mid');
 if(b.sel===u)slot.classList.add('sel');
-// 未行动单位黄色高亮
+// 鏈鍔ㄥ崟浣嶉粍鑹查珮浜?
 if(!b.acted.has(u._uid)&&u.tm===b.ct&&u.al&&!u._dying&&!b.sel&&!b.skMode&&!b.coldField&&!u.isS)slot.classList.add('ready');
 slot.style.left=(u.x*42+4)+'px';slot.style.top=((u.y-1)*42+4)+'px';
 slot.style.position='absolute';slot.style.zIndex='2';
@@ -802,8 +802,8 @@ if(u._dying){slot.classList.add('dying');slot.style.zIndex='3';}
 let dHp=u.hp;if(u._hits&&u._hits.length){let recent=u._hits.filter(h=>Date.now()-h.t<2000);if(recent.length){let mh=recent.reduce((a,b)=>a.dmg>b.dmg?a:b,recent[0]);dHp=mh.hpBefore;let intensity=Math.min(8,2+mh.dmg*.6+(1-mh.ratio)*4);slot.style.setProperty('--sx',intensity+'px');slot.classList.add('shake');slot.setAttribute('data-dmg',mh.hpLoss||mh.dmg);slot.setAttribute('data-hpA',mh.hpAfter);slot.setAttribute('data-mH',u.mH)}delete u._hits;}
 let hpC=dHp/u.mH>0.5?'#4f4':(dHp/u.mH>0.25?'#fa0':'#f44');
 let cdText='';for(let k in u.cd)if(u.cd[k]>0)cdText+=k.substring(0,1)+':'+u.cd[k]+' ';
-slot.innerHTML='<span class="n">'+u.n.substring(0,3)+'</span><span class="hp" style="color:'+hpC+'">'+dHp+'/'+u.mH+'</span>'+(cdText?'<span class="cd">'+cdText+'</span>':'')+(u.ch>0?'<span class="cd">⚡'+u.ch+'</span>':'');
-// 恐惧进度条
+slot.innerHTML='<span class="n">'+u.n.substring(0,3)+'</span><span class="hp" style="color:'+hpC+'">'+dHp+'/'+u.mH+'</span>'+(cdText?'<span class="cd">'+cdText+'</span>':'')+(u.ch>0?'<span class="cd">鈿?+u.ch+'</span>':'');
+// 鎭愭儳杩涘害鏉?
 if(u.ail.fear.s>0){
 let pct=u.ail.fear.s/10*100;
 let fb=document.createElement('div');fb.className='fear-bar-wrap';
@@ -813,32 +813,32 @@ if(pct>=100)ff.classList.add('full');
 else if(pct>=70)ff.classList.add('high');
 fb.appendChild(ff);slot.appendChild(fb);
 }
-// 隐匿特效（濒死单位跳过隐匿特效）
+// 闅愬尶鐗规晥锛堟繏姝诲崟浣嶈烦杩囬殣鍖跨壒鏁堬級
 if(!u._dying){
 if(u.sth>0){
   if(!u._prevSth)u._hadSthGain=1;
   slot.classList.add('unit-sth');
-  let lbl=document.createElement('span');lbl.className='sth-label';lbl.textContent='隐匿';slot.appendChild(lbl);
+  let lbl=document.createElement('span');lbl.className='sth-label';lbl.textContent='闅愬尶';slot.appendChild(lbl);
   if(u._hadSthGain){
     let wrap=document.createElement('div');wrap.className='sth-gain-wrap';
     let fog=document.createElement('div');fog.className='sth-gain-fog';
     wrap.appendChild(fog);slot.appendChild(wrap);
-    let gain=document.createElement('span');gain.className='sth-gain';gain.textContent='获得隐匿';slot.appendChild(gain);
+    let gain=document.createElement('span');gain.className='sth-gain';gain.textContent='鑾峰緱闅愬尶';slot.appendChild(gain);
     setTimeout(()=>{wrap.remove();gain.remove()},1300);
     u._hadSthGain=0;
   }
 }else if(u._prevSth>0){
   let burst=document.createElement('div');burst.className='sth-burst';slot.appendChild(burst);
-  let lose=document.createElement('span');lose.className='sth-lose';lose.textContent='破隐';slot.appendChild(lose);
+  let lose=document.createElement('span');lose.className='sth-lose';lose.textContent='鐮撮殣';slot.appendChild(lose);
   setTimeout(()=>{burst.remove();lose.remove()},1300);
 }
 u._prevSth=u.sth;
 }
 if(dummyMoveMode&&u.isDummy) slot.style.background='#552';
 if(dummySelected===u) slot.style.background='#a55';
-slot.onclick=()=>{if(u._dying)return;if(b.coldField&&b.coldField.targets.includes(u)){let cf=b.coldField;let d=u.dmg(cf.u.atk);b.lg.push('冷场 '+u.n+' '+d+'伤 +5恐惧');u.ail.fear.add(5,u);cf.targets.splice(cf.targets.indexOf(u),1);cf.done.push(u);if(!cf.targets.length){b.lg.push('冷场结束');b.coldField=null;renderBattle();setTimeout(function(){if(!b.go&&allActed())switchTeam();else if(!b.go){renderBattle();upInfo()}},500)}else renderBattle()}else onBClick(u)};
+slot.onclick=()=>{if(u._dying)return;if(b.coldField&&b.coldField.targets.includes(u)){let cf=b.coldField;let d=u.dmg(cf.u.atk);b.lg.push('鍐峰満 '+u.n+' '+d+'浼?+5鎭愭儳');u.ail.fear.add(5,u);cf.targets.splice(cf.targets.indexOf(u),1);cf.done.push(u);if(!cf.targets.length){b.lg.push('鍐峰満缁撴潫');b.coldField=null;renderBattle();setTimeout(function(){if(!b.go&&allActed())switchTeam();else if(!b.go){renderBattle();upInfo()}},500)}else renderBattle()}else onBClick(u)};
 brd.appendChild(slot);
-// 濒死单位生成粒子
+// 婵掓鍗曚綅鐢熸垚绮掑瓙
 if(u._dying){
 let colors=['#f44','#fa0','#fff','#f88','#ff4','#f66'];
 for(let i=0;i<12;i++){
@@ -850,7 +850,7 @@ slot.appendChild(p);
 }
 }
 });
-// 开发者模式: 空格点击移动人机
+// 寮€鍙戣€呮ā寮? 绌烘牸鐐瑰嚮绉诲姩浜烘満
 if(dummyMoveMode&&dummySelected){
 for(let x=0;x<7;x++)for(let y=1;y<6;y++){
 let hasUnit=b.us.some(v=>v.al&&v.x===x&&v.y===y);
@@ -861,7 +861,7 @@ ds.onclick=(()=>{
 let ox=x,oy=y;
 return()=>{
 dummySelected.x=ox;dummySelected.y=oy;
-b.lg.push(dummySelected.n+' → ('+ox+','+oy+')');
+b.lg.push(dummySelected.n+' 鈫?('+ox+','+oy+')');
 dummySelected=null;renderBattle();
 };
 })();
@@ -869,7 +869,7 @@ brd.appendChild(ds);
 }
 }
 }
-// 添加人机模式: 空格点击放人机
+// 娣诲姞浜烘満妯″紡: 绌烘牸鐐瑰嚮鏀句汉鏈?
 if(addDummyMode){
 for(let x=0;x<7;x++)for(let y=1;y<6;y++){
 let hasUnit=b.us.some(v=>v.al&&v.x===x&&v.y===y);
@@ -880,13 +880,13 @@ ds.onclick=(()=>{
 let ox=x,oy=y;
 return()=>{
 let dc=b.us.filter(v=>v.isDummy).length;
-let du=mu('人机'+(dc+1),10,1,0,'p2',ox,oy,0,[[0,0],[1,0]]);
+let du=mu('浜烘満'+(dc+1),10,1,0,'p2',ox,oy,0,[[0,0],[1,0]]);
 du.sk=[];du.ch=0;du.isDummy=1;
 b.us.push(du);
-b.lg.push('新增人机 → ('+ox+','+oy+')');
+b.lg.push('鏂板浜烘満 鈫?('+ox+','+oy+')');
 addDummyMode=false;
 $('btnAddDummy').style.background='#252';
-$('btnAddDummy').textContent='+人机';
+$('btnAddDummy').textContent='+浜烘満';
 renderBattle();
 };
 })();
@@ -894,44 +894,44 @@ brd.appendChild(ds);
 }
 }
 }
-// 战斗操作面板
+// 鎴樻枟鎿嶄綔闈㈡澘
 let bp=$('battlePanel');_bpSelAction=null;
 if(b.sel&&!b.skMode){
 let u=b.sel;let isEn=b._selEnemy;let isAView=b._actedView;bp.classList.add('show');
 let h='<div class="bp-left">';
-h+='<div class="bp-name-hp"><span class="bp-name"'+(isEn?' style="color:#f66"':'')+'>'+u.n+(isEn?' [敌]':'')+'</span><span class="bp-hp">'+u.hp+'/'+u.mH+'</span>'+(isEn||isAView?'':'<button class="bp-skip" onclick="bSkip()">跳过回合</button>')+'</div>';
-let als=[{n:'燃烧',s:u.ail.burn.s,c:'#f80'},{n:'恐惧',s:u.ail.fear.s,c:'#c80'},{n:'神经',s:u.ail.neuro.s,c:'#a6f'}];
+h+='<div class="bp-name-hp"><span class="bp-name"'+(isEn?' style="color:#f66"':'')+'>'+u.n+(isEn?' [鏁宂':'')+'</span><span class="bp-hp">'+u.hp+'/'+u.mH+'</span>'+(isEn||isAView?'':'<button class="bp-skip" onclick="bSkip()">璺宠繃鍥炲悎</button>')+'</div>';
+let als=[{n:'鐕冪儳',s:u.ail.burn.s,c:'#f80'},{n:'鎭愭儳',s:u.ail.fear.s,c:'#c80'},{n:'绁炵粡',s:u.ail.neuro.s,c:'#a6f'}];
 als.sort((a,b)=>b.s-a.s);
 let topA=als.find(a=>a.s>0)||als[0];
 h+='<div class="bp-ailments"><div class="bp-ail-bar" id="bpAilBar" onclick="bpCycleAil()"><div class="fill" style="width:'+(topA.s*10)+'%;background:'+topA.c+'"></div>'+topA.n+' '+topA.s+'/10</div></div>';
-if(u.pa)h+='<div class="bp-opt pa dim" onclick="bpClick(\'pa\',\'\')">被动：'+u.pa+'</div>';
+if(u.pa)h+='<div class="bp-opt pa dim" onclick="bpClick(\'pa\',\'\')">琚姩锛?+u.pa+'</div>';
 let ba=u.sk.find(s=>s.tp==='ba');
-if(ba){let baOk=!isEn&&!isAView&&u.atk>0;h+='<div class="bp-opt ba'+(baOk?'':' dim')+'" onclick="bpClick(\'ba\',\''+ba.n+'\')">普攻：'+ba.n+'</div>';}
+if(ba){let baOk=!isEn&&!isAView&&u.atk>0;h+='<div class="bp-opt ba'+(baOk?'':' dim')+'" onclick="bpClick(\'ba\',\''+ba.n+'\')">鏅敾锛?+ba.n+'</div>';}
 u.sk.filter(s=>s.tp==='sk').forEach(s=>{
 let cd=u.gCd(s.n),avail;
-if(s.n==='毛毛虫')avail=!isEn&&!isAView&&(u.mc||0)>0&&!u.skDisabled;
+if(s.n==='姣涙瘺铏?)avail=!isEn&&!isAView&&(u.mc||0)>0&&!u.skDisabled;
 else avail=!isEn&&!isAView&&cd<=0&&(!s.ch||u.ch>=s.ch)&&!u.skDisabled;
-h+='<div class="bp-opt sk'+(avail?'':' dim')+'" onclick="bpClick(\'sk\',\''+s.n+'\')">技能：'+s.n+' 冷'+cd+'存'+(s.st||0)+(s.n==='毛毛虫'?' 储'+(u.mc||0):'')+'</div>';
+h+='<div class="bp-opt sk'+(avail?'':' dim')+'" onclick="bpClick(\'sk\',\''+s.n+'\')">鎶€鑳斤細'+s.n+' 鍐?+cd+'瀛?+(s.st||0)+(s.n==='姣涙瘺铏??' 鍌?+(u.mc||0):'')+'</div>';
 });
 u.sk.filter(s=>s.tp==='ult').forEach(s=>{
 let avail=!isEn&&!isAView&&!s.auto&&u.ch>=u.mxc&&!u.skDisabled;
-h+='<div class="bp-opt ult'+(avail?'':' dim')+'" onclick="bpClick(\'ult\',\''+s.n+'\')">大招：'+s.n+' 充'+u.ch+'/'+(s.auto?u.mxc:s.ch)+'</div>';
+h+='<div class="bp-opt ult'+(avail?'':' dim')+'" onclick="bpClick(\'ult\',\''+s.n+'\')">澶ф嫑锛?+s.n+' 鍏?+u.ch+'/'+(s.auto?u.mxc:s.ch)+'</div>';
 });
-h+='</div><div class="bp-right" id="bpDesc">点击选项查看描述</div>';
+h+='</div><div class="bp-right" id="bpDesc">鐐瑰嚮閫夐」鏌ョ湅鎻忚堪</div>';
 bp.innerHTML=h;
 }else{bp.classList.remove('show');bp.innerHTML='';}
-// 内联日志
+// 鍐呰仈鏃ュ織
 let lgEl=$('bpLog');if(lgEl){
 let logs=b._logs;let recent=logs.slice(-6);
 let h='';recent.forEach(l=>{h+='<div class="l">'+(l.side?'['+l.side+'] ':'')+l.msg+'</div>';});
-if(logs.length>6)h+='<div class="tap">▲ 点击展开完整日志（共'+logs.length+'条）</div>';
-else if(!logs.length)h='<div class="tap">暂无日志</div>';
+if(logs.length>6)h+='<div class="tap">鈻?鐐瑰嚮灞曞紑瀹屾暣鏃ュ織锛堝叡'+logs.length+'鏉★級</div>';
+else if(!logs.length)h='<div class="tap">鏆傛棤鏃ュ織</div>';
 lgEl.innerHTML=h;
 lgEl.onclick=function(){showLog();};
 }
 /* log displayed via modal */
 setTimeout(function(){document.querySelectorAll('#board2 [data-dmg]').forEach(function(s){var d=parseFloat(s.getAttribute('data-dmg')),hA=parseFloat(s.getAttribute('data-hpA')),mH=parseFloat(s.getAttribute('data-mH'));s.removeAttribute('data-dmg');s.removeAttribute('data-hpA');s.removeAttribute('data-mH');var hpEl=s.querySelector('.hp');if(hpEl){var hpC=hA/mH>0.5?'#4f4':(hA/mH>0.25?'#fa0':'#f44');hpEl.textContent=hA+'/'+mH;hpEl.style.color=hpC}var p=document.createElement('div');p.textContent='-'+Math.round(d);p.className='dmg-popup';s.appendChild(p);setTimeout(function(){p.remove()},1000)});
-// 处理濒死单位：动画结束后正式移除
+// 澶勭悊婵掓鍗曚綅锛氬姩鐢荤粨鏉熷悗姝ｅ紡绉婚櫎
 setTimeout(function(){
 let dy=b.us.filter(u=>u._dying);
 dy.forEach(u=>{u.al=0;delete u._dying});
@@ -939,44 +939,44 @@ if(dy.length){checkGO();renderBattle();upInfo()}
 },650);},350);
 }
 
-// 开发者模式: 人机拖动
+// 寮€鍙戣€呮ā寮? 浜烘満鎷栧姩
 let dummyMoveMode=false,dummySelected=null,addDummyMode=false;
 function toggleDummyMove(){
 dummyMoveMode=!dummyMoveMode;
 $('btnDummyMove').style.background=dummyMoveMode?'#a55':'#552';
-$('btnDummyMove').textContent=dummyMoveMode?'📦 调整中':'📦 调整人机';
-if(dummyMoveMode) b.lg.push('人机调整模式:点击人机→点击空格移动');
-else b.lg.push('人机调整模式关闭');
+$('btnDummyMove').textContent=dummyMoveMode?'馃摝 璋冩暣涓?:'馃摝 璋冩暣浜烘満';
+if(dummyMoveMode) b.lg.push('浜烘満璋冩暣妯″紡:鐐瑰嚮浜烘満鈫掔偣鍑荤┖鏍肩Щ鍔?);
+else b.lg.push('浜烘満璋冩暣妯″紡鍏抽棴');
 renderBattle();
 }
 
 function toggleAddDummy(){
 addDummyMode=!addDummyMode;
 $('btnAddDummy').style.background=addDummyMode?'#2a2':'#252';
-$('btnAddDummy').textContent=addDummyMode?'点空格放置':'+人机';
-if(addDummyMode) b.lg.push('添加人机模式:点击一个空格放置人机(中列不可放)');
-else b.lg.push('添加人机模式取消');
+$('btnAddDummy').textContent=addDummyMode?'鐐圭┖鏍兼斁缃?:'+浜烘満';
+if(addDummyMode) b.lg.push('娣诲姞浜烘満妯″紡:鐐瑰嚮涓€涓┖鏍兼斁缃汉鏈?涓垪涓嶅彲鏀?');
+else b.lg.push('娣诲姞浜烘満妯″紡鍙栨秷');
 renderBattle();
 }
 
 function onBClick(u){
-// 开发者模式: 人机拖动
+// 寮€鍙戣€呮ā寮? 浜烘満鎷栧姩
 if(dummyMoveMode){
 if(u.isDummy){
 if(dummySelected===u){dummySelected=null;renderBattle();return}
-dummySelected=u;b.lg.push('选中 '+u.n);renderBattle();return;
+dummySelected=u;b.lg.push('閫変腑 '+u.n);renderBattle();return;
 }
 return;
 }
-// 添加人机模式
+// 娣诲姞浜烘満妯″紡
 if(addDummyMode) return;
 if(b.skMode){
-// 技能/普攻选位模式
+// 鎶€鑳?鏅敾閫変綅妯″紡
 if(b.skMode.isBA){
 b.logCtx={u:b.sel,tp:'ba',sn:b.skMode.sk.n};
-// 普攻选目标：检查是否可攻击
+// 鏅敾閫夌洰鏍囷細妫€鏌ユ槸鍚﹀彲鏀诲嚮
 let chgR=isChargeUnit(b.sel)?getChargeRows(b.sel,b.us).rows:null;let canAtk=isChargeUnit(b.sel)?(chgR.includes(u.y)&&((b.sel.tm==='p1'&&u.x>b.sel.x)||(b.sel.tm==='p2'&&u.x<b.sel.x))):b.sel.inRg(u.x,u.y);
-// 冲锋单位：仅允许x距离最近的目标
+// 鍐查攱鍗曚綅锛氫粎鍏佽x璺濈鏈€杩戠殑鐩爣
 if(isChargeUnit(b.sel)&&canAtk){
 let nearest=b.us.filter(v=>v.tm!==b.sel.tm&&v.al&&!v.sth&&chgR.includes(v.y)&&((b.sel.tm==='p1'&&v.x>b.sel.x)||(b.sel.tm==='p2'&&v.x<b.sel.x)));
 let minD=Math.min(...nearest.map(v=>Math.abs(v.x-b.sel.x)));
@@ -987,8 +987,8 @@ let ba=b.skMode.sk;
 let ctx={b,sel:u};
 b.logCtx={u:b.sel,tp:'ba',sn:ba.n};
 ba.ex(b.sel,u,ctx);b.logCtx=null;
-if(b.sel.n==='手充'&&b.sel.ultA>0){b.us.filter(v=>v.tm!==b.sel.tm&&v.al&&Math.abs(v.x-u.x)<=1&&Math.abs(v.y-u.y)<=1&&v!==u).forEach(v=>dmg(v,b.sel.atk));b.sel.ultA--}
-if(b.sel.chging){b.sel.chging=0;b.lg.push(b.sel.n+' 蓄力释放!')}
+if(b.sel.n==='鎵嬪厖'&&b.sel.ultA>0){b.us.filter(v=>v.tm!==b.sel.tm&&v.al&&Math.abs(v.x-u.x)<=1&&Math.abs(v.y-u.y)<=1&&v!==u).forEach(v=>dmg(v,b.sel.atk));b.sel.ultA--}
+if(b.sel.chging){b.sel.chging=0;b.lg.push(b.sel.n+' 钃勫姏閲婃斁!')}
 finishAction(b.sel);
 }
 return;
@@ -1000,7 +1000,7 @@ finishAction(b.sel);
 return;
 }
 if(!b.sel){
-// 无选中：可查看己方或敌方（队友选为操作，敌方仅查看）
+// 鏃犻€変腑锛氬彲鏌ョ湅宸辨柟鎴栨晫鏂癸紙闃熷弸閫変负鎿嶄綔锛屾晫鏂逛粎鏌ョ湅锛?
 if(u.al&&!u.isS){
 if(u.tm===b.ct&&!b.acted.has(u._uid)){b.sel=u;b._selEnemy=0;b._actedView=0;renderBattle();upInfo();return;}
 if(u.tm!==b.ct){b.sel=u;b._selEnemy=1;renderBattle();upInfo();return;}
@@ -1009,20 +1009,20 @@ if(u.tm===b.ct&&b.acted.has(u._uid)){b.sel=u;b._selEnemy=0;b._actedView=1;render
 return;
 }
 if(u===b.sel){
-// 点自己取消
+// 鐐硅嚜宸卞彇娑?
 b.sel=null;b.logCtx=null;b._selEnemy=0;b._actedView=0;renderBattle();upInfo();return;
 }
-// 查看敌方时点击其他敌方→切换查看
+// 鏌ョ湅鏁屾柟鏃剁偣鍑诲叾浠栨晫鏂光啋鍒囨崲鏌ョ湅
 if(b._selEnemy&&u.tm!==b.ct){b.sel=u;renderBattle();upInfo();return;}
-// 查看敌方时点击己方可行动单位→切换到己方
+// 鏌ョ湅鏁屾柟鏃剁偣鍑诲繁鏂瑰彲琛屽姩鍗曚綅鈫掑垏鎹㈠埌宸辨柟
 if(b._selEnemy&&u.tm===b.ct&&!b.acted.has(u._uid)){b.sel=u;b._selEnemy=0;b._actedView=0;renderBattle();upInfo();return;}
 if(b._selEnemy)return;
-// 查看已行动队友时切换
+// 鏌ョ湅宸茶鍔ㄩ槦鍙嬫椂鍒囨崲
 if(b._actedView&&u.tm===b.ct&&b.acted.has(u._uid)){b.sel=u;renderBattle();upInfo();return;}
 if(b._actedView&&u.tm!==b.ct){b.sel=u;b._selEnemy=1;b._actedView=0;renderBattle();upInfo();return;}
 if(b._actedView&&u.tm===b.ct&&!b.acted.has(u._uid)){b.sel=u;b._actedView=0;renderBattle();upInfo();return;}
 if(b._actedView)return;
-// 己方选中→点击敌方→普攻
+// 宸辨柟閫変腑鈫掔偣鍑绘晫鏂光啋鏅敾
 let cr=b.sel.chging?2:1;let canAtk=isChargeUnit(b.sel)?Math.abs(b.sel.y-u.y)<cr&&((b.sel.tm==='p1'&&u.x>b.sel.x)||(b.sel.tm==='p2'&&u.x<b.sel.x)):b.sel.inRg(u.x,u.y);
 if(u.tm!==b.sel.tm&&canAtk&&!u.sth){
 let ba=b.sel.sk.find(s=>s.tp==='ba');
@@ -1030,13 +1030,13 @@ if(ba){
 let ctx={b,sel:u};
 b.logCtx={u:b.sel,tp:'ba',sn:ba.n};
 ba.ex(b.sel,u,ctx);b.logCtx=null;
-if(b.sel.n==='手充'&&b.sel.ultA>0){b.us.filter(v=>v.tm!==b.sel.tm&&v.al&&Math.abs(v.x-u.x)<=1&&Math.abs(v.y-u.y)<=1&&v!==u).forEach(v=>dmg(v,b.sel.atk));b.sel.ultA--}
-if(b.sel.chging){b.sel.chging=0;b.lg.push(b.sel.n+' 蓄力释放!')}
+if(b.sel.n==='鎵嬪厖'&&b.sel.ultA>0){b.us.filter(v=>v.tm!==b.sel.tm&&v.al&&Math.abs(v.x-u.x)<=1&&Math.abs(v.y-u.y)<=1&&v!==u).forEach(v=>dmg(v,b.sel.atk));b.sel.ultA--}
+if(b.sel.chging){b.sel.chging=0;b.lg.push(b.sel.n+' 钃勫姏閲婃斁!')}
 finishAction(b.sel);
 }
 }
 if(u.tm===b.sel.tm){
-// 切换选中队友
+// 鍒囨崲閫変腑闃熷弸
 b.sel=u;renderBattle();upInfo();b.logCtx=null;
 }
 }
@@ -1044,38 +1044,38 @@ b.sel=u;renderBattle();upInfo();b.logCtx=null;
 function doAction(unit,tp,sk){
 b.logCtx={u:unit,tp:tp,sn:sk.n};
 if(tp==='ba'){
-// 检查是否有可攻击的目标（排除隐匿单位）
+// 妫€鏌ユ槸鍚︽湁鍙敾鍑荤殑鐩爣锛堟帓闄ら殣鍖垮崟浣嶏級
 let cR=isChargeUnit(unit)?getChargeRows(unit,b.us).rows:null;let hasTarget=b.us.some(v=>v.tm!==unit.tm&&v.al&&!v.sth&&(isChargeUnit(unit)?(cR.includes(v.y)&&((unit.tm==='p1'&&v.x>unit.x)||(unit.tm==='p2'&&v.x<unit.x))):unit.inRg(v.x,v.y)));
 if(!hasTarget){
-// 无有效目标，直接执行（如丁衍征一的自身技能）
+// 鏃犳湁鏁堢洰鏍囷紝鐩存帴鎵ц锛堝涓佽寰佷竴鐨勮嚜韬妧鑳斤級
 try{
 let ctx={b,sel:null};
 sk.ex(unit,null,ctx);
 }catch(e){
-b.lg.push(unit.n+' 范围内无目标');
+b.lg.push(unit.n+' 鑼冨洿鍐呮棤鐩爣');
 b.sel=null;b._selEnemy=0;b._actedView=0;renderBattle();return;
 }
 finishAction(unit);
 return;
 }
-// 进入普攻选目标模式
+// 杩涘叆鏅敾閫夌洰鏍囨ā寮?
 b.skMode={sk:sk,tgt:'enemy',isBA:1};
 renderBattle();upInfo();
 return;
 }
-// 判断是否需要选目标 (ex有3个参数=需要t，或技能名是毛毛虫)
-let needsTarget=sk.ex.length===3||sk.n==='毛毛虫';
+// 鍒ゆ柇鏄惁闇€瑕侀€夌洰鏍?(ex鏈?涓弬鏁?闇€瑕乼锛屾垨鎶€鑳藉悕鏄瘺姣涜櫕)
+let needsTarget=sk.ex.length===3||sk.n==='姣涙瘺铏?;
 if(needsTarget){
-if(sk.n==='毛毛虫'){
+if(sk.n==='姣涙瘺铏?){
 let n=unit.mc||0;
 b.skMode={sk:sk,tgt:'empty',max:n,placed:0,newWorms:[]};
 }else{
-b.skMode={sk:sk,tgt:sk.tp==='ba'||(sk.n==='点赞'||sk.n==='葡萄糖'||sk.n==='飘絮')?'any':'enemy'};
+b.skMode={sk:sk,tgt:sk.tp==='ba'||(sk.n==='鐐硅禐'||sk.n==='钁¤悇绯?||sk.n==='椋樼诞')?'any':'enemy'};
 }
 renderBattle();upInfo();
 return;
 }
-// 不需要目标，直接执行
+// 涓嶉渶瑕佺洰鏍囷紝鐩存帴鎵ц
 let ctx={b,sel:null};
 sk.ex(unit,ctx);
 finishAction(unit);
@@ -1085,22 +1085,22 @@ function allActed(){
 return b.us.filter(u=>u.al&&u.tm===b.ct&&!u.isS&&!u.isDummy).every(u=>b.acted.has(u._uid));
 }
 
-// 冷场：周水击杀后标记待触发
+// 鍐峰満锛氬懆姘村嚮鏉€鍚庢爣璁板緟瑙﹀彂
 function triggerColdField(u,b){
 let targets=b.us.filter(v=>v.al&&v._uid!==u._uid);
-if(!targets.length){b.lg.push('冷场:无可选目标');return;}
-b.lg.push('冷场:对全场触发!请逐个选择目标');
+if(!targets.length){b.lg.push('鍐峰満:鏃犲彲閫夌洰鏍?);return;}
+b.lg.push('鍐峰満:瀵瑰叏鍦鸿Е鍙?璇烽€愪釜閫夋嫨鐩爣');
 b.coldFieldPending=u;
 }
 
-// 动作后摇：1秒延迟后继续
+// 鍔ㄤ綔鍚庢憞锛?绉掑欢杩熷悗缁х画
 function finishAction(unit){
 b._actionDelay=1;b.acted.add(unit._uid);b.sel=null;b.skMode=null;b.logCtx=null;b._selEnemy=0;b._actedView=0;
 b.us.filter(u=>u.al).forEach(u=>u.cdTk());
 renderBattle();checkGO();
 setTimeout(function(){
 b._actionDelay=0;
-// 冷场额外回合：不占行动，不触发回合切换
+// 鍐峰満棰濆鍥炲悎锛氫笉鍗犺鍔紝涓嶈Е鍙戝洖鍚堝垏鎹?
 if(b.coldFieldPending){
 let cfU=b.coldFieldPending;
 b.coldFieldPending=null;
@@ -1109,7 +1109,7 @@ if(targets.length){
 b.coldField={u:cfU,targets:targets,done:[]};
 renderBattle();
 }else{
-b.lg.push('冷场:无可选目标');
+b.lg.push('鍐峰満:鏃犲彲閫夌洰鏍?);
 if(!b.go&&allActed())switchTeam();
 else if(!b.go){renderBattle();upInfo();}
 }
@@ -1121,14 +1121,14 @@ else if(!b.go){renderBattle();upInfo();}
 }
 
 
-// ===== 冲锋目标选择 =====
+// ===== 鍐查攱鐩爣閫夋嫨 =====
 function getChargeTarget(u, bus){
 let dir=u.tm==='p1'?1:-1;
-// 同列：身前一整行内离自身最近的单位（我方和敌方）
+// 鍚屽垪锛氳韩鍓嶄竴鏁磋鍐呯鑷韩鏈€杩戠殑鍗曚綅锛堟垜鏂瑰拰鏁屾柟锛?
 let sameRow=bus.filter(v=>v.al&&v.y===u.y&&((dir===1&&v.x>u.x)||(dir===-1&&v.x<u.x)));
 sameRow.sort((a,b)=>dir===1?(a.x-b.x):(b.x-a.x));
 if(sameRow.length>0)return sameRow[0];
-// 相邻行(y-1, y+1)：身前行内离自身最近的单位
+// 鐩搁偦琛?y-1, y+1)锛氳韩鍓嶈鍐呯鑷韩鏈€杩戠殑鍗曚綅
 let adjRows=bus.filter(v=>v.al&&(v.y===u.y-1||v.y===u.y+1)&&((dir===1&&v.x>u.x)||(dir===-1&&v.x<u.x)));
 adjRows.sort((a,b)=>{let da=Math.abs(a.x-u.x),db=Math.abs(b.x-u.x);return da!==db?da-db:Math.abs(a.y-u.y)-Math.abs(b.y-u.y)});
 if(adjRows.length>0)return adjRows[0];
@@ -1136,17 +1136,17 @@ return null;
 }
 function isChargeUnit(u){
 let e=ROSTER.find(r=>r.n===u.n);
-if(e&&e.cls==='冲锋手')return true;
-// 检查是否有冲锋相关技能或BA带charge标记
-let hasChargeSkill=u.sk.some(s=>(s.tp==='ba'&&s.charge)||s.n.includes('冲锋')||s.n.includes('千鸟')||s.n.includes('扶摇'));
+if(e&&e.cls==='鍐查攱鎵?)return true;
+// 妫€鏌ユ槸鍚︽湁鍐查攱鐩稿叧鎶€鑳芥垨BA甯harge鏍囪
+let hasChargeSkill=u.sk.some(s=>(s.tp==='ba'&&s.charge)||s.n.includes('鍐查攱')||s.n.includes('鍗冮笩')||s.n.includes('鎵舵憞'));
 if(hasChargeSkill)return true;
-// 检查 chging 状态
+// 妫€鏌?chging 鐘舵€?
 if(u.chging)return true;
 return false;
 }
 
 function getChargeRows(unit, bus){
-// 返回冲锋可选的行号数组 + 是否仅同行
+// 杩斿洖鍐查攱鍙€夌殑琛屽彿鏁扮粍 + 鏄惁浠呭悓琛?
 let dir=unit.tm==='p1'?1:-1;
 let sameHas=bus.some(v=>v.tm!==unit.tm&&v.al&&!v.sth&&v.y===unit.y&&((dir===1&&v.x>unit.x)||(dir===-1&&v.x<unit.x)));
 if(sameHas)return {rows:[unit.y],sameOnly:1};
@@ -1160,32 +1160,32 @@ function switchTeam(){
 if(!b.us.some(u=>u.tm==='p1'&&u.al)||!b.us.some(u=>u.tm==='p2'&&u.al)){checkGO();return}
 if(b.extra){
 let eu=b.extra;b.extra=null;
-if(eu.al&&eu.tm===b.ct){b.acted.delete(eu._uid);b.lg.push(eu.n+' 额外行动!');b.sel=null;b.skMode=null;b._selEnemy=0;b._actedView=0;renderBattle();upInfo();return}
+if(eu.al&&eu.tm===b.ct){b.acted.delete(eu._uid);b.lg.push(eu.n+' 棰濆琛屽姩!');b.sel=null;b.skMode=null;b._selEnemy=0;b._actedView=0;renderBattle();upInfo();return}
 }
-// 小回合结束：自动大招（按敏捷降序）
+// 灏忓洖鍚堢粨鏉燂細鑷姩澶ф嫑锛堟寜鏁忔嵎闄嶅簭锛?
 let autoUnits=b.us.filter(u=>u.al&&u.ch>=u.mxc).sort((a,b)=>b.agi-a.agi);
 for(let u of autoUnits){
 let au=u.sk.find(s=>s.tp==='ult'&&s.auto);
 if(au){
-b.lg.push(u.n+' 充能满自动释放·'+au.n);
+b.lg.push(u.n+' 鍏呰兘婊¤嚜鍔ㄩ噴鏀韭?+au.n);
 b.logCtx={u:u,tp:'ult',sn:au.n};
 au.ex(u,{b:b,us:b.us});
 b.logCtx=null;
 }
 }
 b.ct=b.ct==='p1'?'p2':'p1';
-b.logSection('side');b.lg.push((b.ct==='p1'?'蓝方':'红方')+'行动');
-if(b.ct==='p1'){b.lg.push('第'+(b.rn-1)+'大回合结束');b._roundLogged=0;
+b.logSection('side');b.lg.push((b.ct==='p1'?'钃濇柟':'绾㈡柟')+'琛屽姩');
+if(b.ct==='p1'){b.lg.push('绗?+(b.rn-1)+'澶у洖鍚堢粨鏉?);b._roundLogged=0;
 b.rn++;
-// 进入选位阶段
+// 杩涘叆閫変綅闃舵
 startReposition();
 return;
 }
-// 切换到p2: 如果dev mode且红方是dummy，自动全跳过
+// 鍒囨崲鍒皃2: 濡傛灉dev mode涓旂孩鏂规槸dummy锛岃嚜鍔ㄥ叏璺宠繃
 if(b.ct==='p2'&&b.us.some(u=>u.isDummy)){
 let dummies=b.us.filter(u=>u.al&&u.tm===b.ct&&u.isDummy&&!b.acted.has(u._uid));
 dummies.forEach(u=>{b.acted.add(u._uid);b.us.filter(v=>v.al).forEach(v=>v.cdTk());});
-b.lg.push('人机自动跳过');
+b.lg.push('浜烘満鑷姩璺宠繃');
 switchTeam();
 return;
 }
@@ -1194,23 +1194,23 @@ beginRound();
 if(!b.go){renderBattle();upInfo()}
 }
 
-// ===== 选位阶段 =====
+// ===== 閫変綅闃舵 =====
 let repoStep=0,repoCur=null,repoOrder=[],repoFirst='',repoPool=[];
 
 function startReposition(){
 b.sel=null;b.skMode=null;b.acted=new Set();b._selEnemy=0;b._actedView=0;
 let p1u=b.us.filter(u=>u.al&&u.tm==='p1');let p2u=b.us.filter(u=>u.al&&u.tm==='p2');
 let p1a=p1u.reduce((s,u)=>s+u.agi,0);let p2a=p2u.reduce((s,u)=>s+u.agi,0);
-let reason='敏捷';
+let reason='鏁忔嵎';
 if(p1a!==p2a){repoFirst=p1a>p2a?'p1':'p2';}else{
 let p1hp=p1u.reduce((s,u)=>s+u.mH,0);let p2hp=p2u.reduce((s,u)=>s+u.mH,0);
-if(p1hp!==p2hp){repoFirst=p1hp<p2hp?'p1':'p2';reason='HP上限更低';}else{
+if(p1hp!==p2hp){repoFirst=p1hp<p2hp?'p1':'p2';reason='HP涓婇檺鏇翠綆';}else{
 let p1atk=p1u.reduce((s,u)=>s+u.atk,0);let p2atk=p2u.reduce((s,u)=>s+u.atk,0);
-repoFirst=p1atk>=p2atk?'p1':'p2';reason='攻击力更高';
+repoFirst=p1atk>=p2atk?'p1':'p2';reason='鏀诲嚮鍔涙洿楂?;
 }}
-b.logRepo();b.lg.push('第'+b.rn+'大回合选位');
-let label=repoFirst==='p1'?'🔵蓝方':'🔴红方';
-b.lg.push(label+' 先选位 ('+reason+':'+(repoFirst==='p1'?p1a:p2a)+')');
+b.logRepo();b.lg.push('绗?+b.rn+'澶у洖鍚堥€変綅');
+let label=repoFirst==='p1'?'馃數钃濇柟':'馃敶绾㈡柟';
+b.lg.push(label+' 鍏堥€変綅 ('+reason+':'+(repoFirst==='p1'?p1a:p2a)+')');
 let sc=repoFirst==='p1'?'p2':'p1';
 repoOrder=[repoFirst,sc,sc,repoFirst,repoFirst,sc,sc,repoFirst,repoFirst,sc];
 repoPool=b.us.filter(u=>u.al&&!u.isS&&!u.isDummy);
@@ -1230,10 +1230,10 @@ repoStep++;
 if(repoStep>=10){confirmReposition();return}
 
 let cur=repoOrder[repoStep];
-let label=cur==='p1'?'🔵蓝方':'🔴红方';
+let label=cur==='p1'?'馃數钃濇柟':'馃敶绾㈡柟';
 let isDummy=b.us.some(u=>u.isDummy);
-$('deployTitle').textContent=label+' 布阵 ('+(repoStep+1)+'/10)';
-$('deployInfo').textContent='第'+b.rn+'回合选位 - 点击角色→点击空格放置';
+$('deployTitle').textContent=label+' 甯冮樀 ('+(repoStep+1)+'/10)';
+$('deployInfo').textContent='绗?+b.rn+'鍥炲悎閫変綅 - 鐐瑰嚮瑙掕壊鈫掔偣鍑荤┖鏍兼斁缃?;
 let brd=$('board');brd.innerHTML='';
 let allOcc=b.us.filter(u=>u.al&&u.x>=0);
 let placed=repoPool.filter(u=>u.x>=0);
@@ -1259,7 +1259,7 @@ renderReposition();
 }
 brd.appendChild(slot);
 }
-// 侧栏：双方已选+未选角色
+// 渚ф爮锛氬弻鏂瑰凡閫?鏈€夎鑹?
 let sl=$('deploySideL'),sr=$('deploySideR');
 sl.innerHTML='';sr.innerHTML='';
 repoPool.filter(u=>u.tm==='p1').forEach(u=>{
@@ -1294,7 +1294,7 @@ if(repoCur===u)el.classList.add('current');
 sr.appendChild(el);
 });
 while(sr.children.length<5){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.3';c.textContent='-';sr.appendChild(c);}
-// 可选角色（仅侧栏，无下方角色条）
+// 鍙€夎鑹诧紙浠呬晶鏍忥紝鏃犱笅鏂硅鑹叉潯锛?
 let avail=repoPool.filter(u=>u.al&&u.tm===cur&&u.x<0);
 let humanU=avail.filter(u=>!u.isDummy);
 let dummyU=avail.filter(u=>u.isDummy);
@@ -1325,7 +1325,7 @@ if(p2pick.length>0)p2u.sort((a,b)=>(p2pick.indexOf(a._pi)-p2pick.indexOf(b._pi))
 p1u.forEach(u=>{
 let c=document.createElement('div');
 c.className='side-cell p1'+(u.al?'':' dead');
-if(!u.al){c.style.background='#331';c.style.color='#a33';c.textContent='死';}
+if(!u.al){c.style.background='#331';c.style.color='#a33';c.textContent='姝?;}
 else c.textContent=u.n.substring(0,2);
 sl.appendChild(c);
 });
@@ -1333,7 +1333,7 @@ while(sl.children.length<5){let c=document.createElement('div');c.className='sid
 p2u.forEach(u=>{
 let c=document.createElement('div');
 c.className='side-cell p2'+(u.al?'':' dead');
-if(!u.al){c.style.background='#331';c.style.color='#a33';c.textContent='死';}
+if(!u.al){c.style.background='#331';c.style.color='#a33';c.textContent='姝?;}
 else c.textContent=u.n.substring(0,2);
 sr.appendChild(c);
 });
@@ -1343,7 +1343,7 @@ while(sr.children.length<5){let c=document.createElement('div');c.className='sid
 function checkGO(){
 let p1=b.us.some(u=>u.tm==='p1'&&u.al);
 let p2=b.us.some(u=>u.tm==='p2'&&u.al);
-if(!p1||!p2){b.go=1;setPhase('gameover');$('winnerText').textContent=(p1?'🔵 蓝方':'🔴 红方')+' 获胜!'}
+if(!p1||!p2){b.go=1;setPhase('gameover');$('winnerText').textContent=(p1?'馃數 钃濇柟':'馃敶 绾㈡柟')+' 鑾疯儨!'}
 }
 
 function bSkip(){if(!b.sel)return;b.acted.add(b.sel._uid);b.us.filter(u=>u.al).forEach(u=>u.cdTk());b.sel=null;b._selEnemy=0;b._actedView=0;renderBattle();if(allActed())switchTeam()}
@@ -1352,15 +1352,15 @@ if(!devMode)return;
 b.us.filter(u=>u.al).forEach(u=>{
 for(let k in u.cd)if(u.cd[k]>0)u.cd[k]--;
 });
-// 陈色毛毛虫储存检查
-b.us.filter(u=>u.al&&u.n==='陈色'&&!u.ultDur).forEach(cs=>{
-if(cs.gCd('毛毛虫')<=0){
+// 闄堣壊姣涙瘺铏偍瀛樻鏌?
+b.us.filter(u=>u.al&&u.n==='闄堣壊'&&!u.ultDur).forEach(cs=>{
+if(cs.gCd('姣涙瘺铏?)<=0){
 cs.mc=Math.min((cs.mc||0)+1,4);
-cs.sC('毛毛虫',8);
-b.lg.push('陈色 毛毛虫储存+1 ('+cs.mc+'/4)');
+cs.sC('姣涙瘺铏?,8);
+b.lg.push('闄堣壊 姣涙瘺铏偍瀛?1 ('+cs.mc+'/4)');
 }
 });
-b.lg.push('全体冷却-1');
+b.lg.push('鍏ㄤ綋鍐峰嵈-1');
 renderBattle();
 }
 function devChgPlus(){
@@ -1368,16 +1368,16 @@ if(!devMode)return;
 b.us.filter(u=>u.al).forEach(u=>{
 if(!u.ultDur)u.ch=Math.min(u.mxc,u.ch+1);
 });
-b.lg.push('全体充能+1');
+b.lg.push('鍏ㄤ綋鍏呰兘+1');
 renderBattle();
 }
 
-// ===== 战斗面板交互 =====
+// ===== 鎴樻枟闈㈡澘浜や簰 =====
 let _bpAilIdx=0,_bpSelAction=null;
 function bpCycleAil(){
 if(!b.sel)return;
 _bpAilIdx=(_bpAilIdx+1)%3;
-let als=[{n:'燃烧',s:b.sel.ail.burn.s,c:'#f80'},{n:'恐惧',s:b.sel.ail.fear.s,c:'#c80'},{n:'神经',s:b.sel.ail.neuro.s,c:'#a6f'}];
+let als=[{n:'鐕冪儳',s:b.sel.ail.burn.s,c:'#f80'},{n:'鎭愭儳',s:b.sel.ail.fear.s,c:'#c80'},{n:'绁炵粡',s:b.sel.ail.neuro.s,c:'#a6f'}];
 let a=als[_bpAilIdx];
 let bar=$('bpAilBar');if(!bar)return;
 bar.innerHTML='<div class="fill" style="width:'+(a.s*10)+'%;background:'+a.c+'"></div>'+a.n+' '+a.s+'/10';
@@ -1389,44 +1389,44 @@ document.querySelectorAll('.bp-opt').forEach(o=>o.classList.remove('hl'));
 let tgt=document.querySelector('.bp-opt.'+(tp==='ba'?'ba':tp==='sk'?'sk':tp==='ult'?'ult':'pa'));
 if(tgt)tgt.classList.add('hl');
 let desc='',sk=null,avail=false;
-if(tp==='pa'){desc=b.sel.pa||'无被动描述';_bpSelAction=null;}
+if(tp==='pa'){desc=b.sel.pa||'鏃犺鍔ㄦ弿杩?;_bpSelAction=null;}
 else{
 sk=b.sel.sk.find(s=>s.tp===tp&&s.n===sn);
 if(!sk)return;
-desc=sk.d||(sk.n+'：无详细描述');
+desc=sk.d||(sk.n+'锛氭棤璇︾粏鎻忚堪');
 if(b._selEnemy||b._actedView){_bpSelAction=null;}
 else{
 if(tp==='ba'){avail=b.sel.atk>0;}
-else if(tp==='sk'){if(sn==='毛毛虫')avail=(b.sel.mc||0)>0&&!b.sel.skDisabled;else{let cd=b.sel.gCd(sn);avail=cd<=0&&(!sk.ch||b.sel.ch>=sk.ch)&&!b.sel.skDisabled;}}
+else if(tp==='sk'){if(sn==='姣涙瘺铏?)avail=(b.sel.mc||0)>0&&!b.sel.skDisabled;else{let cd=b.sel.gCd(sn);avail=cd<=0&&(!sk.ch||b.sel.ch>=sk.ch)&&!b.sel.skDisabled;}}
 else{avail=!sk.auto&&b.sel.ch>=b.sel.mxc&&!b.sel.skDisabled;}
 _bpSelAction=avail?{tp:tp,sn:sn,sk:sk}:null;
 }
 }
 let bd=$('bpDesc');if(!bd)return;
 let h=desc;
-if(avail)h+='<br><button class="bp-use-btn" onclick="bpUse()">使用</button>';
+if(avail)h+='<br><button class="bp-use-btn" onclick="bpUse()">浣跨敤</button>';
 bd.innerHTML=h;
 }
 function bpUse(){if(!_bpSelAction||!b.sel)return;b.logCtx=null;doAction(b.sel,_bpSelAction.tp,_bpSelAction.sk);_bpSelAction=null;}
 
-// ===== 首页入口 =====
+// ===== 棣栭〉鍏ュ彛 =====
 function startNormalGame(){devMode=false;setPhase('ban');startBan();}
 function startDevGame(){devMode=true;startDevMode();}
 
 function upInfo(){
-let info='第'+b.rn+'回合 | '+(b.ct==='p1'?'🔵蓝':'🔴红')+'方';
+let info='绗?+b.rn+'鍥炲悎 | '+(b.ct==='p1'?'馃數钃?:'馃敶绾?)+'鏂?;
 let ready=b.us.filter(u=>u.al&&u.tm===b.ct&&!b.acted.has(u._uid)&&!u.isS).length;
-info+=' | 待行动:'+ready;
-if(b.sel)info+=' | 已选:'+b.sel.n+' HP:'+b.sel.hp+'/'+b.sel.mH;
-if(b.skMode)info+=' | ⚠选择目标中';
+info+=' | 寰呰鍔?'+ready;
+if(b.sel)info+=' | 宸查€?'+b.sel.n+' HP:'+b.sel.hp+'/'+b.sel.mH;
+if(b.skMode)info+=' | 鈿犻€夋嫨鐩爣涓?;
 $('battleInfo').textContent=info;
 }
 
-// 启动
+// 鍚姩
 let _uidC=0;
 let muOrig=mu;
 mu=function(...args){let u=muOrig(...args);u._uid=_uidC++;return u;}
-// 首页为初始界面，不自动启动
+// 棣栭〉涓哄垵濮嬬晫闈紝涓嶈嚜鍔ㄥ惎鍔?
 
 function showLog(){
 $('logModal').classList.add('show');
@@ -1436,98 +1436,98 @@ var lastHdr='';
 for(var i=0;i<logs.length;i++){
 var l=logs[i];
 var hdr='';
-if(l.tp==='repo'){hdr='第'+l.r+'大回合选位';}
-else if(l.tp==='round'){hdr='第'+l.r+'大回合开始';}
-else if(l.tp==='side'){var s=l.side==='p1'?'蓝方':'红方';hdr=s+'行动';}
+if(l.tp==='repo'){hdr='绗?+l.r+'澶у洖鍚堥€変綅';}
+else if(l.tp==='round'){hdr='绗?+l.r+'澶у洖鍚堝紑濮?;}
+else if(l.tp==='side'){var s=l.side==='p1'?'钃濇柟':'绾㈡柟';hdr=s+'琛屽姩';}
 if(hdr&&hdr!==lastHdr){html+='<div class="hdr">'+hdr+'</div>';lastHdr=hdr;}
 var cls=l.tp==='act'?'act':'info';
 html+='<div class="'+cls+'">'+l.msg+'</div>';
 }
-$('logContent').innerHTML=html||'暂无日志';
+$('logContent').innerHTML=html||'鏆傛棤鏃ュ織';
 }
 function hideLog(){$('logModal').classList.remove('show');}
-function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志 v1.20</div>- 2026年06月07日，v1.20：回退至v1.56恢复完整24角色；新建1.20八宝舟知识库.txt(整合原版规则+角色+应用详解)；新建项目介绍.txt；仅陈色周水保留完整描述，其余角色精简为数值；修复瞬杀时刻描述×1→×2；统一版本号至v1.20';
+function showCL(){$('clContent').innerHTML='<div class="cl-hdr">鏀瑰姩鏃ュ織 v1.20</div>- 2026骞?6鏈?7鏃ワ紝v1.20锛氬洖閫€鑷硋1.56鎭㈠瀹屾暣24瑙掕壊锛涙柊寤?.20鍏疂鑸熺煡璇嗗簱.txt(鏁村悎鍘熺増瑙勫垯+瑙掕壊+搴旂敤璇﹁В)锛涙柊寤洪」鐩粙缁?txt锛涗粎闄堣壊鍛ㄦ按淇濈暀瀹屾暣鎻忚堪锛屽叾浣欒鑹茬簿绠€涓烘暟鍊硷紱淇鐬潃鏃跺埢鎻忚堪脳1鈫捗?锛涚粺涓€鐗堟湰鍙疯嚦v1.20';
 $('clContent').innerHTML+=`
-- - 2026年06月05日，选位界面重构：侧栏角色改为正方格42×42（蓝红渐变背景区分阵营）；删除地图下方角色条仅保留两侧角色；修复跨阵营放置bug（选位时只能点击已方角色+棋盘双重校验_deployCur._tm）；main-grid间隙收窄4→2px控制总宽390px<br>- 2026年06月05日，选人棋盘取消公共区域限制：移除中列不可放置规则，35格全可用；所有格子初始黑色背景(#111)；角色被选后原地留空不进位<br>- 2026年06月05日，修复选人界面角色消失：slot定位从style属性子串匹配改为dataset属性(x/y)，解决浏览器style格式化空格导致的querySelector匹配失败<br>- 2026年06月05日，修复三阶段棋盘同色混淆：恢复pick/deploy/battle棋盘渐变背景(蓝-透-红)区分各阶段；之前v1.52统一纯色导致选人界面与战斗界面无法辨别<br>- 2026年06月05日，移动端适配：main-grid整体缩小(棋盘302×220+侧栏32px,格42×42,侧格28×42)使总宽374px适配375px手机；去掉user-scalable=no允许手动缩放<br>- 2026年06月05日，三阶段统一main-grid布局：选人/布阵/战斗全用7×5网格+两侧5格竖置side-cell；CSS去重deploy-wrap；部署高亮：选中角色时地图可部署位金色脉冲闪烁(.ready)<br>- 2026年06月07日，v1.20：回退至v1.56恢复完整24角色；新建1.20八宝舟知识库.txt(整合原版规则+角色+应用详解)；新建项目介绍.txt；仅陈色周水保留完整描述，其余角色精简为数值；修复瞬杀时刻描述×1→×2；统一版本号至v1.20
-- - 2026年06月05日，选位界面重构：已选角色放两侧（左蓝右红），地图居中缩小（格子56→42px，地图420→316px），角色名缩为2字；三处布阵页面统一适配（renderDeploy/renderDevDeploy/renderReposition）<br>- 2026年06月05日，选人界面适配手机：角色格子56→72px、待选池最大宽度360→420px、字体放大；整体更贴合手机屏幕<br>- 2026年06月05日，已行动队友仅查看：选中本大回合已行动过的我方角色时面板不显示「使用」按钮和「跳过回合」，仅展示技能描述<br>- 2026年06月05日，充能初始化规则：所有角色初始无充能方式，陈色仅自充(beginRound)，周水仅受充(dmg)<br>- 2026年06月05日，自充根因修复：beginRound充能移入_roundLogged守卫内，确保每大回合仅充能+1（此前每大回合被调用两次导致双倍充能）<br>- 2026年06月05日，自充bug修复：移除bpClick两处全局敌方充能泄露（每次攻击后不再给敌方全队+1充能）；新增点击敌方查看描述功能（红色[敌]标记、技能全灰不可用、仅可查看描述）<br>- 2026年06月05日，充能三分法：自充(beginRound每大回合+1)/攻充(普攻目标后+1)/受充(每受击+1)严格区分；陈色→自充，周水→受充，其余→自充；所有普攻移除u.chg(1)攻充逻辑，beginRound回退排除周水（周水仅靠dmg受充）<br>- 2026年06月04日，auto大招不显示「使用」按钮（周水瞬杀时刻等充能满后自动释放），面板渲染与bpClick双重拦截；自充逻辑修复：beginRound移除周水排除，所有角色大回合开始时统一充能+1<br>- 2026年06月04日，所有技能选项点击即可查看完整描述（不可用时也能看），技能数据新增d字段存储每个技能的详细说明<br>- 2026年06月04日，战斗日志嵌入战斗界面：面板下方显示最近6条，点击展开完整日志弹窗<br>- 2026年06月04日，战斗面板操作改为两步：点击选项查看描述+「使用」按钮→点击按钮执行；被动选项可点击查看描述；选中友方切换时自动重置面板默认状态<br>- 2026年06月04日，修复开发者模式选人界面空白：startDevMode()跳过ban阶段导致pool未初始化，补pool=ROSTER.map(r=>({...r}))<br>- 2026年06月04日，修复规则/角色图鉴弹窗在首页无法显示（弹窗从battle div内移至全局#app下）<br>- 2026年06月04日，UI重做：新增首页(正常对战/开发者模式/规则/角色图鉴四个按钮)；选人界面角色格子改为正方形；战斗阶段技能栏替换为信息面板（角色名+HP+跳过回合+损伤条+被动+普攻+技能+大招，点击选项右侧显示描述，可用操作点击即进入目标选择）<br>- 2026年06月04日，陈色/周水添加被动描述字段（面板中被动行显示）<br>- 2026年06月03日，恐惧损伤实装：Ail.add()自动结算(叠满10→4伤)+所有ail.fear.add()传入目标单位；新增恐惧进度条(单位格子底部细条，<70%黄色，≥70%橙红脉冲，满条红色闪烁)<br>- 2026年06月03日，修复致死伤害不播放受击动画：dmg()致死时改设_dying=1保持al=1→renderBattle渲染濒死单位+震动+浮动伤害→动画结束后al=0+checkGO；新增死亡粒子消散动画<br>- 2026年06月03日，跳过冷却修复：bSkip（跳过回合）补调cdTk，每次跳过也触发全体冷却-1，与普攻/技能一致<br>- 2026年06月03日，冷却修复补充：红方人机跳过时补调cdTk，每跳过一个调用一次致全体冷却-1，恢复每大回合10次冷却流逝的正常节奏<br>- 2026年06月03日，冷却机制修复：cdTk从switchTeam（切换行动方时调用）移至finishAction（每个小回合完成时调用），实现每过1个任意角色小回合冷却-1而非每大回合/切换行动方时-1<br>- 2026年06月03日，showRules重写为三部分格式（全局规则/角色通用规则/角色专属规则）并同步showGuide角色图鉴<br>- 2026年06月03日，更新showRules: 公共区域"禁止进入"→"任何单位不能在上面"、攻击优先级补充嘲讽机制、冲锋描述更新、自充描述明确(每个自身小回合+1/除周水外); 陈色充能加入自充(不再排除)<br>- 2026年06月02日，先手判定改为三级(敏捷→HP上限更低→攻击力更高)；自动大招触发时机从大回合开始改为小回合结束时(按敏捷降序)；储存机制通用化(cdTk冷却归零自动存储/毛毛虫加str:4)<br>- 2026年06月02日，充能方式调整：除陈色和周水外所有角色改为自动充能(每大回合+1)；删除除陈色和周水外所有角色的被动(王土回血/手充减上限/科比牢大bns/蓝主任积怨/大树回血)；冷却改为每小回合(切换行动方时)-1<br>- 2026年06月02日，隐匿三态特效重做：获得隐匿(白雾升腾+文字)/持有隐匿(半透明+白色雾气粒子飘散+"隐匿"小字)/解除隐匿(雾气炸散+"破隐"文字)；删除隐匿特效切换按钮(统一雾隐)<br>- 2026年06月02日，冷场改为额外回合：普攻/大招击杀后finishAction完成→插入冷场额外回合(不占行动/不计算冷却充能)→冷场结束后继续正常回合<br>- 2026年06月02日，周水重做：冷场改为自选目标逐个造成ATK×1伤害+5层恐惧(全图)/大招瞬杀时刻去掉穿透/新增规则按钮+角色图鉴按钮(陈色+周水)<br>- 2026年06月02日，选中周水不破隐修复：beginRound中sth递减跳过周水(后门隐匿由攻击机制管理，不自动过期)<br>- 2026年06月02日，选中隐匿单位不破隐修复：新增.slot.unit-sth.sel规则，选中时仅金色边框标记不覆盖隐匿box-shadow<br>- 2026年06月02日，周水隐匿不显示修复：beginRound中sth递减从renderBattle之前移到之后(解决第一回合渲染时sth已被归零)/开发者模式充能上限修复：startDevBattle中rd.m→rd.mxc<br>- 2026年06月01日，充能上限修复：startBattle正常部署路径d.m→d.mxc/自动大招：chg()充能达到上限时自动触发auto:1大招/开发者模式补周水sth=1<br>- 2026年06月01日，隐匿特效根因修复：outline-color不是CSS可动画属性→改为box-shadow内外发光呼吸动画+加!important/新增测试隐匿特效按钮(内联强制渲染)<br>- 2026年06月01日，充能上限修复：deployCur缺少m字段导致mxc回退默认5→改为透传r.mxc/隐匿特效重做：overlay方案改为slot级filter+outline呼吸动画，更稳定可见<br>- 2026年06月01日，隐匿overlay加半透明背景色+inset发光/冲锋选位仅允许x距离最近目标(高亮+点击双限制)<br>- 2026年06月01日，冲锋范围动态检测(同行有敌→仅同行/同行无敌→同行+相邻行)/隐匿独立overlay层+发光模糊动画/冷场按距离排序且不伤自己/周水充能上限2<br>- 2026年05月31日，周水重做(充能改为受击+1上限2/冲锋UI自选目标/自动大招不消耗行动/隐匿雾隐虚影双特效+按钮切换)<br>- 2026年05月31日，周水重做：恐惧震慑改为冲锋自动锁定目标、瞬杀时刻伤害公式改为(已损失+ATK)*2穿透、新增被动后门(开局隐匿/攻击解除/2回合后恢复)、冷场改为对全场触发普攻<br>- 2026年05月29日，损伤全局触发（叠满10点自动结算：神经=2伤+眩晕/恐惧=4伤/燃烧=2伤+3回合流血）+ 先手平局随机 + 冲锋全局规则（同列/相邻行取最近单位，含友方）<br>- 2026年05月29日，战斗反馈优化：先震动后出伤（暂显旧HP→震动0.35s→HP更新+红色小字"-x"浮动跳出）<br>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害累加取最强+血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}function hideCL(){$('clModal').classList.remove('show');}
+- - 2026骞?6鏈?5鏃ワ紝閫変綅鐣岄潰閲嶆瀯锛氫晶鏍忚鑹叉敼涓烘鏂规牸42脳42锛堣摑绾㈡笎鍙樿儗鏅尯鍒嗛樀钀ワ級锛涘垹闄ゅ湴鍥句笅鏂硅鑹叉潯浠呬繚鐣欎袱渚ц鑹诧紱淇璺ㄩ樀钀ユ斁缃産ug锛堥€変綅鏃跺彧鑳界偣鍑诲凡鏂硅鑹?妫嬬洏鍙岄噸鏍￠獙_deployCur._tm锛夛紱main-grid闂撮殭鏀剁獎4鈫?px鎺у埗鎬诲390px<br>- 2026骞?6鏈?5鏃ワ紝閫変汉妫嬬洏鍙栨秷鍏叡鍖哄煙闄愬埗锛氱Щ闄や腑鍒椾笉鍙斁缃鍒欙紝35鏍煎叏鍙敤锛涙墍鏈夋牸瀛愬垵濮嬮粦鑹茶儗鏅?#111)锛涜鑹茶閫夊悗鍘熷湴鐣欑┖涓嶈繘浣?br>- 2026骞?6鏈?5鏃ワ紝淇閫変汉鐣岄潰瑙掕壊娑堝け锛歴lot瀹氫綅浠巗tyle灞炴€у瓙涓插尮閰嶆敼涓篸ataset灞炴€?x/y)锛岃В鍐虫祻瑙堝櫒style鏍煎紡鍖栫┖鏍煎鑷寸殑querySelector鍖归厤澶辫触<br>- 2026骞?6鏈?5鏃ワ紝淇涓夐樁娈垫鐩樺悓鑹叉贩娣嗭細鎭㈠pick/deploy/battle妫嬬洏娓愬彉鑳屾櫙(钃?閫?绾?鍖哄垎鍚勯樁娈碉紱涔嬪墠v1.52缁熶竴绾壊瀵艰嚧閫変汉鐣岄潰涓庢垬鏂楃晫闈㈡棤娉曡鲸鍒?br>- 2026骞?6鏈?5鏃ワ紝绉诲姩绔€傞厤锛歮ain-grid鏁翠綋缂╁皬(妫嬬洏302脳220+渚ф爮32px,鏍?2脳42,渚ф牸28脳42)浣挎€诲374px閫傞厤375px鎵嬫満锛涘幓鎺塽ser-scalable=no鍏佽鎵嬪姩缂╂斁<br>- 2026骞?6鏈?5鏃ワ紝涓夐樁娈电粺涓€main-grid甯冨眬锛氶€変汉/甯冮樀/鎴樻枟鍏ㄧ敤7脳5缃戞牸+涓や晶5鏍肩珫缃畇ide-cell锛汣SS鍘婚噸deploy-wrap锛涢儴缃查珮浜細閫変腑瑙掕壊鏃跺湴鍥惧彲閮ㄧ讲浣嶉噾鑹茶剦鍐查棯鐑?.ready)<br>- 2026骞?6鏈?7鏃ワ紝v1.20锛氬洖閫€鑷硋1.56鎭㈠瀹屾暣24瑙掕壊锛涙柊寤?.20鍏疂鑸熺煡璇嗗簱.txt(鏁村悎鍘熺増瑙勫垯+瑙掕壊+搴旂敤璇﹁В)锛涙柊寤洪」鐩粙缁?txt锛涗粎闄堣壊鍛ㄦ按淇濈暀瀹屾暣鎻忚堪锛屽叾浣欒鑹茬簿绠€涓烘暟鍊硷紱淇鐬潃鏃跺埢鎻忚堪脳1鈫捗?锛涚粺涓€鐗堟湰鍙疯嚦v1.20
+- - 2026骞?6鏈?5鏃ワ紝閫変綅鐣岄潰閲嶆瀯锛氬凡閫夎鑹叉斁涓や晶锛堝乏钃濆彸绾級锛屽湴鍥惧眳涓缉灏忥紙鏍煎瓙56鈫?2px锛屽湴鍥?20鈫?16px锛夛紝瑙掕壊鍚嶇缉涓?瀛楋紱涓夊甯冮樀椤甸潰缁熶竴閫傞厤锛坮enderDeploy/renderDevDeploy/renderReposition锛?br>- 2026骞?6鏈?5鏃ワ紝閫変汉鐣岄潰閫傞厤鎵嬫満锛氳鑹叉牸瀛?6鈫?2px銆佸緟閫夋睜鏈€澶у搴?60鈫?20px銆佸瓧浣撴斁澶э紱鏁翠綋鏇磋创鍚堟墜鏈哄睆骞?br>- 2026骞?6鏈?5鏃ワ紝宸茶鍔ㄩ槦鍙嬩粎鏌ョ湅锛氶€変腑鏈ぇ鍥炲悎宸茶鍔ㄨ繃鐨勬垜鏂硅鑹叉椂闈㈡澘涓嶆樉绀恒€屼娇鐢ㄣ€嶆寜閽拰銆岃烦杩囧洖鍚堛€嶏紝浠呭睍绀烘妧鑳芥弿杩?br>- 2026骞?6鏈?5鏃ワ紝鍏呰兘鍒濆鍖栬鍒欙細鎵€鏈夎鑹插垵濮嬫棤鍏呰兘鏂瑰紡锛岄檲鑹蹭粎鑷厖(beginRound)锛屽懆姘翠粎鍙楀厖(dmg)<br>- 2026骞?6鏈?5鏃ワ紝鑷厖鏍瑰洜淇锛歜eginRound鍏呰兘绉诲叆_roundLogged瀹堝崼鍐咃紝纭繚姣忓ぇ鍥炲悎浠呭厖鑳?1锛堟鍓嶆瘡澶у洖鍚堣璋冪敤涓ゆ瀵艰嚧鍙屽€嶅厖鑳斤級<br>- 2026骞?6鏈?5鏃ワ紝鑷厖bug淇锛氱Щ闄pClick涓ゅ鍏ㄥ眬鏁屾柟鍏呰兘娉勯湶锛堟瘡娆℃敾鍑诲悗涓嶅啀缁欐晫鏂瑰叏闃?1鍏呰兘锛夛紱鏂板鐐瑰嚮鏁屾柟鏌ョ湅鎻忚堪鍔熻兘锛堢孩鑹瞇鏁宂鏍囪銆佹妧鑳藉叏鐏颁笉鍙敤銆佷粎鍙煡鐪嬫弿杩帮級<br>- 2026骞?6鏈?5鏃ワ紝鍏呰兘涓夊垎娉曪細鑷厖(beginRound姣忓ぇ鍥炲悎+1)/鏀诲厖(鏅敾鐩爣鍚?1)/鍙楀厖(姣忓彈鍑?1)涓ユ牸鍖哄垎锛涢檲鑹测啋鑷厖锛屽懆姘粹啋鍙楀厖锛屽叾浣欌啋鑷厖锛涙墍鏈夋櫘鏀荤Щ闄.chg(1)鏀诲厖閫昏緫锛宐eginRound鍥為€€鎺掗櫎鍛ㄦ按锛堝懆姘翠粎闈燿mg鍙楀厖锛?br>- 2026骞?6鏈?4鏃ワ紝auto澶ф嫑涓嶆樉绀恒€屼娇鐢ㄣ€嶆寜閽紙鍛ㄦ按鐬潃鏃跺埢绛夊厖鑳芥弧鍚庤嚜鍔ㄩ噴鏀撅級锛岄潰鏉挎覆鏌撲笌bpClick鍙岄噸鎷︽埅锛涜嚜鍏呴€昏緫淇锛歜eginRound绉婚櫎鍛ㄦ按鎺掗櫎锛屾墍鏈夎鑹插ぇ鍥炲悎寮€濮嬫椂缁熶竴鍏呰兘+1<br>- 2026骞?6鏈?4鏃ワ紝鎵€鏈夋妧鑳介€夐」鐐瑰嚮鍗冲彲鏌ョ湅瀹屾暣鎻忚堪锛堜笉鍙敤鏃朵篃鑳界湅锛夛紝鎶€鑳芥暟鎹柊澧瀌瀛楁瀛樺偍姣忎釜鎶€鑳界殑璇︾粏璇存槑<br>- 2026骞?6鏈?4鏃ワ紝鎴樻枟鏃ュ織宓屽叆鎴樻枟鐣岄潰锛氶潰鏉夸笅鏂规樉绀烘渶杩?鏉★紝鐐瑰嚮灞曞紑瀹屾暣鏃ュ織寮圭獥<br>- 2026骞?6鏈?4鏃ワ紝鎴樻枟闈㈡澘鎿嶄綔鏀逛负涓ゆ锛氱偣鍑婚€夐」鏌ョ湅鎻忚堪+銆屼娇鐢ㄣ€嶆寜閽啋鐐瑰嚮鎸夐挳鎵ц锛涜鍔ㄩ€夐」鍙偣鍑绘煡鐪嬫弿杩帮紱閫変腑鍙嬫柟鍒囨崲鏃惰嚜鍔ㄩ噸缃潰鏉块粯璁ょ姸鎬?br>- 2026骞?6鏈?4鏃ワ紝淇寮€鍙戣€呮ā寮忛€変汉鐣岄潰绌虹櫧锛歴tartDevMode()璺宠繃ban闃舵瀵艰嚧pool鏈垵濮嬪寲锛岃ˉpool=ROSTER.map(r=>({...r}))<br>- 2026骞?6鏈?4鏃ワ紝淇瑙勫垯/瑙掕壊鍥鹃壌寮圭獥鍦ㄩ椤垫棤娉曟樉绀猴紙寮圭獥浠巄attle div鍐呯Щ鑷冲叏灞€#app涓嬶級<br>- 2026骞?6鏈?4鏃ワ紝UI閲嶅仛锛氭柊澧為椤?姝ｅ父瀵规垬/寮€鍙戣€呮ā寮?瑙勫垯/瑙掕壊鍥鹃壌鍥涗釜鎸夐挳)锛涢€変汉鐣岄潰瑙掕壊鏍煎瓙鏀逛负姝ｆ柟褰紱鎴樻枟闃舵鎶€鑳芥爮鏇挎崲涓轰俊鎭潰鏉匡紙瑙掕壊鍚?HP+璺宠繃鍥炲悎+鎹熶激鏉?琚姩+鏅敾+鎶€鑳?澶ф嫑锛岀偣鍑婚€夐」鍙充晶鏄剧ず鎻忚堪锛屽彲鐢ㄦ搷浣滅偣鍑诲嵆杩涘叆鐩爣閫夋嫨锛?br>- 2026骞?6鏈?4鏃ワ紝闄堣壊/鍛ㄦ按娣诲姞琚姩鎻忚堪瀛楁锛堥潰鏉夸腑琚姩琛屾樉绀猴級<br>- 2026骞?6鏈?3鏃ワ紝鎭愭儳鎹熶激瀹炶锛欰il.add()鑷姩缁撶畻(鍙犳弧10鈫?浼?+鎵€鏈塧il.fear.add()浼犲叆鐩爣鍗曚綅锛涙柊澧炴亹鎯ц繘搴︽潯(鍗曚綅鏍煎瓙搴曢儴缁嗘潯锛?70%榛勮壊锛屸墺70%姗欑孩鑴夊啿锛屾弧鏉＄孩鑹查棯鐑?<br>- 2026骞?6鏈?3鏃ワ紝淇鑷存浼ゅ涓嶆挱鏀惧彈鍑诲姩鐢伙細dmg()鑷存鏃舵敼璁綺dying=1淇濇寔al=1鈫抮enderBattle娓叉煋婵掓鍗曚綅+闇囧姩+娴姩浼ゅ鈫掑姩鐢荤粨鏉熷悗al=0+checkGO锛涙柊澧炴浜＄矑瀛愭秷鏁ｅ姩鐢?br>- 2026骞?6鏈?3鏃ワ紝璺宠繃鍐峰嵈淇锛歜Skip锛堣烦杩囧洖鍚堬級琛ヨ皟cdTk锛屾瘡娆¤烦杩囦篃瑙﹀彂鍏ㄤ綋鍐峰嵈-1锛屼笌鏅敾/鎶€鑳戒竴鑷?br>- 2026骞?6鏈?3鏃ワ紝鍐峰嵈淇琛ュ厖锛氱孩鏂逛汉鏈鸿烦杩囨椂琛ヨ皟cdTk锛屾瘡璺宠繃涓€涓皟鐢ㄤ竴娆¤嚧鍏ㄤ綋鍐峰嵈-1锛屾仮澶嶆瘡澶у洖鍚?0娆″喎鍗存祦閫濈殑姝ｅ父鑺傚<br>- 2026骞?6鏈?3鏃ワ紝鍐峰嵈鏈哄埗淇锛歝dTk浠巗witchTeam锛堝垏鎹㈣鍔ㄦ柟鏃惰皟鐢級绉昏嚦finishAction锛堟瘡涓皬鍥炲悎瀹屾垚鏃惰皟鐢級锛屽疄鐜版瘡杩?涓换鎰忚鑹插皬鍥炲悎鍐峰嵈-1鑰岄潪姣忓ぇ鍥炲悎/鍒囨崲琛屽姩鏂规椂-1<br>- 2026骞?6鏈?3鏃ワ紝showRules閲嶅啓涓轰笁閮ㄥ垎鏍煎紡锛堝叏灞€瑙勫垯/瑙掕壊閫氱敤瑙勫垯/瑙掕壊涓撳睘瑙勫垯锛夊苟鍚屾showGuide瑙掕壊鍥鹃壌<br>- 2026骞?6鏈?3鏃ワ紝鏇存柊showRules: 鍏叡鍖哄煙"绂佹杩涘叆"鈫?浠讳綍鍗曚綅涓嶈兘鍦ㄤ笂闈?銆佹敾鍑讳紭鍏堢骇琛ュ厖鍢茶鏈哄埗銆佸啿閿嬫弿杩版洿鏂般€佽嚜鍏呮弿杩版槑纭?姣忎釜鑷韩灏忓洖鍚?1/闄ゅ懆姘村); 闄堣壊鍏呰兘鍔犲叆鑷厖(涓嶅啀鎺掗櫎)<br>- 2026骞?6鏈?2鏃ワ紝鍏堟墜鍒ゅ畾鏀逛负涓夌骇(鏁忔嵎鈫扝P涓婇檺鏇翠綆鈫掓敾鍑诲姏鏇撮珮)锛涜嚜鍔ㄥぇ鎷涜Е鍙戞椂鏈轰粠澶у洖鍚堝紑濮嬫敼涓哄皬鍥炲悎缁撴潫鏃?鎸夋晱鎹烽檷搴?锛涘偍瀛樻満鍒堕€氱敤鍖?cdTk鍐峰嵈褰掗浂鑷姩瀛樺偍/姣涙瘺铏姞str:4)<br>- 2026骞?6鏈?2鏃ワ紝鍏呰兘鏂瑰紡璋冩暣锛氶櫎闄堣壊鍜屽懆姘村鎵€鏈夎鑹叉敼涓鸿嚜鍔ㄥ厖鑳?姣忓ぇ鍥炲悎+1)锛涘垹闄ら櫎闄堣壊鍜屽懆姘村鎵€鏈夎鑹茬殑琚姩(鐜嬪湡鍥炶/鎵嬪厖鍑忎笂闄?绉戞瘮鐗㈠ぇbns/钃濅富浠荤Н鎬?澶ф爲鍥炶)锛涘喎鍗存敼涓烘瘡灏忓洖鍚?鍒囨崲琛屽姩鏂规椂)-1<br>- 2026骞?6鏈?2鏃ワ紝闅愬尶涓夋€佺壒鏁堥噸鍋氾細鑾峰緱闅愬尶(鐧介浘鍗囪吘+鏂囧瓧)/鎸佹湁闅愬尶(鍗婇€忔槑+鐧借壊闆炬皵绮掑瓙椋樻暎+"闅愬尶"灏忓瓧)/瑙ｉ櫎闅愬尶(闆炬皵鐐告暎+"鐮撮殣"鏂囧瓧)锛涘垹闄ら殣鍖跨壒鏁堝垏鎹㈡寜閽?缁熶竴闆鹃殣)<br>- 2026骞?6鏈?2鏃ワ紝鍐峰満鏀逛负棰濆鍥炲悎锛氭櫘鏀?澶ф嫑鍑绘潃鍚巉inishAction瀹屾垚鈫掓彃鍏ュ喎鍦洪澶栧洖鍚?涓嶅崰琛屽姩/涓嶈绠楀喎鍗村厖鑳?鈫掑喎鍦虹粨鏉熷悗缁х画姝ｅ父鍥炲悎<br>- 2026骞?6鏈?2鏃ワ紝鍛ㄦ按閲嶅仛锛氬喎鍦烘敼涓鸿嚜閫夌洰鏍囬€愪釜閫犳垚ATK脳1浼ゅ+5灞傛亹鎯?鍏ㄥ浘)/澶ф嫑鐬潃鏃跺埢鍘绘帀绌块€?鏂板瑙勫垯鎸夐挳+瑙掕壊鍥鹃壌鎸夐挳(闄堣壊+鍛ㄦ按)<br>- 2026骞?6鏈?2鏃ワ紝閫変腑鍛ㄦ按涓嶇牬闅愪慨澶嶏細beginRound涓璼th閫掑噺璺宠繃鍛ㄦ按(鍚庨棬闅愬尶鐢辨敾鍑绘満鍒剁鐞嗭紝涓嶈嚜鍔ㄨ繃鏈?<br>- 2026骞?6鏈?2鏃ワ紝閫変腑闅愬尶鍗曚綅涓嶇牬闅愪慨澶嶏細鏂板.slot.unit-sth.sel瑙勫垯锛岄€変腑鏃朵粎閲戣壊杈规鏍囪涓嶈鐩栭殣鍖縝ox-shadow<br>- 2026骞?6鏈?2鏃ワ紝鍛ㄦ按闅愬尶涓嶆樉绀轰慨澶嶏細beginRound涓璼th閫掑噺浠巖enderBattle涔嬪墠绉诲埌涔嬪悗(瑙ｅ喅绗竴鍥炲悎娓叉煋鏃秙th宸茶褰掗浂)/寮€鍙戣€呮ā寮忓厖鑳戒笂闄愪慨澶嶏細startDevBattle涓璻d.m鈫抮d.mxc<br>- 2026骞?6鏈?1鏃ワ紝鍏呰兘涓婇檺淇锛歴tartBattle姝ｅ父閮ㄧ讲璺緞d.m鈫抎.mxc/鑷姩澶ф嫑锛歝hg()鍏呰兘杈惧埌涓婇檺鏃惰嚜鍔ㄨЕ鍙慳uto:1澶ф嫑/寮€鍙戣€呮ā寮忚ˉ鍛ㄦ按sth=1<br>- 2026骞?6鏈?1鏃ワ紝闅愬尶鐗规晥鏍瑰洜淇锛歰utline-color涓嶆槸CSS鍙姩鐢诲睘鎬р啋鏀逛负box-shadow鍐呭鍙戝厜鍛煎惛鍔ㄧ敾+鍔?important/鏂板娴嬭瘯闅愬尶鐗规晥鎸夐挳(鍐呰仈寮哄埗娓叉煋)<br>- 2026骞?6鏈?1鏃ワ紝鍏呰兘涓婇檺淇锛歞eployCur缂哄皯m瀛楁瀵艰嚧mxc鍥為€€榛樿5鈫掓敼涓洪€忎紶r.mxc/闅愬尶鐗规晥閲嶅仛锛歰verlay鏂规鏀逛负slot绾ilter+outline鍛煎惛鍔ㄧ敾锛屾洿绋冲畾鍙<br>- 2026骞?6鏈?1鏃ワ紝闅愬尶overlay鍔犲崐閫忔槑鑳屾櫙鑹?inset鍙戝厜/鍐查攱閫変綅浠呭厑璁竫璺濈鏈€杩戠洰鏍?楂樹寒+鐐瑰嚮鍙岄檺鍒?<br>- 2026骞?6鏈?1鏃ワ紝鍐查攱鑼冨洿鍔ㄦ€佹娴?鍚岃鏈夋晫鈫掍粎鍚岃/鍚岃鏃犳晫鈫掑悓琛?鐩搁偦琛?/闅愬尶鐙珛overlay灞?鍙戝厜妯＄硦鍔ㄧ敾/鍐峰満鎸夎窛绂绘帓搴忎笖涓嶄激鑷繁/鍛ㄦ按鍏呰兘涓婇檺2<br>- 2026骞?5鏈?1鏃ワ紝鍛ㄦ按閲嶅仛(鍏呰兘鏀逛负鍙楀嚮+1涓婇檺2/鍐查攱UI鑷€夌洰鏍?鑷姩澶ф嫑涓嶆秷鑰楄鍔?闅愬尶闆鹃殣铏氬奖鍙岀壒鏁?鎸夐挳鍒囨崲)<br>- 2026骞?5鏈?1鏃ワ紝鍛ㄦ按閲嶅仛锛氭亹鎯ч渿鎱戞敼涓哄啿閿嬭嚜鍔ㄩ攣瀹氱洰鏍囥€佺灛鏉€鏃跺埢浼ゅ鍏紡鏀逛负(宸叉崯澶?ATK)*2绌块€忋€佹柊澧炶鍔ㄥ悗闂?寮€灞€闅愬尶/鏀诲嚮瑙ｉ櫎/2鍥炲悎鍚庢仮澶?銆佸喎鍦烘敼涓哄鍏ㄥ満瑙﹀彂鏅敾<br>- 2026骞?5鏈?9鏃ワ紝鎹熶激鍏ㄥ眬瑙﹀彂锛堝彔婊?0鐐硅嚜鍔ㄧ粨绠楋細绁炵粡=2浼?鐪╂檿/鎭愭儳=4浼?鐕冪儳=2浼?3鍥炲悎娴佽锛? 鍏堟墜骞冲眬闅忔満 + 鍐查攱鍏ㄥ眬瑙勫垯锛堝悓鍒?鐩搁偦琛屽彇鏈€杩戝崟浣嶏紝鍚弸鏂癸級<br>- 2026骞?5鏈?9鏃ワ紝鎴樻枟鍙嶉浼樺寲锛氬厛闇囧姩鍚庡嚭浼わ紙鏆傛樉鏃P鈫掗渿鍔?.35s鈫扝P鏇存柊+绾㈣壊灏忓瓧"-x"娴姩璺冲嚭锛?br>- 2026骞?5鏈?9鏃?5鏃?5鍒嗭紝鎴樻枟鍙嶉锛氬彈鍑婚渿鍔紙浼ゅ绱姞鍙栨渶寮?琛€閲忓喅瀹氬己搴︼級+ 琛屽姩鍚?s鍚庢憞 + 閫変綅鐣岄潰鏄剧ず琛€閲?br>- 2026骞?5鏈?9鏃?5鏃?0鍒嗭紝閫変綅鐣岄潰鏀硅繘锛氭樉绀烘墍鏈夊崟浣嶏紙鍙嬫柟/鏁屾柟/浜烘満/鍙敜鐗╋級锛岃鍗犳牸瀛?涓嚎/瀵归潰涓嶅彲鐐瑰嚮<br>- 2026骞?5鏈?9鏃?5鏃?5鍒嗭紝鎴樻枟妫嬬洏鍚屾缇庡寲锛氭覆鏌撳畬鏁?5鏍艰儗鏅唬鏇胯櫄绾跨綉鏍?br>- 2026骞?5鏈?9鏃?5鏃?0鍒嗭紝妫嬬洏缇庡寲锛氳摑绾㈡柟娓愬彉搴曡壊+鏍煎瓙闃村奖灞傛鎰?涓嚎鍔犵矖<br>- 2026骞?5鏈?9鏃?4鏃?0鍒嗭紝淇櫕缇ゅ悗鍥炲悎涓嶇粨鏉?logCtx鈫抪ush)+甯冮樀闅愯棌浜烘満+鎴樻枟鏉垮姞缃戞牸绾?br>- 2026骞?5鏈?9鏃?2鏃?2鍒嗭紝淇瘺姣涜櫕logCtx娉勬紡瀵艰嚧鏃ュ織閿欎贡+闄堣壊mxc=3<br>- 2026骞?5鏈?9鏃?2鏃?2鍒嗭紝闄堣壊铏兢閲嶅仛锛氬厛绠椾激瀹冲啀鏉€铏€佸瓨x鍊笺€佷簩娆′激瀹虫敼鑷韩鍥炲悎瑙﹀彂銆佺粨鏉熸椂閲嶇疆鍏呰兘<br>- 2026骞?5鏈?9鏃?2鏃?2鍒嗭紝dev妯″紡锛氫汉鏈轰笉鍙備笌閫変綅銆侀粯璁?涓€?浜烘満鎸夐挳銆佷腑鍒楃鏀惧崟浣?br>- 2026骞?5鏈?9鏃?1鏃?4鍒嗭紝鏀瑰姩鏃ュ織鏀逛负宸︿笅瑙掓寜閽?寮圭獥灞曠ず<br>- 2026骞?5鏈?9鏃?1鏃?6鍒嗭紝鎴樻枟鏃ュ織閲嶆瀯涓烘寜鍥炲悎鍒嗘鏍煎紡锛涘彫鍞ょ墿涓嶅彲閫変腑/涓嶆樉绀哄緟琛屽姩锛涘悓鎵规瘺姣涜櫕鏀剧疆婊¤锛涙坊鍔犵増鏈彿v1.00鍙婃敼鍔ㄦ棩蹇?;$('clModal').classList.add('show');}function hideCL(){$('clModal').classList.remove('show')`;}
 function showRules(){
-var h='<div class="cl-hdr">八宝舟 总体规则</div>';
-h+='<p style="font-size:13px;color:#aaa;margin:2px 0">第一部分 全局规则</p>';
-h+='<p><b>一 基础设定</b><br>';
-h+='游戏类型：双人回合制战棋策略对战游戏<br>';
-h+='获胜条件：全歼敌方所有作战单位，敌方主动认输投降</p>';
-h+='<p><b>二 回合结构</b><br>';
-h+='完整大回合：准备阶段 → 双方交替进行若干小回合 → 结算结束阶段<br>';
-h+='单个小回合流程：回合开始 → 行动结算 → 回合结束<br>';
-h+='小回合定义：任意方角色进行操作的一个回合。一个大回合通常包括5（我方）+5（敌方）=10个小回合（不计额外回合）</p>';
-h+='<p><b>三 开局与单位布阵</b><br>';
-h+='<b>1 禁选规则：</b>对局选人阶段开启禁用环节，双方合计可以禁用4名角色。禁用顺序：1号玩家 → 2号玩家 → 2号玩家 → 1号玩家。被禁用角色本局无法出战<br>';
-h+='<b>2 选将规则：</b>同一个角色仅能被一方选择，选定后另一方不可重复选择。选人顺序：1→2→2→1→1→2→2→1→1→2<br>';
-h+='<b>3 棋盘与站位：</b>7×5格（x:0~6, y:1~5），中线x=3分隔蓝方(p1)和红方(p2)。初始仅己方区域可布阵，公共区域任何单位不能在上面<br>';
-h+='<b>4 攻击规则：</b>角色仅能攻击自身攻击范围内的敌方单位（冲锋可攻击友方单位）。攻击优先级：优先攻击同列距离最近的敌人（但也要自主选择），存在多个目标可自主选择，嘲讽等特殊效果可以改变攻击目标逻辑</p>';
-h+='<p><b>四 行动与先手判定</b><br>';
-h+='<b>1 大回合先手判定（三级）：</b>全队总敏捷更高 → HP上限更低 → 攻击力更高<br>';
-h+='<b>2 行动顺序：</b>大回合行动顺序由先手权决定，队内自定义己方小回合行动顺序<br>';
-h+='<b>3 小回合规则：</b>主动技能、普攻、大招（非自动释放型）仅能在自身小回合释放，操作后直接结束当前小回合。可跳过对应角色的小回合</p>';
-h+='<p><b>五 单位与生存规则</b><br>';
-h+='单位：角色本体和召唤物统称为单位。<br>';
-h+='死亡判定：单位HP≤0时判定阵亡并离场。<br>';
-h+='召唤物：不可被选中、可视为攻击目标、不占行动次数，单格最多1个</p>';
-h+='<p><b>六 负面战斗状态</b><br>';
-h+='已实现：隐匿、流血、护盾、眩晕（部分）、恐惧<br>';
-h+='未实现：嘲讽、束缚、蓄力<br>';
-h+='隐匿：无法被单体锁定，群体伤害正常。获得（白雾+文字）/持有（半透明+粒子+"隐匿"小字）/解除（雾气炸散+"破隐"）<br>';
-h+='流血：每大回合开局扣2HP<br>';
-h+='护盾：受击优先抵扣护盾</p>';
-h+='<p><b>七 伤害与损伤体系</b><br>';
-h+='<b>1 基础伤害：</b>攻击力×倍率，小数向下取整<br>';
-h+='<b>2 损伤叠层：</b>累计10点后清空触发特效，不同类型单独统计，不直接扣血。先结算血量损耗再判损伤<br>';
-h+='<b>3 损伤效果（上限各10）：</b>神经（2伤+眩晕）/恐惧（4伤）/燃烧（2伤+后续3大回合末各-1HP）<br>';
-h+='<b>4 特殊机制：</b>冲锋（身前全行，可打友方，无目标→身前3行）。贯穿/防反/延时：未实现。回血扣血同时优先回血：未实现</p>';
-h+='<p><b>八 范围规则</b><br>';
-h+='周围4格：↑↓←→ ｜ 周围8格：3×3九宫格<br>';
-h+='所有攻击优先打x坐标离自身最近的</p>';
+var h='<div class="cl-hdr">鍏疂鑸?鎬讳綋瑙勫垯</div>';
+h+='<p style="font-size:13px;color:#aaa;margin:2px 0">绗竴閮ㄥ垎 鍏ㄥ眬瑙勫垯</p>';
+h+='<p><b>涓€ 鍩虹璁惧畾</b><br>';
+h+='娓告垙绫诲瀷锛氬弻浜哄洖鍚堝埗鎴樻绛栫暐瀵规垬娓告垙<br>';
+h+='鑾疯儨鏉′欢锛氬叏姝兼晫鏂规墍鏈変綔鎴樺崟浣嶏紝鏁屾柟涓诲姩璁よ緭鎶曢檷</p>';
+h+='<p><b>浜?鍥炲悎缁撴瀯</b><br>';
+h+='瀹屾暣澶у洖鍚堬細鍑嗗闃舵 鈫?鍙屾柟浜ゆ浛杩涜鑻ュ共灏忓洖鍚?鈫?缁撶畻缁撴潫闃舵<br>';
+h+='鍗曚釜灏忓洖鍚堟祦绋嬶細鍥炲悎寮€濮?鈫?琛屽姩缁撶畻 鈫?鍥炲悎缁撴潫<br>';
+h+='灏忓洖鍚堝畾涔夛細浠绘剰鏂硅鑹茶繘琛屾搷浣滅殑涓€涓洖鍚堛€備竴涓ぇ鍥炲悎閫氬父鍖呮嫭5锛堟垜鏂癸級+5锛堟晫鏂癸級=10涓皬鍥炲悎锛堜笉璁￠澶栧洖鍚堬級</p>';
+h+='<p><b>涓?寮€灞€涓庡崟浣嶅竷闃?/b><br>';
+h+='<b>1 绂侀€夎鍒欙細</b>瀵瑰眬閫変汉闃舵寮€鍚鐢ㄧ幆鑺傦紝鍙屾柟鍚堣鍙互绂佺敤4鍚嶈鑹层€傜鐢ㄩ『搴忥細1鍙风帺瀹?鈫?2鍙风帺瀹?鈫?2鍙风帺瀹?鈫?1鍙风帺瀹躲€傝绂佺敤瑙掕壊鏈眬鏃犳硶鍑烘垬<br>';
+h+='<b>2 閫夊皢瑙勫垯锛?/b>鍚屼竴涓鑹蹭粎鑳借涓€鏂归€夋嫨锛岄€夊畾鍚庡彟涓€鏂逛笉鍙噸澶嶉€夋嫨銆傞€変汉椤哄簭锛?鈫?鈫?鈫?鈫?鈫?鈫?鈫?鈫?鈫?<br>';
+h+='<b>3 妫嬬洏涓庣珯浣嶏細</b>7脳5鏍硷紙x:0~6, y:1~5锛夛紝涓嚎x=3鍒嗛殧钃濇柟(p1)鍜岀孩鏂?p2)銆傚垵濮嬩粎宸辨柟鍖哄煙鍙竷闃碉紝鍏叡鍖哄煙浠讳綍鍗曚綅涓嶈兘鍦ㄤ笂闈?br>';
+h+='<b>4 鏀诲嚮瑙勫垯锛?/b>瑙掕壊浠呰兘鏀诲嚮鑷韩鏀诲嚮鑼冨洿鍐呯殑鏁屾柟鍗曚綅锛堝啿閿嬪彲鏀诲嚮鍙嬫柟鍗曚綅锛夈€傛敾鍑讳紭鍏堢骇锛氫紭鍏堟敾鍑诲悓鍒楄窛绂绘渶杩戠殑鏁屼汉锛堜絾涔熻鑷富閫夋嫨锛夛紝瀛樺湪澶氫釜鐩爣鍙嚜涓婚€夋嫨锛屽槻璁界瓑鐗规畩鏁堟灉鍙互鏀瑰彉鏀诲嚮鐩爣閫昏緫</p>';
+h+='<p><b>鍥?琛屽姩涓庡厛鎵嬪垽瀹?/b><br>';
+h+='<b>1 澶у洖鍚堝厛鎵嬪垽瀹氾紙涓夌骇锛夛細</b>鍏ㄩ槦鎬绘晱鎹锋洿楂?鈫?HP涓婇檺鏇翠綆 鈫?鏀诲嚮鍔涙洿楂?br>';
+h+='<b>2 琛屽姩椤哄簭锛?/b>澶у洖鍚堣鍔ㄩ『搴忕敱鍏堟墜鏉冨喅瀹氾紝闃熷唴鑷畾涔夊繁鏂瑰皬鍥炲悎琛屽姩椤哄簭<br>';
+h+='<b>3 灏忓洖鍚堣鍒欙細</b>涓诲姩鎶€鑳姐€佹櫘鏀汇€佸ぇ鎷涳紙闈炶嚜鍔ㄩ噴鏀惧瀷锛変粎鑳藉湪鑷韩灏忓洖鍚堥噴鏀撅紝鎿嶄綔鍚庣洿鎺ョ粨鏉熷綋鍓嶅皬鍥炲悎銆傚彲璺宠繃瀵瑰簲瑙掕壊鐨勫皬鍥炲悎</p>';
+h+='<p><b>浜?鍗曚綅涓庣敓瀛樿鍒?/b><br>';
+h+='鍗曚綅锛氳鑹叉湰浣撳拰鍙敜鐗╃粺绉颁负鍗曚綅銆?br>';
+h+='姝讳骸鍒ゅ畾锛氬崟浣岺P鈮?鏃跺垽瀹氶樀浜″苟绂诲満銆?br>';
+h+='鍙敜鐗╋細涓嶅彲琚€変腑銆佸彲瑙嗕负鏀诲嚮鐩爣銆佷笉鍗犺鍔ㄦ鏁帮紝鍗曟牸鏈€澶?涓?/p>';
+h+='<p><b>鍏?璐熼潰鎴樻枟鐘舵€?/b><br>';
+h+='宸插疄鐜帮細闅愬尶銆佹祦琛€銆佹姢鐩俱€佺湬鏅曪紙閮ㄥ垎锛夈€佹亹鎯?br>';
+h+='鏈疄鐜帮細鍢茶銆佹潫缂氥€佽搫鍔?br>';
+h+='闅愬尶锛氭棤娉曡鍗曚綋閿佸畾锛岀兢浣撲激瀹虫甯搞€傝幏寰楋紙鐧介浘+鏂囧瓧锛?鎸佹湁锛堝崐閫忔槑+绮掑瓙+"闅愬尶"灏忓瓧锛?瑙ｉ櫎锛堥浘姘旂偢鏁?"鐮撮殣"锛?br>';
+h+='娴佽锛氭瘡澶у洖鍚堝紑灞€鎵?HP<br>';
+h+='鎶ょ浘锛氬彈鍑讳紭鍏堟姷鎵ｆ姢鐩?/p>';
+h+='<p><b>涓?浼ゅ涓庢崯浼や綋绯?/b><br>';
+h+='<b>1 鍩虹浼ゅ锛?/b>鏀诲嚮鍔浢楀€嶇巼锛屽皬鏁板悜涓嬪彇鏁?br>';
+h+='<b>2 鎹熶激鍙犲眰锛?/b>绱10鐐瑰悗娓呯┖瑙﹀彂鐗规晥锛屼笉鍚岀被鍨嬪崟鐙粺璁★紝涓嶇洿鎺ユ墸琛€銆傚厛缁撶畻琛€閲忔崯鑰楀啀鍒ゆ崯浼?br>';
+h+='<b>3 鎹熶激鏁堟灉锛堜笂闄愬悇10锛夛細</b>绁炵粡锛?浼?鐪╂檿锛?鎭愭儳锛?浼わ級/鐕冪儳锛?浼?鍚庣画3澶у洖鍚堟湯鍚?1HP锛?br>';
+h+='<b>4 鐗规畩鏈哄埗锛?/b>鍐查攱锛堣韩鍓嶅叏琛岋紝鍙墦鍙嬫柟锛屾棤鐩爣鈫掕韩鍓?琛岋級銆傝疮绌?闃插弽/寤舵椂锛氭湭瀹炵幇銆傚洖琛€鎵ｈ鍚屾椂浼樺厛鍥炶锛氭湭瀹炵幇</p>';
+h+='<p><b>鍏?鑼冨洿瑙勫垯</b><br>';
+h+='鍛ㄥ洿4鏍硷細鈫戔啌鈫愨啋 锝?鍛ㄥ洿8鏍硷細3脳3涔濆鏍?br>';
+h+='鎵€鏈夋敾鍑讳紭鍏堟墦x鍧愭爣绂昏嚜韬渶杩戠殑</p>';
 h+='<hr style="border-color:#333;margin:10px 0">';
-h+='<p style="font-size:13px;color:#aaa;margin:2px 0">第二部分 角色通用规则</p>';
-h+='<p><b>一 技能分类</b><br>';
-h+='被动【被】：无冷却、无充能、自动触发<br>';
-h+='普攻冷0存0：ATK=0无法使用<br>';
-h+='常规技能冷X存Y：有冷却无充能<br>';
-h+='大招（自充/受充/攻充）：无冷却，充能满释放<br>';
-h+='操作 = 普攻/技能/大招的总称</p>';
-h+='<p><b>二 执行顺序</b><br>';
-h+='被动 → 普攻 → 技能 → 大招</p>';
-h+='<p><b>三 词条释义</b><br>';
-h+='冷：每个小回合开始（切换行动方时）-1，归零可用<br>';
-h+='存：标记str:N，冷却归零储存+1，冷却重置至上限<br>';
-h+='持：大招持续回合数（未实现通用化）</p>';
-h+='<p><b>四 大招充能规则</b><br>';
-h+='自充（自身小回合+1，除周水外均采用）/攻充（命中+1）/受充（受击+1，如周水）<br>';
-h+='充能满后在小回合结束阶段自动释放（多单位按敏捷降序）<br>';
-h+='持续大招期间无法充能</p>';
+h+='<p style="font-size:13px;color:#aaa;margin:2px 0">绗簩閮ㄥ垎 瑙掕壊閫氱敤瑙勫垯</p>';
+h+='<p><b>涓€ 鎶€鑳藉垎绫?/b><br>';
+h+='琚姩銆愯銆戯細鏃犲喎鍗淬€佹棤鍏呰兘銆佽嚜鍔ㄨЕ鍙?br>';
+h+='鏅敾鍐?瀛?锛欰TK=0鏃犳硶浣跨敤<br>';
+h+='甯歌鎶€鑳藉喎X瀛榊锛氭湁鍐峰嵈鏃犲厖鑳?br>';
+h+='澶ф嫑锛堣嚜鍏?鍙楀厖/鏀诲厖锛夛細鏃犲喎鍗达紝鍏呰兘婊￠噴鏀?br>';
+h+='鎿嶄綔 = 鏅敾/鎶€鑳?澶ф嫑鐨勬€荤О</p>';
+h+='<p><b>浜?鎵ц椤哄簭</b><br>';
+h+='琚姩 鈫?鏅敾 鈫?鎶€鑳?鈫?澶ф嫑</p>';
+h+='<p><b>涓?璇嶆潯閲婁箟</b><br>';
+h+='鍐凤細姣忎釜灏忓洖鍚堝紑濮嬶紙鍒囨崲琛屽姩鏂规椂锛?1锛屽綊闆跺彲鐢?br>';
+h+='瀛橈細鏍囪str:N锛屽喎鍗村綊闆跺偍瀛?1锛屽喎鍗撮噸缃嚦涓婇檺<br>';
+h+='鎸侊細澶ф嫑鎸佺画鍥炲悎鏁帮紙鏈疄鐜伴€氱敤鍖栵級</p>';
+h+='<p><b>鍥?澶ф嫑鍏呰兘瑙勫垯</b><br>';
+h+='鑷厖锛堣嚜韬皬鍥炲悎+1锛岄櫎鍛ㄦ按澶栧潎閲囩敤锛?鏀诲厖锛堝懡涓?1锛?鍙楀厖锛堝彈鍑?1锛屽鍛ㄦ按锛?br>';
+h+='鍏呰兘婊″悗鍦ㄥ皬鍥炲悎缁撴潫闃舵鑷姩閲婃斁锛堝鍗曚綅鎸夋晱鎹烽檷搴忥級<br>';
+h+='鎸佺画澶ф嫑鏈熼棿鏃犳硶鍏呰兘</p>';
 h+='<hr style="border-color:#333;margin:10px 0">';
-h+='<p style="font-size:13px;color:#aaa;margin:2px 0">第三部分 角色专属规则（详见角色图鉴）</p>';
+h+='<p style="font-size:13px;color:#aaa;margin:2px 0">绗笁閮ㄥ垎 瑙掕壊涓撳睘瑙勫垯锛堣瑙佽鑹插浘閴达級</p>';
 $('rulesContent').innerHTML=h;
 $('rulesModal').style.display='flex';
 }
 function showGuide(){
-var h='<div class="cl-hdr">角色图鉴</div>';
+var h='<div class="cl-hdr">瑙掕壊鍥鹃壌</div>';
 h+='<div style="margin:8px 0;padding:8px;background:#1a1a3e;border-radius:6px;border-left:3px solid #8af">';
-h+='<b style="font-size:13px;color:#8af">陈色 — 召唤师</b> HP16 | ATK0 | 敏捷7 | 充能上限3（自充）';
-h+='<p style="margin:4px 0;font-size:10px;color:#aaa">被动：毛毛虫血量上限=当前存活毛毛虫数+1<br>';
-h+='技能「毛毛虫」CD8 存4：冷却归零自动储存+1，消耗储存召唤毛毛虫<br>';
-h+='大招「虫群」自充3 持1：消耗所有毛毛虫，总HP×2对敌方均分伤害，友方全体ATK+1（持续至下个大回合结束），下个自身回合触发二次伤害，结束后重新充能</p></div>';
+h+='<b style="font-size:13px;color:#8af">闄堣壊 鈥?鍙敜甯?/b> HP16 | ATK0 | 鏁忔嵎7 | 鍏呰兘涓婇檺3锛堣嚜鍏咃級';
+h+='<p style="margin:4px 0;font-size:10px;color:#aaa">琚姩锛氭瘺姣涜櫕琛€閲忎笂闄?褰撳墠瀛樻椿姣涙瘺铏暟+1<br>';
+h+='鎶€鑳姐€屾瘺姣涜櫕銆岰D8 瀛?锛氬喎鍗村綊闆惰嚜鍔ㄥ偍瀛?1锛屾秷鑰楀偍瀛樺彫鍞ゆ瘺姣涜櫕<br>';
+h+='澶ф嫑銆岃櫕缇ゃ€嶈嚜鍏? 鎸?锛氭秷鑰楁墍鏈夋瘺姣涜櫕锛屾€籋P脳2瀵规晫鏂瑰潎鍒嗕激瀹筹紝鍙嬫柟鍏ㄤ綋ATK+1锛堟寔缁嚦涓嬩釜澶у洖鍚堢粨鏉燂級锛屼笅涓嚜韬洖鍚堣Е鍙戜簩娆′激瀹筹紝缁撴潫鍚庨噸鏂板厖鑳?/p></div>';
 h+='<div style="margin:8px 0;padding:8px;background:#1a1a3e;border-radius:6px;border-left:3px solid #f0f">';
-h+='<b style="font-size:13px;color:#f0f">周水 — 处决者</b> HP3 | ATK2 | 敏捷8 | 充能上限2（受充）';
-h+='<p style="margin:4px 0;font-size:10px;color:#aaa">被动「后门」：开局隐匿，攻击解除，下下大回合开始后自动恢复<br>';
-h+='被动「冷场」：因自身操作击杀后插入额外回合，对全场单位（除自身）自选顺序依次造成ATK×1伤害+5层恐惧<br>';
-h+='普攻「恐惧震慑」：冲锋，对目标造成1倍伤害+5层恐惧<br>';
-h+='大招「瞬杀时刻」受充2 自动释放：对血量最低敌方造成(已损失HP+ATK)×2伤害+8层恐惧</p></div>';
+h+='<b style="font-size:13px;color:#f0f">鍛ㄦ按 鈥?澶勫喅鑰?/b> HP3 | ATK2 | 鏁忔嵎8 | 鍏呰兘涓婇檺2锛堝彈鍏咃級';
+h+='<p style="margin:4px 0;font-size:10px;color:#aaa">琚姩銆屽悗闂ㄣ€嶏細寮€灞€闅愬尶锛屾敾鍑昏В闄わ紝涓嬩笅澶у洖鍚堝紑濮嬪悗鑷姩鎭㈠<br>';
+h+='琚姩銆屽喎鍦恒€嶏細鍥犺嚜韬搷浣滃嚮鏉€鍚庢彃鍏ラ澶栧洖鍚堬紝瀵瑰叏鍦哄崟浣嶏紙闄よ嚜韬級鑷€夐『搴忎緷娆￠€犳垚ATK脳1浼ゅ+5灞傛亹鎯?br>';
+h+='鏅敾銆屾亹鎯ч渿鎱戙€嶏細鍐查攱锛屽鐩爣閫犳垚1鍊嶄激瀹?5灞傛亹鎯?br>';
+h+='澶ф嫑銆岀灛鏉€鏃跺埢銆嶅彈鍏? 鑷姩閲婃斁锛氬琛€閲忔渶浣庢晫鏂归€犳垚(宸叉崯澶盚P+ATK)脳2浼ゅ+8灞傛亹鎯?/p></div>';
 $('guideContent').innerHTML=h;
 $('guideModal').style.display='flex';
 }
 </script>
 
-<button class="cl-btn" onclick="showCL()" title="改动日志">📝</button>
-<div class="cl-modal" id="clModal"><button class="cl-close" onclick="hideCL()">✕</button><div class="cl-content" id="clContent"></div></div>
+<button class="cl-btn" onclick="showCL()" title="鏀瑰姩鏃ュ織">馃摑</button>
+<div class="cl-modal" id="clModal"><button class="cl-close" onclick="hideCL()">鉁?/button><div class="cl-content" id="clContent"></div></div>
 </body></html>
