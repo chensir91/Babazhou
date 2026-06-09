@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>鍏疂鑸?/title>
+<title>鍏疂鑸</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#111;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;font-family:sans-serif}
@@ -151,7 +151,7 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 <div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v2.00</div>
 
 <div id="home" class="phase active">
-<h2 style="text-align:center;color:#fc0;font-size:22px;margin:30px 0 10px">鍏疂鑸?/h2>
+<h2 style="text-align:center;color:#fc0;font-size:22px;margin:30px 0 10px">鍏疂鑸</h2>
 <div class="home-wrap">
 <button class="home-btn" onclick="startNormalGame()">姝ｅ父瀵规垬 (5v5)</button>
 <button class="home-btn dev" onclick="startDevGame()">寮€鍙戣€呮ā寮?(1v5)</button>
@@ -161,7 +161,7 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 </div>
 
 <div id="ban" class="phase">
-<h2>馃數 钃濇柟 BAN锛?/4锛?/h2>
+<h2>馃數 钃濇柟 BAN锛?/4锛</h2>
 <div class="info">鐐瑰嚮瑙掕壊绂佺敤锛堝叡4涓級</div>
 <div id="banPool" class="grid6"></div>
 </div>
@@ -196,14 +196,14 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 <div id="bpLog" class="bp-log"></div>
 <div class="row"><button class="btn" onclick="bSkip()">璺宠繃鍥炲悎</button><button class="btn" id="btnDummyMove" style="display:none;background:#552" onclick="toggleDummyMove()">馃摝 璋冩暣浜烘満</button><button class="btn" id="btnAddDummy" style="display:none;background:#252" onclick="toggleAddDummy()">+浜烘満</button><button class="btn" id="btnCdMinus" style="display:none;background:#a33" onclick="devCdMinus()">鈴?鍏ㄤ綋鍐峰嵈-1</button><button class="btn" id="btnChgPlus" style="display:none;background:#3a3" onclick="devChgPlus()">鈿?鍏ㄤ綋鍏呰兘+1</button><button class="btn" style="background:#448" onclick="showRules()">馃摉 瑙勫垯</button><button class="btn" style="background:#484" onclick="showGuide()">馃摎 瑙掕壊鍥鹃壌</button></div>
 <button class="log-icon" id="logBtn" onclick="showLog()" title="鎴樻枟鏃ュ織">馃搵</button>
-<div class="log-modal" id="logModal"><button class="log-close" onclick="hideLog()">鉁?/button><div class="log-content" id="logContent"></div></div>
+<div class="log-modal" id="logModal"><button class="log-close" onclick="hideLog()">鉁</button><div class="log-content" id="logContent"></div></div>
 </div>
-<div class="log-modal" id="rulesModal"><button class="log-close" onclick="$('rulesModal').style.display='none'">鉁?/button><div class="log-content" id="rulesContent"></div></div>
-<div class="log-modal" id="guideModal"><button class="log-close" onclick="$('guideModal').style.display='none'">鉁?/button><div class="log-content" id="guideContent"></div></div>
+<div class="log-modal" id="rulesModal"><button class="log-close" onclick="$('rulesModal').style.display='none'">鉁</button><div class="log-content" id="rulesContent"></div></div>
+<div class="log-modal" id="guideModal"><button class="log-close" onclick="$('guideModal').style.display='none'">鉁</button><div class="log-content" id="guideContent"></div></div>
 
 <div id="gameover" class="phase">
 <h2 id="winnerText"></h2>
-<div class="row"><button class="btn" onclick="location.reload()">閲嶆柊寮€濮?/button></div>
+<div class="row"><button class="btn" onclick="location.reload()">閲嶆柊寮€濮</button></div>
 </div>
 
 </div>
@@ -1460,36 +1460,36 @@ h+='<p><b>浜?鍥炲悎缁撴瀯</b><br>';
 h+='瀹屾暣澶у洖鍚堬細鍑嗗闃舵 鈫?鍙屾柟浜ゆ浛杩涜鑻ュ共灏忓洖鍚?鈫?缁撶畻缁撴潫闃舵<br>';
 h+='鍗曚釜灏忓洖鍚堟祦绋嬶細鍥炲悎寮€濮?鈫?琛屽姩缁撶畻 鈫?鍥炲悎缁撴潫<br>';
 h+='灏忓洖鍚堝畾涔夛細浠绘剰鏂硅鑹茶繘琛屾搷浣滅殑涓€涓洖鍚堛€備竴涓ぇ鍥炲悎閫氬父鍖呮嫭5锛堟垜鏂癸級+5锛堟晫鏂癸級=10涓皬鍥炲悎锛堜笉璁￠澶栧洖鍚堬級</p>';
-h+='<p><b>涓?寮€灞€涓庡崟浣嶅竷闃?/b><br>';
+h+='<p><b>涓?寮€灞€涓庡崟浣嶅竷闃</b><br>';
 h+='<b>1 绂侀€夎鍒欙細</b>瀵瑰眬閫変汉闃舵寮€鍚鐢ㄧ幆鑺傦紝鍙屾柟鍚堣鍙互绂佺敤4鍚嶈鑹层€傜鐢ㄩ『搴忥細1鍙风帺瀹?鈫?2鍙风帺瀹?鈫?2鍙风帺瀹?鈫?1鍙风帺瀹躲€傝绂佺敤瑙掕壊鏈眬鏃犳硶鍑烘垬<br>';
-h+='<b>2 閫夊皢瑙勫垯锛?/b>鍚屼竴涓鑹蹭粎鑳借涓€鏂归€夋嫨锛岄€夊畾鍚庡彟涓€鏂逛笉鍙噸澶嶉€夋嫨銆傞€変汉椤哄簭锛?鈫?鈫?鈫?鈫?鈫?鈫?鈫?鈫?鈫?<br>';
+h+='<b>2 閫夊皢瑙勫垯锛</b>鍚屼竴涓鑹蹭粎鑳借涓€鏂归€夋嫨锛岄€夊畾鍚庡彟涓€鏂逛笉鍙噸澶嶉€夋嫨銆傞€変汉椤哄簭锛?鈫?鈫?鈫?鈫?鈫?鈫?鈫?鈫?鈫?<br>';
 h+='<b>3 妫嬬洏涓庣珯浣嶏細</b>7脳5鏍硷紙x:0~6, y:1~5锛夛紝涓嚎x=3鍒嗛殧钃濇柟(p1)鍜岀孩鏂?p2)銆傚垵濮嬩粎宸辨柟鍖哄煙鍙竷闃碉紝鍏叡鍖哄煙浠讳綍鍗曚綅涓嶈兘鍦ㄤ笂闈?br>';
-h+='<b>4 鏀诲嚮瑙勫垯锛?/b>瑙掕壊浠呰兘鏀诲嚮鑷韩鏀诲嚮鑼冨洿鍐呯殑鏁屾柟鍗曚綅锛堝啿閿嬪彲鏀诲嚮鍙嬫柟鍗曚綅锛夈€傛敾鍑讳紭鍏堢骇锛氫紭鍏堟敾鍑诲悓鍒楄窛绂绘渶杩戠殑鏁屼汉锛堜絾涔熻鑷富閫夋嫨锛夛紝瀛樺湪澶氫釜鐩爣鍙嚜涓婚€夋嫨锛屽槻璁界瓑鐗规畩鏁堟灉鍙互鏀瑰彉鏀诲嚮鐩爣閫昏緫</p>';
-h+='<p><b>鍥?琛屽姩涓庡厛鎵嬪垽瀹?/b><br>';
+h+='<b>4 鏀诲嚮瑙勫垯锛</b>瑙掕壊浠呰兘鏀诲嚮鑷韩鏀诲嚮鑼冨洿鍐呯殑鏁屾柟鍗曚綅锛堝啿閿嬪彲鏀诲嚮鍙嬫柟鍗曚綅锛夈€傛敾鍑讳紭鍏堢骇锛氫紭鍏堟敾鍑诲悓鍒楄窛绂绘渶杩戠殑鏁屼汉锛堜絾涔熻鑷富閫夋嫨锛夛紝瀛樺湪澶氫釜鐩爣鍙嚜涓婚€夋嫨锛屽槻璁界瓑鐗规畩鏁堟灉鍙互鏀瑰彉鏀诲嚮鐩爣閫昏緫</p>';
+h+='<p><b>鍥?琛屽姩涓庡厛鎵嬪垽瀹</b><br>';
 h+='<b>1 澶у洖鍚堝厛鎵嬪垽瀹氾紙涓夌骇锛夛細</b>鍏ㄩ槦鎬绘晱鎹锋洿楂?鈫?HP涓婇檺鏇翠綆 鈫?鏀诲嚮鍔涙洿楂?br>';
-h+='<b>2 琛屽姩椤哄簭锛?/b>澶у洖鍚堣鍔ㄩ『搴忕敱鍏堟墜鏉冨喅瀹氾紝闃熷唴鑷畾涔夊繁鏂瑰皬鍥炲悎琛屽姩椤哄簭<br>';
+h+='<b>2 琛屽姩椤哄簭锛</b>澶у洖鍚堣鍔ㄩ『搴忕敱鍏堟墜鏉冨喅瀹氾紝闃熷唴鑷畾涔夊繁鏂瑰皬鍥炲悎琛屽姩椤哄簭<br>';
 h+='<b>3 灏忓洖鍚堣鍒欙細</b>涓诲姩鎶€鑳姐€佹櫘鏀汇€佸ぇ鎷涳紙闈炶嚜鍔ㄩ噴鏀惧瀷锛変粎鑳藉湪鑷韩灏忓洖鍚堥噴鏀撅紝鎿嶄綔鍚庣洿鎺ョ粨鏉熷綋鍓嶅皬鍥炲悎銆傚彲璺宠繃瀵瑰簲瑙掕壊鐨勫皬鍥炲悎</p>';
-h+='<p><b>浜?鍗曚綅涓庣敓瀛樿鍒?/b><br>';
+h+='<p><b>浜?鍗曚綅涓庣敓瀛樿鍒</b><br>';
 h+='鍗曚綅锛氳鑹叉湰浣撳拰鍙敜鐗╃粺绉颁负鍗曚綅銆?br>';
 h+='姝讳骸鍒ゅ畾锛氬崟浣岺P鈮?鏃跺垽瀹氶樀浜″苟绂诲満銆?br>';
-h+='鍙敜鐗╋細涓嶅彲琚€変腑銆佸彲瑙嗕负鏀诲嚮鐩爣銆佷笉鍗犺鍔ㄦ鏁帮紝鍗曟牸鏈€澶?涓?/p>';
-h+='<p><b>鍏?璐熼潰鎴樻枟鐘舵€?/b><br>';
+h+='鍙敜鐗╋細涓嶅彲琚€変腑銆佸彲瑙嗕负鏀诲嚮鐩爣銆佷笉鍗犺鍔ㄦ鏁帮紝鍗曟牸鏈€澶?涓</p>';
+h+='<p><b>鍏?璐熼潰鎴樻枟鐘舵€</b><br>';
 h+='宸插疄鐜帮細闅愬尶銆佹祦琛€銆佹姢鐩俱€佺湬鏅曪紙閮ㄥ垎锛夈€佹亹鎯?br>';
 h+='鏈疄鐜帮細鍢茶銆佹潫缂氥€佽搫鍔?br>';
 h+='闅愬尶锛氭棤娉曡鍗曚綋閿佸畾锛岀兢浣撲激瀹虫甯搞€傝幏寰楋紙鐧介浘+鏂囧瓧锛?鎸佹湁锛堝崐閫忔槑+绮掑瓙+"闅愬尶"灏忓瓧锛?瑙ｉ櫎锛堥浘姘旂偢鏁?"鐮撮殣"锛?br>';
 h+='娴佽锛氭瘡澶у洖鍚堝紑灞€鎵?HP<br>';
-h+='鎶ょ浘锛氬彈鍑讳紭鍏堟姷鎵ｆ姢鐩?/p>';
-h+='<p><b>涓?浼ゅ涓庢崯浼や綋绯?/b><br>';
-h+='<b>1 鍩虹浼ゅ锛?/b>鏀诲嚮鍔浢楀€嶇巼锛屽皬鏁板悜涓嬪彇鏁?br>';
-h+='<b>2 鎹熶激鍙犲眰锛?/b>绱10鐐瑰悗娓呯┖瑙﹀彂鐗规晥锛屼笉鍚岀被鍨嬪崟鐙粺璁★紝涓嶇洿鎺ユ墸琛€銆傚厛缁撶畻琛€閲忔崯鑰楀啀鍒ゆ崯浼?br>';
+h+='鎶ょ浘锛氬彈鍑讳紭鍏堟姷鎵ｆ姢鐩</p>';
+h+='<p><b>涓?浼ゅ涓庢崯浼や綋绯</b><br>';
+h+='<b>1 鍩虹浼ゅ锛</b>鏀诲嚮鍔浢楀€嶇巼锛屽皬鏁板悜涓嬪彇鏁?br>';
+h+='<b>2 鎹熶激鍙犲眰锛</b>绱10鐐瑰悗娓呯┖瑙﹀彂鐗规晥锛屼笉鍚岀被鍨嬪崟鐙粺璁★紝涓嶇洿鎺ユ墸琛€銆傚厛缁撶畻琛€閲忔崯鑰楀啀鍒ゆ崯浼?br>';
 h+='<b>3 鎹熶激鏁堟灉锛堜笂闄愬悇10锛夛細</b>绁炵粡锛?浼?鐪╂檿锛?鎭愭儳锛?浼わ級/鐕冪儳锛?浼?鍚庣画3澶у洖鍚堟湯鍚?1HP锛?br>';
-h+='<b>4 鐗规畩鏈哄埗锛?/b>鍐查攱锛堣韩鍓嶅叏琛岋紝鍙墦鍙嬫柟锛屾棤鐩爣鈫掕韩鍓?琛岋級銆傝疮绌?闃插弽/寤舵椂锛氭湭瀹炵幇銆傚洖琛€鎵ｈ鍚屾椂浼樺厛鍥炶锛氭湭瀹炵幇</p>';
+h+='<b>4 鐗规畩鏈哄埗锛</b>鍐查攱锛堣韩鍓嶅叏琛岋紝鍙墦鍙嬫柟锛屾棤鐩爣鈫掕韩鍓?琛岋級銆傝疮绌?闃插弽/寤舵椂锛氭湭瀹炵幇銆傚洖琛€鎵ｈ鍚屾椂浼樺厛鍥炶锛氭湭瀹炵幇</p>';
 h+='<p><b>鍏?鑼冨洿瑙勫垯</b><br>';
 h+='鍛ㄥ洿4鏍硷細鈫戔啌鈫愨啋 锝?鍛ㄥ洿8鏍硷細3脳3涔濆鏍?br>';
 h+='鎵€鏈夋敾鍑讳紭鍏堟墦x鍧愭爣绂昏嚜韬渶杩戠殑</p>';
 h+='<hr style="border-color:#333;margin:10px 0">';
 h+='<p style="font-size:13px;color:#aaa;margin:2px 0">绗簩閮ㄥ垎 瑙掕壊閫氱敤瑙勫垯</p>';
-h+='<p><b>涓€ 鎶€鑳藉垎绫?/b><br>';
+h+='<p><b>涓€ 鎶€鑳藉垎绫</b><br>';
 h+='琚姩銆愯銆戯細鏃犲喎鍗淬€佹棤鍏呰兘銆佽嚜鍔ㄨЕ鍙?br>';
 h+='鏅敾鍐?瀛?锛欰TK=0鏃犳硶浣跨敤<br>';
 h+='甯歌鎶€鑳藉喎X瀛榊锛氭湁鍐峰嵈鏃犲厖鑳?br>';
@@ -1513,21 +1513,21 @@ $('rulesModal').style.display='flex';
 function showGuide(){
 var h='<div class="cl-hdr">瑙掕壊鍥鹃壌</div>';
 h+='<div style="margin:8px 0;padding:8px;background:#1a1a3e;border-radius:6px;border-left:3px solid #8af">';
-h+='<b style="font-size:13px;color:#8af">闄堣壊 鈥?鍙敜甯?/b> HP16 | ATK0 | 鏁忔嵎7 | 鍏呰兘涓婇檺3锛堣嚜鍏咃級';
+h+='<b style="font-size:13px;color:#8af">闄堣壊 鈥?鍙敜甯</b> HP16 | ATK0 | 鏁忔嵎7 | 鍏呰兘涓婇檺3锛堣嚜鍏咃級';
 h+='<p style="margin:4px 0;font-size:10px;color:#aaa">琚姩锛氭瘺姣涜櫕琛€閲忎笂闄?褰撳墠瀛樻椿姣涙瘺铏暟+1<br>';
 h+='鎶€鑳姐€屾瘺姣涜櫕銆岰D8 瀛?锛氬喎鍗村綊闆惰嚜鍔ㄥ偍瀛?1锛屾秷鑰楀偍瀛樺彫鍞ゆ瘺姣涜櫕<br>';
-h+='澶ф嫑銆岃櫕缇ゃ€嶈嚜鍏? 鎸?锛氭秷鑰楁墍鏈夋瘺姣涜櫕锛屾€籋P脳2瀵规晫鏂瑰潎鍒嗕激瀹筹紝鍙嬫柟鍏ㄤ綋ATK+1锛堟寔缁嚦涓嬩釜澶у洖鍚堢粨鏉燂級锛屼笅涓嚜韬洖鍚堣Е鍙戜簩娆′激瀹筹紝缁撴潫鍚庨噸鏂板厖鑳?/p></div>';
+h+='澶ф嫑銆岃櫕缇ゃ€嶈嚜鍏? 鎸?锛氭秷鑰楁墍鏈夋瘺姣涜櫕锛屾€籋P脳2瀵规晫鏂瑰潎鍒嗕激瀹筹紝鍙嬫柟鍏ㄤ綋ATK+1锛堟寔缁嚦涓嬩釜澶у洖鍚堢粨鏉燂級锛屼笅涓嚜韬洖鍚堣Е鍙戜簩娆′激瀹筹紝缁撴潫鍚庨噸鏂板厖鑳</p></div>';
 h+='<div style="margin:8px 0;padding:8px;background:#1a1a3e;border-radius:6px;border-left:3px solid #f0f">';
-h+='<b style="font-size:13px;color:#f0f">鍛ㄦ按 鈥?澶勫喅鑰?/b> HP3 | ATK2 | 鏁忔嵎8 | 鍏呰兘涓婇檺2锛堝彈鍏咃級';
+h+='<b style="font-size:13px;color:#f0f">鍛ㄦ按 鈥?澶勫喅鑰</b> HP3 | ATK2 | 鏁忔嵎8 | 鍏呰兘涓婇檺2锛堝彈鍏咃級';
 h+='<p style="margin:4px 0;font-size:10px;color:#aaa">琚姩銆屽悗闂ㄣ€嶏細寮€灞€闅愬尶锛屾敾鍑昏В闄わ紝涓嬩笅澶у洖鍚堝紑濮嬪悗鑷姩鎭㈠<br>';
 h+='琚姩銆屽喎鍦恒€嶏細鍥犺嚜韬搷浣滃嚮鏉€鍚庢彃鍏ラ澶栧洖鍚堬紝瀵瑰叏鍦哄崟浣嶏紙闄よ嚜韬級鑷€夐『搴忎緷娆￠€犳垚ATK脳1浼ゅ+5灞傛亹鎯?br>';
 h+='鏅敾銆屾亹鎯ч渿鎱戙€嶏細鍐查攱锛屽鐩爣閫犳垚1鍊嶄激瀹?5灞傛亹鎯?br>';
-h+='澶ф嫑銆岀灛鏉€鏃跺埢銆嶅彈鍏? 鑷姩閲婃斁锛氬琛€閲忔渶浣庢晫鏂归€犳垚(宸叉崯澶盚P+ATK)脳2浼ゅ+8灞傛亹鎯?/p></div>';
+h+='澶ф嫑銆岀灛鏉€鏃跺埢銆嶅彈鍏? 鑷姩閲婃斁锛氬琛€閲忔渶浣庢晫鏂归€犳垚(宸叉崯澶盚P+ATK)脳2浼ゅ+8灞傛亹鎯</p></div>';
 $('guideContent').innerHTML=h;
 $('guideModal').style.display='flex';
 }
 </script>
 
 <button class="cl-btn" onclick="showCL()" title="鏀瑰姩鏃ュ織">馃摑</button>
-<div class="cl-modal" id="clModal"><button class="cl-close" onclick="hideCL()">鉁?/button><div class="cl-content" id="clContent"></div></div>
+<div class="cl-modal" id="clModal"><button class="cl-close" onclick="hideCL()">鉁</button><div class="cl-content" id="clContent"></div></div>
 </body></html>
