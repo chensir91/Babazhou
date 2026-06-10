@@ -147,6 +147,7 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 .bp-log .tap{text-align:center;color:#448;font-size:8px;margin-top:2px}
 </style></head>
 <body>
+<div id="_err" style="position:fixed;bottom:0;left:0;right:0;background:rgba(220,20,20,0.92);color:#fff;z-index:99999;padding:10px;font-size:11px;font-family:monospace;display:none;max-height:150px;overflow:auto;white-space:pre-wrap;word-break:break-all"></div>
 <div id="app">
 <div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v2.00</div>
 
@@ -209,6 +210,24 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 </div>
 
 <script>
+window._errs=[];window.onerror=function(m,s,l,c,e){var el=document.getElementById('_err');if(el){el.style.display='block';el.innerHTML+='['+(window._errs.length+1)+'] '+m+' (line '+l+')<br>';}window._errs.push({m:m,l:l});return false;};
+(function patchClicks(){
+setInterval(function(){
+var btns=document.querySelectorAll('.home-btn');
+btns.forEach(function(b){
+if(!b._patched){
+var orig=b.onclick;
+b._patched=true;
+b.addEventListener('click',function(ev){
+try{orig.call(this,ev);}catch(ex){
+var el=document.getElementById('_err');if(el){el.style.display='block';el.innerHTML+='[CLICK ERROR] '+ex+'<br>';}
+}
+});
+b.onclick=null;
+}
+});
+},200);
+})();
 // ===== 24角色数据 =====
 const ROSTER=[{n:'陈色',h:16,a:0,agi:7,cls:'召唤师',pa:'虫迷：场上每存在1只虫子，虫子生命值+1',rg:[[0,0]],sk:[
 {tp:'sk',n:'毛毛虫',cd:8,str:4,d:'在己方区域召唤生命值为1的毛毛虫，开局场上无毛毛虫。冷8/存4。',ex:(u,ctx)=>{
