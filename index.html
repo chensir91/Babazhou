@@ -409,20 +409,22 @@ brd.appendChild(slot);
 }
 // 侧栏
 let sl=$('deploySideL'),sr=$('deploySideR');
-sl.innerHTML='';
-sr.innerHTML='';
+sl.innerHTML='';sr.innerHTML='';
 let r=pool[p1pick[0]];
 let placed=p1deploy.length>0;
+if(!placed){
 let c=document.createElement('div');
-c.className='side-cell p1'+(placed?' placed':'');
+c.className='side-cell p1 pick';
 c.textContent=r.n.substring(0,2);
-if(!placed){c.onclick=()=>{
+c.title=r.n+' 敏'+(r.agi||0);
+c.onclick=()=>{
 deployCur={n:r.n,h:r.h,a:r.a,agi:r.g||0,m:r.mxc,rg:r.rg,cls:r.cls,_pi:p1pick[0],sk:r.sk||[],x:-1,y:-1,_tm:'p1'};
 renderDevDeploy();
-};c.classList.add('pick');}
+};
 if(deployCur)c.classList.add('current');
 sl.appendChild(c);
-for(let i=0;i<4;i++){let e=document.createElement('div');e.className='side-cell';e.style.opacity='0.3';e.textContent='-';sl.appendChild(e);}
+}
+for(let i=placed?5:4;i<5;i++){let e=document.createElement('div');e.className='side-cell';e.style.opacity='0.3';e.textContent='-';sl.appendChild(e);}
 for(let i=0;i<5;i++){let e=document.createElement('div');e.className='side-cell p2';e.style.opacity='0.3';e.textContent='机';sr.appendChild(e);}
 }
 function startDevBattle(){
@@ -552,39 +554,41 @@ if(deployStep<10)renderDeploy();else confirmDeploy();
 }
 brd.appendChild(slot);
 }
-// 侧栏
+// 侧栏（仅显示未放置角色）
 let sl=$('deploySideL'),sr=$('deploySideR');
 sl.innerHTML='';sr.innerHTML='';
-p1pick.forEach(pi=>{
+let p1u=p1pick.filter(pi=>!depAll.find(d=>d._pi===pi));
+p1u.forEach(pi=>{
 let r=pool[pi];
-let placed=depAll.find(d=>d._pi===pi);
 let c=document.createElement('div');
-c.className='side-cell p1'+(placed?' placed':'');
+c.className='side-cell p1 pick';
 c.textContent=r.n.substring(0,2);
-if(!placed&&t==='蓝'){c.onclick=()=>{
+c.title=r.n+' 敏'+(r.agi||0);
+if(t==='蓝'){c.onclick=()=>{
 if(deployCur&&deployCur._pi===pi){deployCur=null;renderDeploy();return}
 deployCur={n:r.n,...r,_pi:pi,sk:r.sk||[],x:-1,y:-1,_tm:'p1'};
 renderDeploy();
-};c.classList.add('pick');}
+}}
 if(deployCur&&deployCur._pi===pi)c.classList.add('current');
 sl.appendChild(c);
 });
-for(let i=p1pick.length;i<5;i++){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.3';c.textContent='-';sl.appendChild(c);}
-p2pick.forEach(pi=>{
+for(let i=p1u.length;i<5;i++){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.3';c.textContent='-';sl.appendChild(c);}
+let p2u=p2pick.filter(pi=>!depAll.find(d=>d._pi===pi));
+p2u.forEach(pi=>{
 let r=pool[pi];
-let placed=depAll.find(d=>d._pi===pi);
 let c=document.createElement('div');
-c.className='side-cell p2'+(placed?' placed':'');
+c.className='side-cell p2 pick';
 c.textContent=r.n.substring(0,2);
-if(!placed&&t==='红'){c.onclick=()=>{
+c.title=r.n+' 敏'+(r.agi||0);
+if(t==='红'){c.onclick=()=>{
 if(deployCur&&deployCur._pi===pi){deployCur=null;renderDeploy();return}
 deployCur={n:r.n,...r,_pi:pi,sk:r.sk||[],x:-1,y:-1,_tm:'p2'};
 renderDeploy();
-};c.classList.add('pick');}
+}}
 if(deployCur&&deployCur._pi===pi)c.classList.add('current');
 sr.appendChild(c);
 });
-for(let i=p2pick.length;i<5;i++){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.3';c.textContent='-';sr.appendChild(c);}
+for(let i=p2u.length;i<5;i++){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.3';c.textContent='-';sr.appendChild(c);}
 }
 function confirmDeploy(){
 if(p1deploy.length<5||p2deploy.length<5)return;
@@ -1266,36 +1270,36 @@ renderReposition();
 }
 brd.appendChild(slot);
 }
-// 侧栏：双方已选+未选角色
+// 侧栏：仅显示未放置角色
 let sl=$('deploySideL'),sr=$('deploySideR');
 sl.innerHTML='';sr.innerHTML='';
-repoPool.filter(u=>u.tm==='p1').forEach(u=>{
+let p1Unplaced=repoPool.filter(u=>u.tm==='p1'&&u.x<0);
+p1Unplaced.forEach(u=>{
 let el=document.createElement('div');
-let isPl=u.x>=0;
-el.className='side-cell p1'+(isPl?' placed':'');
+el.className='side-cell p1 pick';
 el.textContent=u.n.substring(0,2);
 el.title=u.n+' HP:'+u.hp;
-if(!isPl&&cur==='p1'){
+if(cur==='p1'){
 el.onclick=()=>{
 if(repoCur===u){repoCur=null;renderReposition();return}
 repoCur=u;renderReposition();
-};el.classList.add('pick');
+};
 }
 if(repoCur===u)el.classList.add('current');
 sl.appendChild(el);
 });
 while(sl.children.length<5){let c=document.createElement('div');c.className='side-cell';c.style.opacity='0.3';c.textContent='-';sl.appendChild(c);}
-repoPool.filter(u=>u.tm==='p2').forEach(u=>{
+let p2Unplaced=repoPool.filter(u=>u.tm==='p2'&&u.x<0);
+p2Unplaced.forEach(u=>{
 let el=document.createElement('div');
-let isPl=u.x>=0;
-el.className='side-cell p2'+(isPl?' placed':'');
+el.className='side-cell p2 pick';
 el.textContent=u.n.substring(0,2);
 el.title=u.n+' HP:'+u.hp;
-if(!isPl&&cur==='p2'){
+if(cur==='p2'){
 el.onclick=()=>{
 if(repoCur===u){repoCur=null;renderReposition();return}
 repoCur=u;renderReposition();
-};el.classList.add('pick');
+};
 }
 if(repoCur===u)el.classList.add('current');
 sr.appendChild(el);
