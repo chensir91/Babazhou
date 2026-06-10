@@ -147,7 +147,7 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 .bp-log .tap{text-align:center;color:#448;font-size:8px;margin-top:2px}
 </style></head>
 <body>
-<div id="_err" style="position:fixed;bottom:0;left:0;right:0;background:rgba(220,20,20,0.92);color:#fff;z-index:99999;padding:10px;font-size:11px;font-family:monospace;display:none;max-height:150px;overflow:auto;white-space:pre-wrap;word-break:break-all"></div>
+<div id="_err" style="position:fixed;top:0;left:0;right:0;background:rgba(0,100,0,0.92);color:#fff;z-index:99999;padding:8px;font-size:10px;font-family:monospace;max-height:80px;overflow:auto;white-space:pre-wrap;word-break:break-all">READY: 页面已加载 | 函数数: <span id="_fc">?</span> | 点击: <span id="_cl">0</span></div>
 <div id="app">
 <div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v2.00</div>
 
@@ -210,23 +210,22 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 </div>
 
 <script>
-window._errs=[];window.onerror=function(m,s,l,c,e){var el=document.getElementById('_err');if(el){el.style.display='block';el.innerHTML+='['+(window._errs.length+1)+'] '+m+' (line '+l+')<br>';}window._errs.push({m:m,l:l});return false;};
-(function patchClicks(){
-setInterval(function(){
-var btns=document.querySelectorAll('.home-btn');
-btns.forEach(function(b){
-if(!b._patched){
-var orig=b.onclick;
-b._patched=true;
-b.addEventListener('click',function(ev){
-try{orig.call(this,ev);}catch(ex){
-var el=document.getElementById('_err');if(el){el.style.display='block';el.innerHTML+='[CLICK ERROR] '+ex+'<br>';}
-}
-});
-b.onclick=null;
-}
-});
-},200);
+window.onerror=function(m,s,l,c,e){
+var el=document.getElementById('_err');
+if(el)el.innerHTML='ERROR:'+m+' @L'+l;
+return false;
+};
+(function(){
+var fc=0;for(var k in window)if(typeof window[k]==='function')fc++;
+var fce=document.getElementById('_fc');if(fce)fce.textContent=fc;
+var clc=0;
+document.addEventListener('click',function(e){
+clc++;
+var t=e.target;
+var cl=document.getElementById('_cl');if(cl)cl.textContent=clc;
+var el=document.getElementById('_err');
+if(el)el.innerHTML='CLICK #'+clc+' on <'+t.tagName+'> .'+(t.className||'')+' #'+(t.id||'')+' | onclick='+(t.getAttribute('onclick')||'none');
+},true);
 })();
 // ===== 24角色数据 =====
 const ROSTER=[{n:'陈色',h:16,a:0,agi:7,cls:'召唤师',pa:'虫迷：场上每存在1只虫子，虫子生命值+1',rg:[[0,0]],sk:[
