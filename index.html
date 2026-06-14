@@ -21,12 +21,12 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 .btn{padding:8px 14px;border-radius:6px;border:none;background:#336;color:#fff;font-size:12px;cursor:pointer;margin:3px}
 .btn:active{background:#558}
 .btn.dis{opacity:0.4;pointer-events:none}
-#board,#board2{position:relative;width:288px;height:210px;margin:0 auto;background:linear-gradient(90deg,rgba(30,40,80,0.4) 0%,rgba(30,40,80,0.4) 40%,transparent 40%,transparent 60%,rgba(80,25,25,0.4) 60%,rgba(80,25,25,0.4) 100%),#151525;border-radius:4px;box-shadow:0 3px 16px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.02);border:1px solid #2a2a44}
-.main-grid{display:flex;gap:1px;align-items:flex-start;justify-content:center;margin-top:2px}
+#board,#board2{position:relative;width:288px;height:210px;box-sizing:border-box;margin:0 auto;background:linear-gradient(90deg,rgba(30,40,80,0.4) 0%,rgba(30,40,80,0.4) 40%,transparent 40%,transparent 60%,rgba(80,25,25,0.4) 60%,rgba(80,25,25,0.4) 100%),#151525;border-radius:4px;box-shadow:0 3px 16px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.02);border:1px solid #2a2a44}
+.main-grid{display:flex;gap:1px;align-items:flex-start;justify-content:center;margin-top:2px;overflow:hidden}
 .main-grid #board,.main-grid #board2{width:288px;height:210px}
 .main-grid .slot{width:40px;height:40px;font-size:8px}
-.side-col{width:42px;flex-shrink:0;display:flex;flex-direction:column;gap:2px}
-.side-cell{width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:#1a1a2e;border:1px solid #2a2a44;border-radius:3px;font-size:9px;color:#ccc;text-align:center;flex-direction:column;box-sizing:border-box}
+.side-col{width:42px;flex-shrink:0;display:flex;flex-direction:column;gap:2px;overflow:hidden}
+.side-cell{width:42px;height:42px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;background:#1a1a2e;border:1px solid #2a2a44;border-radius:3px;font-size:9px;color:#ccc;text-align:center;flex-direction:column;box-sizing:border-box}
 .side-cell.p1{background:linear-gradient(180deg,#1a2e50,#162540);border-color:#2a4477}
 .side-cell.p2{background:linear-gradient(180deg,#3a1a1a,#2a1515);border-color:#552a2a}
 .side-cell.picked{background:#1a2e2e;border-color:#3a6}
