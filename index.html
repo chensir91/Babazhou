@@ -21,19 +21,19 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 .btn{padding:8px 14px;border-radius:6px;border:none;background:#336;color:#fff;font-size:12px;cursor:pointer;margin:3px}
 .btn:active{background:#558}
 .btn.dis{opacity:0.4;pointer-events:none}
-#board,#board2{position:relative;width:302px;height:220px;margin:0 auto;background:linear-gradient(90deg,rgba(30,40,80,0.4) 0%,rgba(30,40,80,0.4) 40%,transparent 40%,transparent 60%,rgba(80,25,25,0.4) 60%,rgba(80,25,25,0.4) 100%),#151525;border-radius:4px;box-shadow:0 3px 16px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.02);border:1px solid #2a2a44}
-.main-grid{display:flex;gap:2px;align-items:flex-start;justify-content:center;margin-top:2px}
+#board,#board2{position:relative;width:288px;height:210px;box-sizing:border-box;margin:0 auto;background:linear-gradient(90deg,rgba(30,40,80,0.4) 0%,rgba(30,40,80,0.4) 40%,transparent 40%,transparent 60%,rgba(80,25,25,0.4) 60%,rgba(80,25,25,0.4) 100%),#151525;border-radius:4px;box-shadow:0 3px 16px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.02);border:1px solid #2a2a44}
+.main-grid{display:flex;gap:1px;align-items:flex-start;justify-content:center;margin-top:2px}
 .main-grid #board,.main-grid #board2{width:302px;height:220px}
-.main-grid .slot{width:42px;height:42px;font-size:8px}
+.main-grid .slot{width:40px;height:40px;font-size:8px}
 .side-col{width:42px;flex-shrink:0;display:flex;flex-direction:column;gap:2px}
-.side-cell{width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:#1a1a2e;border:1px solid #2a2a44;border-radius:3px;font-size:9px;color:#ccc;text-align:center;flex-direction:column;box-sizing:border-box}
+.side-cell{width:42px;height:40px;display:flex;align-items:center;justify-content:center;background:#1a1a2e;border:1px solid #2a2a44;border-radius:3px;font-size:9px;color:#ccc;text-align:center;flex-direction:column;box-sizing:border-box}
 .side-cell.p1{background:linear-gradient(180deg,#1a2e50,#162540);border-color:#2a4477}
 .side-cell.p2{background:linear-gradient(180deg,#3a1a1a,#2a1515);border-color:#552a2a}
 .side-cell.picked{background:#1a2e2e;border-color:#3a6}
 .side-cell.dead{background:#1a1a1a;border-color:#444;color:#a33;font-size:7px}
 .side-cell.current{border-color:#fc0!important;background:#332200;cursor:pointer}
 
-.slot{position:absolute;width:42px;height:42px;border:1px solid #222;background:#111;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:9px;box-shadow:inset 0 1px 4px rgba(0,0,0,0.5)}
+.slot{position:absolute;width:40px;height:40px;border:1px solid #222;background:#111;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:9px;box-shadow:inset 0 1px 4px rgba(0,0,0,0.5)}
 .slot.mid{background:linear-gradient(180deg,#0c0c1a,#121225);border-color:#1a1a33;border-left-width:2px;border-right-width:2px}
 .slot.p1{background:linear-gradient(180deg,#1a2e50,#162540);border-color:#2a4477;box-shadow:inset 0 0 8px rgba(50,100,200,0.08),inset 0 1px 4px rgba(0,0,0,0.3)}
 .slot.p2{background:linear-gradient(180deg,#3a1a1a,#2a1515);border-color:#552a2a;box-shadow:inset 0 0 8px rgba(200,50,50,0.06),inset 0 1px 4px rgba(0,0,0,0.3)}
@@ -148,7 +148,7 @@ h2{text-align:center;margin:4px 0;font-size:15px;color:#fc0}
 </style></head>
 <body>
 <div id="app">
-<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v2.05</div>
+<div style="position:fixed;top:4px;right:8px;color:#666;font-size:10px;z-index:100">v2.06</div>
 
 <div id="home" class="phase active">
 <h2 style="text-align:center;color:#fc0;font-size:22px;margin:30px 0 10px">八宝舟</h2>
@@ -353,7 +353,7 @@ d.innerHTML='';
 for(let x=0;x<7;x++)for(let y=1;y<6;y++){
 let g=document.createElement('div');
 g.className='slot';
-g.style.cssText='left:'+(x*42+4)+'px;top:'+((y-1)*42+4)+'px;width:42px;height:42px;font-size:8px';
+g.style.cssText='left:'+(x*41)+'px;top:'+((y-1)*41)+'px;width:42px;height:42px;font-size:8px';
 g.dataset.x=x;g.dataset.y=y;
 d.appendChild(g);
 }
@@ -390,7 +390,7 @@ let slot=document.createElement('div');slot.className='slot';
 if(x===3)slot.classList.add('mid');
 else if(x<3)slot.classList.add('p1');
 else slot.classList.add('p2');
-slot.style.left=(x*42+4)+'px';slot.style.top=((y-1)*42+4)+'px';
+slot.style.left=(x*41)+'px';slot.style.top=((y-1)*41)+'px';
 slot.dataset.x=x;slot.dataset.y=y;
 let dep=depAll.find(d=>d.x===x&&d.y===y);
 if(dep){slot.innerHTML='<span class="n">'+dep.n.substring(0,2)+'</span>';slot.classList.add('unit')}
@@ -476,7 +476,7 @@ d.innerHTML='';
 for(let x=0;x<7;x++)for(let y=1;y<6;y++){
 let g=document.createElement('div');
 g.className='slot';
-g.style.cssText='left:'+(x*42+4)+'px;top:'+((y-1)*42+4)+'px;width:42px;height:42px;font-size:8px';
+g.style.cssText='left:'+(x*41)+'px;top:'+((y-1)*41)+'px;width:42px;height:42px;font-size:8px';
 g.dataset.x=x;g.dataset.y=y;
 d.appendChild(g);
 }
@@ -531,7 +531,7 @@ let isMid=x===3,isP1=x<3,isP2=x>3;
 if(isMid)slot.classList.add('mid');
 else if(isP1)slot.classList.add('p1');
 else slot.classList.add('p2');
-slot.style.left=(x*42+4)+'px';slot.style.top=((y-1)*42+4)+'px';
+slot.style.left=(x*41)+'px';slot.style.top=((y-1)*41)+'px';
 slot.dataset.x=x;slot.dataset.y=y;
 let dep=depAll.find(d=>d.x===x&&d.y===y);
 if(dep){slot.innerHTML='<span class="n">'+dep.n.substring(0,2)+'</span>';slot.classList.add('unit')}
@@ -680,13 +680,13 @@ let slot=document.createElement('div');slot.className='slot';
 if(x===3)slot.classList.add('mid');
 else if(x<3)slot.classList.add('p1');
 else slot.classList.add('p2');
-slot.style.left=(x*42+4)+'px';slot.style.top=((y-1)*42+4)+'px';
-slot.style.width='42px';slot.style.height='42px';
+slot.style.left=(x*41)+'px';slot.style.top=((y-1)*41)+'px';
+slot.style.width='40px';slot.style.height='40px';
 slot.style.fontSize='8px';
 slot.style.zIndex='0';
 brd.appendChild(slot);
 }
-brd.style.width='302px';brd.style.height='220px';brd.style.position='relative';brd.style.background='linear-gradient(90deg,rgba(30,40,80,0.4) 0%,rgba(30,40,80,0.4) 40%,transparent 40%,transparent 60%,rgba(80,25,25,0.4) 60%,rgba(80,25,25,0.4) 100%),#151525';brd.style.margin='0 auto';brd.style.borderRadius='4px';brd.style.boxShadow='0 3px 16px rgba(0,0,0,0.6)';brd.style.border='1px solid #2a2a44';
+brd.style.width='288px';brd.style.height='210px';brd.style.position='relative';brd.style.background='linear-gradient(90deg,rgba(30,40,80,0.4) 0%,rgba(30,40,80,0.4) 40%,transparent 40%,transparent 60%,rgba(80,25,25,0.4) 60%,rgba(80,25,25,0.4) 100%),#151525';brd.style.margin='0 auto';brd.style.borderRadius='4px';brd.style.boxShadow='0 3px 16px rgba(0,0,0,0.6)';brd.style.border='1px solid #2a2a44';
 // 开发者模式: 显示调整人机按钮
 if(b.us.some(u=>u.isDummy))$('btnDummyMove').style.display='inline-block';
 else $('btnDummyMove').style.display='none';
@@ -710,7 +710,7 @@ chgRows.includes(y)&&((b.sel.tm==='p1'&&x>b.sel.x)||(b.sel.tm==='p2'&&x<b.sel.x)
 ):b.sel.inRg(x,y);
 if(inR){
 let hl=document.createElement('div');
-hl.style.cssText='position:absolute;left:'+(x*42+4)+'px;top:'+((y-1)*42+4)+'px;width:42px;height:42px;';
+hl.style.cssText='position:absolute;left:'+(x*41)+'px;top:'+((y-1)*41)+'px;width:42px;height:42px;';
 let isEnemy=b.us.some(u=>u.tm!==b.sel.tm&&u.al&&u.x===x&&u.y===y&&!u.sth);
 hl.style.background=isEnemy?'rgba(255,80,80,0.2)':'rgba(100,180,255,0.1)';
 hl.style.border=isEnemy?'2px solid rgba(255,80,80,0.5)':'1px dashed rgba(100,180,255,0.3)';
@@ -740,7 +740,7 @@ let chgR=isChargeUnit(b.sel)?getChargeRows(b.sel,b.us).rows:null;let canAtk=isCh
 if(isChargeUnit(b.sel)&&canAtk&&Math.abs(x-b.sel.x)!==chgMinX)canAtk=false;
 if(canAtk){
 let hl=document.createElement('div');
-hl.style.cssText='position:absolute;left:'+(x*42+4)+'px;top:'+((y-1)*42+4)+'px;width:42px;height:42px;background:rgba(255,80,80,0.3);border:2px solid rgba(255,80,80,0.7);border-radius:4px;pointer-events:none;z-index:3';
+hl.style.cssText='position:absolute;left:'+(x*41)+'px;top:'+((y-1)*41)+'px;width:42px;height:42px;background:rgba(255,80,80,0.3);border:2px solid rgba(255,80,80,0.7);border-radius:4px;pointer-events:none;z-index:3';
 brd.appendChild(hl);
 }
 }
@@ -748,7 +748,7 @@ continue;
 }
 if(!hasUnit&&x!==3){
 let hl=document.createElement('div');
-hl.style.cssText='position:absolute;left:'+(x*42+4)+'px;top:'+((y-1)*42+4)+'px;width:42px;height:42px;background:rgba(100,255,100,0.15);border:2px dashed rgba(100,255,100,0.4);border-radius:4px;pointer-events:none;z-index:3';
+hl.style.cssText='position:absolute;left:'+(x*41)+'px;top:'+((y-1)*41)+'px;width:42px;height:42px;background:rgba(100,255,100,0.15);border:2px dashed rgba(100,255,100,0.4);border-radius:4px;pointer-events:none;z-index:3';
 if(b.skMode.tgt==='empty'&&b.skMode.placed<b.skMode.max){
 hl.style.pointerEvents='auto';
 hl.onclick=()=>{
@@ -774,12 +774,12 @@ brd.appendChild(hl);
 let u=b.us.find(v=>v.al&&v.x===x&&v.y===y);
 if(b.skMode.tgt==='enemy'&&u.tm!==b.sel.tm){
 let hl=document.createElement('div');
-hl.style.cssText='position:absolute;left:'+(x*42+4)+'px;top:'+((y-1)*42+4)+'px;width:42px;height:42px;background:rgba(255,80,80,0.25);border:2px solid rgba(255,80,80,0.6);border-radius:4px;pointer-events:none;z-index:3';
+hl.style.cssText='position:absolute;left:'+(x*41)+'px;top:'+((y-1)*41)+'px;width:42px;height:42px;background:rgba(255,80,80,0.25);border:2px solid rgba(255,80,80,0.6);border-radius:4px;pointer-events:none;z-index:3';
 brd.appendChild(hl);
 }
 if(b.skMode.tgt==='ally'&&u.tm===b.sel.tm&&u!==b.sel){
 let hl=document.createElement('div');
-hl.style.cssText='position:absolute;left:'+(x*42+4)+'px;top:'+((y-1)*42+4)+'px;width:42px;height:42px;background:rgba(100,180,255,0.2);border:2px solid rgba(100,180,255,0.6);border-radius:4px;pointer-events:none;z-index:3';
+hl.style.cssText='position:absolute;left:'+(x*41)+'px;top:'+((y-1)*41)+'px;width:42px;height:42px;background:rgba(100,180,255,0.2);border:2px solid rgba(100,180,255,0.6);border-radius:4px;pointer-events:none;z-index:3';
 brd.appendChild(hl);
 }
 }
@@ -794,7 +794,7 @@ for(let x=0;x<7;x++)for(let y=1;y<6;y++){
 let u=b.us.find(v=>v.al&&v.x===x&&v.y===y);
 if(u&&b.coldField.targets.includes(u)){
 let hl=document.createElement('div');
-hl.style.cssText='position:absolute;left:'+(x*42+4)+'px;top:'+((y-1)*42+4)+'px;width:42px;height:42px;background:rgba(255,215,0,0.35);border:2px solid rgba(255,215,0,0.7);border-radius:4px;pointer-events:none;z-index:3';
+hl.style.cssText='position:absolute;left:'+(x*41)+'px;top:'+((y-1)*41)+'px;width:42px;height:42px;background:rgba(255,215,0,0.35);border:2px solid rgba(255,215,0,0.7);border-radius:4px;pointer-events:none;z-index:3';
 brd.appendChild(hl);
 }
 }
@@ -809,7 +809,7 @@ if(u.x<3)slot.classList.add('p1');else if(u.x>3)slot.classList.add('p2');else sl
 if(b.sel===u)slot.classList.add('sel');
 // 未行动单位黄色高亮
 if(!b.acted.has(u._uid)&&u.tm===b.ct&&u.al&&!u._dying&&!b.sel&&!b.skMode&&!b.coldField&&!u.isS)slot.classList.add('ready');
-slot.style.left=(u.x*42+4)+'px';slot.style.top=((u.y-1)*42+4)+'px';
+slot.style.left=(u.x*41)+'px';slot.style.top=((u.y-1)*42+4)+'px';
 slot.style.position='absolute';slot.style.zIndex='2';
 if(u._dying){slot.classList.add('dying');slot.style.zIndex='3';}
 let dHp=u.hp;if(u._hits&&u._hits.length){let recent=u._hits.filter(h=>Date.now()-h.t<2000);if(recent.length){let mh=recent.reduce((a,b)=>a.dmg>b.dmg?a:b,recent[0]);dHp=mh.hpBefore;let intensity=Math.min(8,2+mh.dmg*.6+(1-mh.ratio)*4);slot.style.setProperty('--sx',intensity+'px');slot.classList.add('shake');slot.setAttribute('data-dmg',mh.hpLoss||mh.dmg);slot.setAttribute('data-hpA',mh.hpAfter);slot.setAttribute('data-mH',u.mH)}delete u._hits;}
@@ -869,7 +869,7 @@ for(let x=0;x<7;x++)for(let y=1;y<6;y++){
 let hasUnit=b.us.some(v=>v.al&&v.x===x&&v.y===y);
 if(!hasUnit&&x!==3){
 let ds=document.createElement('div');
-ds.style.cssText='position:absolute;left:'+(x*42+4)+'px;top:'+((y-1)*42+4)+'px;width:42px;height:42px;background:rgba(100,255,100,0.15);border:2px dashed rgba(100,255,100,0.4);border-radius:4px;z-index:5';
+ds.style.cssText='position:absolute;left:'+(x*41)+'px;top:'+((y-1)*41)+'px;width:42px;height:42px;background:rgba(100,255,100,0.15);border:2px dashed rgba(100,255,100,0.4);border-radius:4px;z-index:5';
 ds.onclick=(()=>{
 let ox=x,oy=y;
 return()=>{
@@ -888,7 +888,7 @@ for(let x=0;x<7;x++)for(let y=1;y<6;y++){
 let hasUnit=b.us.some(v=>v.al&&v.x===x&&v.y===y);
 if(!hasUnit&&x!==3){
 let ds=document.createElement('div');
-ds.style.cssText='position:absolute;left:'+(x*42+4)+'px;top:'+((y-1)*42+4)+'px;width:42px;height:42px;background:rgba(100,255,200,0.2);border:2px dashed rgba(100,255,200,0.5);border-radius:4px;z-index:5';
+ds.style.cssText='position:absolute;left:'+(x*41)+'px;top:'+((y-1)*41)+'px;width:42px;height:42px;background:rgba(100,255,200,0.2);border:2px dashed rgba(100,255,200,0.5);border-radius:4px;z-index:5';
 ds.onclick=(()=>{
 let ox=x,oy=y;
 return()=>{
@@ -1257,7 +1257,7 @@ let slot=document.createElement('div');slot.className='slot';
 if(x===3)slot.classList.add('mid');
 else if(x<3)slot.classList.add('p1');
 else slot.classList.add('p2');
-slot.style.left=(x*42+4)+'px';slot.style.top=((y-1)*42+4)+'px';
+slot.style.left=(x*41)+'px';slot.style.top=((y-1)*41)+'px';
 slot.dataset.x=x;slot.dataset.y=y;
 let u=allOcc.find(v=>v.x===x&&v.y===y)||placed.find(v=>v.x===x&&v.y===y);
 if(u){slot.innerHTML='<span class="n">'+u.n.substring(0,2)+'</span><span class="hp">'+u.hp+'/'+u.mH+'</span>';slot.classList.add('unit')}
@@ -1446,7 +1446,7 @@ html+='<div class="'+cls+'">'+l.msg+'</div>';
 $('logContent').innerHTML=html||'暂无日志';
 }
 function hideLog(){$('logModal').classList.remove('show');}
-function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志 v2.05</div>- 2026年06月14日，v2.05：回退棋盘尺寸到v2.01原值302×220/格42/gap 2，保留侧栏逻辑修复（战斗清空/选位空格），去除border-box/overflow:hidden/阴影收窄等尝试<br>- 2026年06月14日，v2.03：棋盘+侧栏border-box修复border外溢；main-grid overflow:hidden裁切棋盘阴影外扩；侧栏overflow:hidden防角色溢出<br>- 2026年06月14日，v2.02：战斗阶段侧栏全空；选位/重部署侧栏已放置角色留空格不补齐`-`；棋盘缩小适配375px手机(302→288/220→210/格42→40/gap 2→1，总宽374px)<br>- 2026年06月07日，v1.20：回退至v1.56恢复完整24角色；新建1.20八宝舟知识库.txt(整合原版规则+角色+应用详解)；新建项目介绍.txt；仅陈色周水保留完整描述，其余角色精简为数值；修复瞬杀时刻描述×1→×2；统一版本号至v1.20<br>- - 2026年06月05日，选位界面重构：侧栏角色改为正方格42×42（蓝红渐变背景区分阵营）；删除地图下方角色条仅保留两侧角色；修复跨阵营放置bug（选位时只能点击已方角色+棋盘双重校验_deployCur._tm）；main-grid间隙收窄4→2px控制总宽390px<br>- 2026年06月05日，选人棋盘取消公共区域限制：移除中列不可放置规则，35格全可用；所有格子初始黑色背景(#111)；角色被选后原地留空不进位<br>- 2026年06月05日，修复选人界面角色消失：slot定位从style属性子串匹配改为dataset属性(x/y)，解决浏览器style格式化空格导致的querySelector匹配失败<br>- 2026年06月05日，修复三阶段棋盘同色混淆：恢复pick/deploy/battle棋盘渐变背景(蓝-透-红)区分各阶段；之前v1.52统一纯色导致选人界面与战斗界面无法辨别<br>- 2026年06月05日，移动端适配：main-grid整体缩小(棋盘302×220+侧栏32px,格42×42,侧格28×42)使总宽374px适配375px手机；去掉user-scalable=no允许手动缩放<br>- 2026年06月05日，三阶段统一main-grid布局：选人/布阵/战斗全用7×5网格+两侧5格竖置side-cell；CSS去重deploy-wrap；部署高亮：选中角色时地图可部署位金色脉冲闪烁(.ready)<br>- 2026年06月07日，v1.20：回退至v1.56恢复完整24角色；新建1.20八宝舟知识库.txt(整合原版规则+角色+应用详解)；新建项目介绍.txt；仅陈色周水保留完整描述，其余角色精简为数值；修复瞬杀时刻描述×1→×2；统一版本号至v1.20<br>- - 2026年06月05日，选位界面重构：已选角色放两侧（左蓝右红），地图居中缩小（格子56→42px，地图420→316px），角色名缩为2字；三处布阵页面统一适配（renderDeploy/renderDevDeploy/renderReposition）<br>- 2026年06月05日，选人界面适配手机：角色格子56→72px、待选池最大宽度360→420px、字体放大；整体更贴合手机屏幕<br>- 2026年06月05日，已行动队友仅查看：选中本大回合已行动过的我方角色时面板不显示「使用」按钮和「跳过回合」，仅展示技能描述<br>- 2026年06月05日，充能初始化规则：所有角色初始无充能方式，陈色仅自充(beginRound)，周水仅受充(dmg)<br>- 2026年06月05日，自充根因修复：beginRound充能移入_roundLogged守卫内，确保每大回合仅充能+1（此前每大回合被调用两次导致双倍充能）<br>- 2026年06月05日，自充bug修复：移除bpClick两处全局敌方充能泄露（每次攻击后不再给敌方全队+1充能）；新增点击敌方查看描述功能（红色[敌]标记、技能全灰不可用、仅可查看描述）<br>- 2026年06月05日，充能三分法：自充(beginRound每大回合+1)/攻充(普攻目标后+1)/受充(每受击+1)严格区分；陈色→自充，周水→受充，其余→自充；所有普攻移除u.chg(1)攻充逻辑，beginRound回退排除周水（周水仅靠dmg受充）<br>- 2026年06月04日，auto大招不显示「使用」按钮（周水瞬杀时刻等充能满后自动释放），面板渲染与bpClick双重拦截；自充逻辑修复：beginRound移除周水排除，所有角色大回合开始时统一充能+1<br>- 2026年06月04日，所有技能选项点击即可查看完整描述（不可用时也能看），技能数据新增d字段存储每个技能的详细说明<br>- 2026年06月04日，战斗日志嵌入战斗界面：面板下方显示最近6条，点击展开完整日志弹窗<br>- 2026年06月04日，战斗面板操作改为两步：点击选项查看描述+「使用」按钮→点击按钮执行；被动选项可点击查看描述；选中友方切换时自动重置面板默认状态<br>- 2026年06月04日，修复开发者模式选人界面空白：startDevMode()跳过ban阶段导致pool未初始化，补pool=ROSTER.map(r=>({...r}))<br>- 2026年06月04日，修复规则/角色图鉴弹窗在首页无法显示（弹窗从battle div内移至全局#app下）<br>- 2026年06月04日，UI重做：新增首页(正常对战/开发者模式/规则/角色图鉴四个按钮)；选人界面角色格子改为正方形；战斗阶段技能栏替换为信息面板（角色名+HP+跳过回合+损伤条+被动+普攻+技能+大招，点击选项右侧显示描述，可用操作点击即进入目标选择）<br>- 2026年06月04日，陈色/周水添加被动描述字段（面板中被动行显示）<br>- 2026年06月03日，恐惧损伤实装：Ail.add()自动结算(叠满10→4伤)+所有ail.fear.add()传入目标单位；新增恐惧进度条(单位格子底部细条，<70%黄色，≥70%橙红脉冲，满条红色闪烁)<br>- 2026年06月03日，修复致死伤害不播放受击动画：dmg()致死时改设_dying=1保持al=1→renderBattle渲染濒死单位+震动+浮动伤害→动画结束后al=0+checkGO；新增死亡粒子消散动画<br>- 2026年06月03日，跳过冷却修复：bSkip（跳过回合）补调cdTk，每次跳过也触发全体冷却-1，与普攻/技能一致<br>- 2026年06月03日，冷却修复补充：红方人机跳过时补调cdTk，每跳过一个调用一次致全体冷却-1，恢复每大回合10次冷却流逝的正常节奏<br>- 2026年06月03日，冷却机制修复：cdTk从switchTeam（切换行动方时调用）移至finishAction（每个小回合完成时调用），实现每过1个任意角色小回合冷却-1而非每大回合/切换行动方时-1<br>- 2026年06月03日，showRules重写为三部分格式（全局规则/角色通用规则/角色专属规则）并同步showGuide角色图鉴<br>- 2026年06月03日，更新showRules: 公共区域"禁止进入"→"任何单位不能在上面"、攻击优先级补充嘲讽机制、冲锋描述更新、自充描述明确(每个自身小回合+1/除周水外); 陈色充能加入自充(不再排除)<br>- 2026年06月02日，先手判定改为三级(敏捷→HP上限更低→攻击力更高)；自动大招触发时机从大回合开始改为小回合结束时(按敏捷降序)；储存机制通用化(cdTk冷却归零自动存储/毛毛虫加str:4)<br>- 2026年06月02日，充能方式调整：除陈色和周水外所有角色改为自动充能(每大回合+1)；删除除陈色和周水外所有角色的被动(王土回血/手充减上限/科比牢大bns/蓝主任积怨/大树回血)；冷却改为每小回合(切换行动方时)-1<br>- 2026年06月02日，隐匿三态特效重做：获得隐匿(白雾升腾+文字)/持有隐匿(半透明+白色雾气粒子飘散+"隐匿"小字)/解除隐匿(雾气炸散+"破隐"文字)；删除隐匿特效切换按钮(统一雾隐)<br>- 2026年06月02日，冷场改为额外回合：普攻/大招击杀后finishAction完成→插入冷场额外回合(不占行动/不计算冷却充能)→冷场结束后继续正常回合<br>- 2026年06月02日，周水重做：冷场改为自选目标逐个造成ATK×1伤害+5层恐惧(全图)/大招瞬杀时刻去掉穿透/新增规则按钮+角色图鉴按钮(陈色+周水)<br>- 2026年06月02日，选中周水不破隐修复：beginRound中sth递减跳过周水(后门隐匿由攻击机制管理，不自动过期)<br>- 2026年06月02日，选中隐匿单位不破隐修复：新增.slot.unit-sth.sel规则，选中时仅金色边框标记不覆盖隐匿box-shadow<br>- 2026年06月02日，周水隐匿不显示修复：beginRound中sth递减从renderBattle之前移到之后(解决第一回合渲染时sth已被归零)/开发者模式充能上限修复：startDevBattle中rd.m→rd.mxc<br>- 2026年06月01日，充能上限修复：startBattle正常部署路径d.m→d.mxc/自动大招：chg()充能达到上限时自动触发auto:1大招/开发者模式补周水sth=1<br>- 2026年06月01日，隐匿特效根因修复：outline-color不是CSS可动画属性→改为box-shadow内外发光呼吸动画+加!important/新增测试隐匿特效按钮(内联强制渲染)<br>- 2026年06月01日，充能上限修复：deployCur缺少m字段导致mxc回退默认5→改为透传r.mxc/隐匿特效重做：overlay方案改为slot级filter+outline呼吸动画，更稳定可见<br>- 2026年06月01日，隐匿overlay加半透明背景色+inset发光/冲锋选位仅允许x距离最近目标(高亮+点击双限制)<br>- 2026年06月01日，冲锋范围动态检测(同行有敌→仅同行/同行无敌→同行+相邻行)/隐匿独立overlay层+发光模糊动画/冷场按距离排序且不伤自己/周水充能上限2<br>- 2026年05月31日，周水重做(充能改为受击+1上限2/冲锋UI自选目标/自动大招不消耗行动/隐匿雾隐虚影双特效+按钮切换)<br>- 2026年05月31日，周水重做：恐惧震慑改为冲锋自动锁定目标、瞬杀时刻伤害公式改为(已损失+ATK)*2穿透、新增被动后门(开局隐匿/攻击解除/2回合后恢复)、冷场改为对全场触发普攻<br>- 2026年05月29日，损伤全局触发（叠满10点自动结算：神经=2伤+眩晕/恐惧=4伤/燃烧=2伤+3回合流血）+ 先手平局随机 + 冲锋全局规则（同列/相邻行取最近单位，含友方）<br>- 2026年05月29日，战斗反馈优化：先震动后出伤（暂显旧HP→震动0.35s→HP更新+红色小字"-x"浮动跳出）<br>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害累加取最强+血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}function hideCL(){$('clModal').classList.remove('show');}
+function showCL(){$('clContent').innerHTML='<div class="cl-hdr">改动日志 v2.06</div>- 2026年06月14日，v2.06：精确适配375px手机端。棋盘302→288(border-box)/220→210，格42→40(间距1px)，main-grid gap 2→1，side-cell高42→40；总宽374px严格不超375<br>- 2026年06月14日，v2.03：棋盘+侧栏border-box修复border外溢；main-grid overflow:hidden裁切棋盘阴影外扩；侧栏overflow:hidden防角色溢出<br>- 2026年06月14日，v2.02：战斗阶段侧栏全空；选位/重部署侧栏已放置角色留空格不补齐`-`；棋盘缩小适配375px手机(302→288/220→210/格42→40/gap 2→1，总宽374px)<br>- 2026年06月07日，v1.20：回退至v1.56恢复完整24角色；新建1.20八宝舟知识库.txt(整合原版规则+角色+应用详解)；新建项目介绍.txt；仅陈色周水保留完整描述，其余角色精简为数值；修复瞬杀时刻描述×1→×2；统一版本号至v1.20<br>- - 2026年06月05日，选位界面重构：侧栏角色改为正方格42×42（蓝红渐变背景区分阵营）；删除地图下方角色条仅保留两侧角色；修复跨阵营放置bug（选位时只能点击已方角色+棋盘双重校验_deployCur._tm）；main-grid间隙收窄4→2px控制总宽390px<br>- 2026年06月05日，选人棋盘取消公共区域限制：移除中列不可放置规则，35格全可用；所有格子初始黑色背景(#111)；角色被选后原地留空不进位<br>- 2026年06月05日，修复选人界面角色消失：slot定位从style属性子串匹配改为dataset属性(x/y)，解决浏览器style格式化空格导致的querySelector匹配失败<br>- 2026年06月05日，修复三阶段棋盘同色混淆：恢复pick/deploy/battle棋盘渐变背景(蓝-透-红)区分各阶段；之前v1.52统一纯色导致选人界面与战斗界面无法辨别<br>- 2026年06月05日，移动端适配：main-grid整体缩小(棋盘302×220+侧栏32px,格42×42,侧格28×42)使总宽374px适配375px手机；去掉user-scalable=no允许手动缩放<br>- 2026年06月05日，三阶段统一main-grid布局：选人/布阵/战斗全用7×5网格+两侧5格竖置side-cell；CSS去重deploy-wrap；部署高亮：选中角色时地图可部署位金色脉冲闪烁(.ready)<br>- 2026年06月07日，v1.20：回退至v1.56恢复完整24角色；新建1.20八宝舟知识库.txt(整合原版规则+角色+应用详解)；新建项目介绍.txt；仅陈色周水保留完整描述，其余角色精简为数值；修复瞬杀时刻描述×1→×2；统一版本号至v1.20<br>- - 2026年06月05日，选位界面重构：已选角色放两侧（左蓝右红），地图居中缩小（格子56→42px，地图420→316px），角色名缩为2字；三处布阵页面统一适配（renderDeploy/renderDevDeploy/renderReposition）<br>- 2026年06月05日，选人界面适配手机：角色格子56→72px、待选池最大宽度360→420px、字体放大；整体更贴合手机屏幕<br>- 2026年06月05日，已行动队友仅查看：选中本大回合已行动过的我方角色时面板不显示「使用」按钮和「跳过回合」，仅展示技能描述<br>- 2026年06月05日，充能初始化规则：所有角色初始无充能方式，陈色仅自充(beginRound)，周水仅受充(dmg)<br>- 2026年06月05日，自充根因修复：beginRound充能移入_roundLogged守卫内，确保每大回合仅充能+1（此前每大回合被调用两次导致双倍充能）<br>- 2026年06月05日，自充bug修复：移除bpClick两处全局敌方充能泄露（每次攻击后不再给敌方全队+1充能）；新增点击敌方查看描述功能（红色[敌]标记、技能全灰不可用、仅可查看描述）<br>- 2026年06月05日，充能三分法：自充(beginRound每大回合+1)/攻充(普攻目标后+1)/受充(每受击+1)严格区分；陈色→自充，周水→受充，其余→自充；所有普攻移除u.chg(1)攻充逻辑，beginRound回退排除周水（周水仅靠dmg受充）<br>- 2026年06月04日，auto大招不显示「使用」按钮（周水瞬杀时刻等充能满后自动释放），面板渲染与bpClick双重拦截；自充逻辑修复：beginRound移除周水排除，所有角色大回合开始时统一充能+1<br>- 2026年06月04日，所有技能选项点击即可查看完整描述（不可用时也能看），技能数据新增d字段存储每个技能的详细说明<br>- 2026年06月04日，战斗日志嵌入战斗界面：面板下方显示最近6条，点击展开完整日志弹窗<br>- 2026年06月04日，战斗面板操作改为两步：点击选项查看描述+「使用」按钮→点击按钮执行；被动选项可点击查看描述；选中友方切换时自动重置面板默认状态<br>- 2026年06月04日，修复开发者模式选人界面空白：startDevMode()跳过ban阶段导致pool未初始化，补pool=ROSTER.map(r=>({...r}))<br>- 2026年06月04日，修复规则/角色图鉴弹窗在首页无法显示（弹窗从battle div内移至全局#app下）<br>- 2026年06月04日，UI重做：新增首页(正常对战/开发者模式/规则/角色图鉴四个按钮)；选人界面角色格子改为正方形；战斗阶段技能栏替换为信息面板（角色名+HP+跳过回合+损伤条+被动+普攻+技能+大招，点击选项右侧显示描述，可用操作点击即进入目标选择）<br>- 2026年06月04日，陈色/周水添加被动描述字段（面板中被动行显示）<br>- 2026年06月03日，恐惧损伤实装：Ail.add()自动结算(叠满10→4伤)+所有ail.fear.add()传入目标单位；新增恐惧进度条(单位格子底部细条，<70%黄色，≥70%橙红脉冲，满条红色闪烁)<br>- 2026年06月03日，修复致死伤害不播放受击动画：dmg()致死时改设_dying=1保持al=1→renderBattle渲染濒死单位+震动+浮动伤害→动画结束后al=0+checkGO；新增死亡粒子消散动画<br>- 2026年06月03日，跳过冷却修复：bSkip（跳过回合）补调cdTk，每次跳过也触发全体冷却-1，与普攻/技能一致<br>- 2026年06月03日，冷却修复补充：红方人机跳过时补调cdTk，每跳过一个调用一次致全体冷却-1，恢复每大回合10次冷却流逝的正常节奏<br>- 2026年06月03日，冷却机制修复：cdTk从switchTeam（切换行动方时调用）移至finishAction（每个小回合完成时调用），实现每过1个任意角色小回合冷却-1而非每大回合/切换行动方时-1<br>- 2026年06月03日，showRules重写为三部分格式（全局规则/角色通用规则/角色专属规则）并同步showGuide角色图鉴<br>- 2026年06月03日，更新showRules: 公共区域"禁止进入"→"任何单位不能在上面"、攻击优先级补充嘲讽机制、冲锋描述更新、自充描述明确(每个自身小回合+1/除周水外); 陈色充能加入自充(不再排除)<br>- 2026年06月02日，先手判定改为三级(敏捷→HP上限更低→攻击力更高)；自动大招触发时机从大回合开始改为小回合结束时(按敏捷降序)；储存机制通用化(cdTk冷却归零自动存储/毛毛虫加str:4)<br>- 2026年06月02日，充能方式调整：除陈色和周水外所有角色改为自动充能(每大回合+1)；删除除陈色和周水外所有角色的被动(王土回血/手充减上限/科比牢大bns/蓝主任积怨/大树回血)；冷却改为每小回合(切换行动方时)-1<br>- 2026年06月02日，隐匿三态特效重做：获得隐匿(白雾升腾+文字)/持有隐匿(半透明+白色雾气粒子飘散+"隐匿"小字)/解除隐匿(雾气炸散+"破隐"文字)；删除隐匿特效切换按钮(统一雾隐)<br>- 2026年06月02日，冷场改为额外回合：普攻/大招击杀后finishAction完成→插入冷场额外回合(不占行动/不计算冷却充能)→冷场结束后继续正常回合<br>- 2026年06月02日，周水重做：冷场改为自选目标逐个造成ATK×1伤害+5层恐惧(全图)/大招瞬杀时刻去掉穿透/新增规则按钮+角色图鉴按钮(陈色+周水)<br>- 2026年06月02日，选中周水不破隐修复：beginRound中sth递减跳过周水(后门隐匿由攻击机制管理，不自动过期)<br>- 2026年06月02日，选中隐匿单位不破隐修复：新增.slot.unit-sth.sel规则，选中时仅金色边框标记不覆盖隐匿box-shadow<br>- 2026年06月02日，周水隐匿不显示修复：beginRound中sth递减从renderBattle之前移到之后(解决第一回合渲染时sth已被归零)/开发者模式充能上限修复：startDevBattle中rd.m→rd.mxc<br>- 2026年06月01日，充能上限修复：startBattle正常部署路径d.m→d.mxc/自动大招：chg()充能达到上限时自动触发auto:1大招/开发者模式补周水sth=1<br>- 2026年06月01日，隐匿特效根因修复：outline-color不是CSS可动画属性→改为box-shadow内外发光呼吸动画+加!important/新增测试隐匿特效按钮(内联强制渲染)<br>- 2026年06月01日，充能上限修复：deployCur缺少m字段导致mxc回退默认5→改为透传r.mxc/隐匿特效重做：overlay方案改为slot级filter+outline呼吸动画，更稳定可见<br>- 2026年06月01日，隐匿overlay加半透明背景色+inset发光/冲锋选位仅允许x距离最近目标(高亮+点击双限制)<br>- 2026年06月01日，冲锋范围动态检测(同行有敌→仅同行/同行无敌→同行+相邻行)/隐匿独立overlay层+发光模糊动画/冷场按距离排序且不伤自己/周水充能上限2<br>- 2026年05月31日，周水重做(充能改为受击+1上限2/冲锋UI自选目标/自动大招不消耗行动/隐匿雾隐虚影双特效+按钮切换)<br>- 2026年05月31日，周水重做：恐惧震慑改为冲锋自动锁定目标、瞬杀时刻伤害公式改为(已损失+ATK)*2穿透、新增被动后门(开局隐匿/攻击解除/2回合后恢复)、冷场改为对全场触发普攻<br>- 2026年05月29日，损伤全局触发（叠满10点自动结算：神经=2伤+眩晕/恐惧=4伤/燃烧=2伤+3回合流血）+ 先手平局随机 + 冲锋全局规则（同列/相邻行取最近单位，含友方）<br>- 2026年05月29日，战斗反馈优化：先震动后出伤（暂显旧HP→震动0.35s→HP更新+红色小字"-x"浮动跳出）<br>- 2026年05月29日05时55分，战斗反馈：受击震动（伤害累加取最强+血量决定强度）+ 行动后1s后摇 + 选位界面显示血量<br>- 2026年05月29日05时30分，选位界面改进：显示所有单位（友方/敌方/人机/召唤物），被占格子/中线/对面不可点击<br>- 2026年05月29日05时15分，战斗棋盘同步美化：渲染完整35格背景代替虚线网格<br>- 2026年05月29日05时00分，棋盘美化：蓝红方渐变底色+格子阴影层次感+中线加粗<br>- 2026年05月29日04时30分，修虫群后回合不结束(logCtx→push)+布阵隐藏人机+战斗板加网格线<br>- 2026年05月29日02时12分，修毛毛虫logCtx泄漏导致日志错乱+陈色mxc=3<br>- 2026年05月29日02时12分，陈色虫群重做：先算伤害再杀虫、存x值、二次伤害改自身回合触发、结束时重置充能<br>- 2026年05月29日02时12分，dev模式：人机不参与选位、默认5个、+人机按钮、中列禁放单位<br>- 2026年05月29日01时44分，改动日志改为左下角按钮+弹窗展示<br>- 2026年05月29日01时26分，战斗日志重构为按回合分段格式；召唤物不可选中/不显示待行动；同批毛毛虫放置满血；添加版本号v1.00及改动日志';$('clModal').classList.add('show');}function hideCL(){$('clModal').classList.remove('show');}
 function showRules(){
 var h='<div class="cl-hdr">八宝舟 总体规则</div>';
 h+='<p style="font-size:13px;color:#aaa;margin:2px 0">第一部分 全局规则</p>';
