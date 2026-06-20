@@ -817,7 +817,7 @@ if(u._dying){slot.classList.add('dying');slot.style.zIndex='3';}
 let dHp=u.hp;if(u._hits&&u._hits.length){let recent=u._hits.filter(h=>Date.now()-h.t<2000);if(recent.length){let mh=recent.reduce((a,b)=>a.dmg>b.dmg?a:b,recent[0]);dHp=mh.hpBefore;let intensity=Math.min(8,2+mh.dmg*.6+(1-mh.ratio)*4);slot.style.setProperty('--sx',intensity+'px');slot.classList.add('shake');slot.setAttribute('data-dmg',mh.hpLoss||mh.dmg);slot.setAttribute('data-hpA',mh.hpAfter);slot.setAttribute('data-mH',u.mH)}delete u._hits;}
 let hpC=dHp/u.mH>0.5?'#4f4':(dHp/u.mH>0.25?'#fa0':'#f44');
 let cdText='';for(let k in u.cd)if(u.cd[k]>0)cdText+=k.substring(0,1)+':'+u.cd[k]+' ';
-slot.innerHTML='<span class="n">'+u.n.substring(0,3)+'</span><span class="hp" style="color:'+hpC+'">'+dHp+'/'+u.mH+'</span>'+(cdText?'<span class="cd">'+cdText+'</span>':'')+(u.ch>0?'<span class="cd">⚡'+u.ch+'</span>':'');
+slot.innerHTML='<span class="n">'+u.n.substring(0,3)+'</span><span class="hp" style="color:'+hpC+'">'+dHp+'/'+u.mH+'</span>';
 // 恐惧进度条
 if(u.ail.fear.s>0){
 let pct=u.ail.fear.s/10*100;
