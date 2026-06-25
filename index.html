@@ -1052,9 +1052,12 @@ if(b.sel.chging){b.sel.chging=0;b.lg.push(b.sel.n+' 蓄力释放!')}
 finishAction(b.sel);
 }
 }
-if(u.tm===b.sel.tm){
+// 敌方不可攻击时→切换查看
+if(b.sel&&u.tm!==b.sel.tm){b.sel=u;b._selEnemy=1;b._actedView=0;renderBattle();upInfo();b.logCtx=null;return;}
+if(b.sel&&u.tm===b.sel.tm){
 // 切换选中队友
-b.sel=u;renderBattle();upInfo();b.logCtx=null;
+b.sel=u;b._selEnemy=0;b._actedView=b.acted.has(u._uid)?1:0;
+renderBattle();upInfo();b.logCtx=null;
 }
 }
 
